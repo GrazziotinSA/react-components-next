@@ -1,5 +1,5 @@
 {
-  "name": "react-components-next",
+  "name": "@grazziotin/react-components-next",
   "version": "0.1.0",
   "description": "Biblioteca de componentes React reutilizáveis",
   "private": false,
