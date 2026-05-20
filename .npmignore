@@ -1,0 +1,9 @@
+src/app/
+.next/
+node_modules/
+*.config.ts
+*.config.mjs
+*.config.js
+tsconfig.lib.json
+.eslintrc*
+.gitignore
