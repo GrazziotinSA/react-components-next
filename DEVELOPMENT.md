@@ -31,14 +31,16 @@ Acesse em [http://localhost:6006](http://localhost:6006).
 
 ## Scripts disponíveis
 
-| Comando | Descrição |
-|---------|-----------|
-| `npm run storybook` | Inicia o Storybook em modo desenvolvimento (porta 6006) |
-| `npm run build-storybook` | Gera o build estático do Storybook |
-| `npm run build:lib` | Gera o bundle da biblioteca para publicação no npm |
-| `npm run build:lib:watch` | Rebuild automático da biblioteca ao salvar |
-| `npm run type-check` | Verifica os tipos com TypeScript |
-| `npm run lint` | Verifica o código com ESLint |
+
+| Comando                   | Descrição                                               |
+| ------------------------- | ------------------------------------------------------- |
+| `npm run storybook`       | Inicia o Storybook em modo desenvolvimento (porta 6006) |
+| `npm run build-storybook` | Gera o build estático do Storybook                      |
+| `npm run build:lib`       | Gera o bundle da biblioteca para publicação no npm      |
+| `npm run build:lib:watch` | Rebuild automático da biblioteca ao salvar              |
+| `npm run type-check`      | Verifica os tipos com TypeScript                        |
+| `npm run lint`            | Verifica o código com ESLint                            |
+
 
 ---
 
@@ -122,11 +124,38 @@ npm run build:lib
 
 Os arquivos gerados ficam em `dist/` com os seguintes formatos:
 
-| Arquivo | Formato |
-|---------|---------|
-| `dist/index.js` | CommonJS (CJS) |
-| `dist/index.mjs` | ES Module (ESM) |
+
+| Arquivo           | Formato          |
+| ----------------- | ---------------- |
+| `dist/index.js`   | CommonJS (CJS)   |
+| `dist/index.mjs`  | ES Module (ESM)  |
 | `dist/index.d.ts` | Tipos TypeScript |
+| `dist/index.css`  | CSS compilado com todas as classes dos componentes |
+
+---
+
+## Configurando estilos no projeto consumidor
+
+A biblioteca usa Tailwind CSS. Escolha uma das opções abaixo dependendo do seu projeto.
+
+### Opção A — Projeto com Tailwind CSS v4 (recomendado)
+
+Adicione uma linha no arquivo CSS onde o Tailwind é importado (geralmente `globals.css`):
+
+```css
+@import "tailwindcss";
+@source "../node_modules/react-components-next/dist/index.mjs";
+```
+
+O Tailwind vai escanear os componentes da biblioteca e incluir todos os estilos automaticamente. **Nenhuma outra configuração é necessária.**
+
+### Opção B — Projeto sem Tailwind CSS
+
+Importe o CSS pré-compilado uma vez no ponto de entrada da aplicação (`layout.tsx`, `_app.tsx`, etc.):
+
+```tsx
+import "react-components-next/styles";
+```
 
 ---
 
@@ -156,6 +185,14 @@ npm link react-components-next
 
 A partir deste momento, `import { Button } from "react-components-next"` apontará para os arquivos locais em `dist/`.
 
+> **Se o projeto de destino for Next.js** e continuar com erro "Module not found" mesmo após o link, adicione o pacote ao `transpilePackages` no `next.config` do projeto de destino:
+> ```js
+> const nextConfig = {
+>   transpilePackages: ["react-components-next"],
+> };
+> ```
+> Reinicie o servidor de dev depois.
+
 ### Passo 3 — Atualizar após mudanças
 
 Sempre que alterar componentes, refaça o build:
@@ -181,11 +218,13 @@ npm unlink
 Para recompilar automaticamente enquanto desenvolve, rode em dois terminais:
 
 **Terminal 1 — rebuild da lib ao salvar:**
+
 ```bash
 npm run build:lib:watch
 ```
 
 **Terminal 2 — projeto de destino em dev:**
+
 ```bash
 npm run dev
 ```
@@ -204,3 +243,4 @@ npm login
 # 3. Publicar (o build:lib roda automaticamente via prepublishOnly)
 npm publish
 ```
+

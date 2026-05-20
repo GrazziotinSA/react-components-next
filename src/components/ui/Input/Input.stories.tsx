@@ -7,6 +7,28 @@ const meta: Meta<typeof Input> = {
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: `
+Campo de entrada com suporte a label, hint, estado de erro e addons laterais.
+
+**Importação:**
+\`\`\`tsx
+import { Input } from "react-components-next";
+\`\`\`
+
+**Uso básico:**
+\`\`\`tsx
+<Input
+  label="E-mail"
+  type="email"
+  placeholder="joao@exemplo.com"
+  hint="Nunca compartilharemos seu e-mail."
+/>
+\`\`\`
+        `,
+      },
+    },
   },
   argTypes: {
     size: {

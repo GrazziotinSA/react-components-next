@@ -7,6 +7,25 @@ const meta: Meta<typeof Button> = {
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: `
+Botão reutilizável com suporte a variantes, tamanhos, estado de loading e ícones.
+
+**Importação:**
+\`\`\`tsx
+import { Button } from "react-components-next";
+\`\`\`
+
+**Uso básico:**
+\`\`\`tsx
+<Button variant="primary" size="md" onClick={() => {}}>
+  Clique aqui
+</Button>
+\`\`\`
+        `,
+      },
+    },
   },
   argTypes: {
     variant: {

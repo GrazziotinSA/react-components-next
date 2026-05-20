@@ -7,6 +7,23 @@ const meta: Meta<typeof Badge> = {
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: `
+Etiqueta colorida para representar status, categorias e contagens.
+
+**Importação:**
+\`\`\`tsx
+import { Badge } from "react-components-next";
+\`\`\`
+
+**Uso básico:**
+\`\`\`tsx
+<Badge variant="success" dot>Online</Badge>
+\`\`\`
+        `,
+      },
+    },
   },
   argTypes: {
     variant: {

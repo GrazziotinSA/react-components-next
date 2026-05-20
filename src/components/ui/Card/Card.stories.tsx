@@ -16,6 +16,39 @@ const meta: Meta<typeof Card> = {
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: `
+Container flexível com subcomponentes compostos para header, conteúdo e rodapé.
+
+**Importação:**
+\`\`\`tsx
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+  CardFooter,
+} from "react-components-next";
+\`\`\`
+
+**Uso básico:**
+\`\`\`tsx
+<Card>
+  <CardHeader>
+    <CardTitle>Título</CardTitle>
+    <CardDescription>Descrição</CardDescription>
+  </CardHeader>
+  <CardContent>Conteúdo do card.</CardContent>
+  <CardFooter>
+    <Button size="sm">Ação</Button>
+  </CardFooter>
+</Card>
+\`\`\`
+        `,
+      },
+    },
   },
   argTypes: {
     shadow: {

@@ -7,6 +7,27 @@ const meta: Meta<typeof Avatar> = {
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
+    docs: {
+      description: {
+        component: `
+Exibe imagens de perfil com fallback automático de iniciais quando a imagem não carrega.
+
+**Importação:**
+\`\`\`tsx
+import { Avatar } from "react-components-next";
+\`\`\`
+
+**Uso básico:**
+\`\`\`tsx
+// Com imagem
+<Avatar src="https://..." alt="João Silva" size="md" />
+
+// Com fallback de iniciais
+<Avatar fallback="João Silva" size="md" />
+\`\`\`
+        `,
+      },
+    },
   },
   argTypes: {
     size: {
