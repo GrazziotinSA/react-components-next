@@ -1,7 +1,24 @@
+import "@mantine/core/styles.css";
 import "../src/app/globals.css";
-import type { Preview } from "@storybook/nextjs-vite";
+
+import React from "react";
+import { MantineProvider } from "@mantine/core";
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import type { Preview } from "@storybook/react-vite";
+
+const muiTheme = createTheme();
 
 const preview: Preview = {
+  decorators: [
+    (Story) => (
+      <ThemeProvider theme={muiTheme}>
+        <CssBaseline />
+        <MantineProvider>
+          <Story />
+        </MantineProvider>
+      </ThemeProvider>
+    ),
+  ],
   parameters: {
     controls: {
       matchers: {
@@ -10,12 +27,7 @@ const preview: Preview = {
       },
     },
 
-    a11y: {
-      // 'todo' - show a11y violations in the test UI only
-      // 'error' - fail CI on a11y violations
-      // 'off' - skip a11y checks entirely
-      test: "todo",
-    },
+    a11y: { test: "todo" },
   },
 };
 

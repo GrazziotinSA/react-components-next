@@ -2,16 +2,22 @@
 
 var tailwindMerge = require('tailwind-merge');
 var clsx = require('clsx');
+var material = require('@mui/material');
+var core = require('@mantine/core');
 var jsxRuntime = require('react/jsx-runtime');
-var React = require('react');
+var DialogMui = require('@mui/material/Dialog');
+var DialogTitle = require('@mui/material/DialogTitle');
+var DialogActions = require('@mui/material/DialogActions');
+var DialogContent = require('@mui/material/DialogContent');
 
 function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
 
-var React__default = /*#__PURE__*/_interopDefault(React);
+var DialogMui__default = /*#__PURE__*/_interopDefault(DialogMui);
+var DialogTitle__default = /*#__PURE__*/_interopDefault(DialogTitle);
+var DialogActions__default = /*#__PURE__*/_interopDefault(DialogActions);
+var DialogContent__default = /*#__PURE__*/_interopDefault(DialogContent);
 
 var __defProp = Object.defineProperty;
-var __defProps = Object.defineProperties;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -27,355 +33,118 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __objRest = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-        target[prop] = source[prop];
-    }
-  return target;
-};
 function cn(...values) {
   return tailwindMerge.twMerge(clsx.clsx(values));
 }
-var variantStyles = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus-visible:ring-blue-500",
-  secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300 focus-visible:ring-gray-400",
-  outline: "border border-gray-300 bg-transparent text-gray-900 hover:bg-gray-50 active:bg-gray-100 focus-visible:ring-gray-400",
-  ghost: "bg-transparent text-gray-700 hover:bg-gray-100 active:bg-gray-200 focus-visible:ring-gray-400",
-  destructive: "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus-visible:ring-red-500"
-};
-var sizeStyles = {
-  sm: "h-8 px-3 text-sm gap-1.5",
-  md: "h-10 px-4 text-sm gap-2",
-  lg: "h-12 px-6 text-base gap-2.5"
-};
-function Button(_a) {
-  var _b = _a, {
-    variant = "primary",
-    size = "md",
-    loading = false,
-    leftIcon,
-    rightIcon,
-    fullWidth = false,
-    children,
-    className,
-    disabled
-  } = _b, props = __objRest(_b, [
-    "variant",
-    "size",
-    "loading",
-    "leftIcon",
-    "rightIcon",
-    "fullWidth",
-    "children",
-    "className",
-    "disabled"
-  ]);
-  const isDisabled = disabled || loading;
+function Card({
+  margin,
+  onClick,
+  title,
+  toolTip,
+  className,
+  borderTitle,
+  children,
+  borderRadius,
+  width = "100%",
+  height = "auto",
+  titleWidth = "100%",
+  justifyContent = "space-between",
+  titleColor = "var(--color-primary)",
+  icon
+}) {
   return /* @__PURE__ */ jsxRuntime.jsxs(
-    "button",
-    __spreadProps(__spreadValues({
-      className: cn(
-        "inline-flex items-center justify-center rounded-md font-medium",
-        "transition-colors duration-150 ease-in-out",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-        "disabled:pointer-events-none disabled:opacity-50",
-        variantStyles[variant],
-        sizeStyles[size],
-        fullWidth && "w-full",
-        className
-      ),
-      disabled: isDisabled
-    }, props), {
-      children: [
-        loading ? /* @__PURE__ */ jsxRuntime.jsx(Spinner, { size }) : leftIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "shrink-0", children: leftIcon }),
-        children,
-        !loading && rightIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "shrink-0", children: rightIcon })
-      ]
-    })
-  );
-}
-function Spinner({ size }) {
-  const spinnerSize = size === "sm" ? "h-3 w-3" : size === "lg" ? "h-5 w-5" : "h-4 w-4";
-  return /* @__PURE__ */ jsxRuntime.jsxs(
-    "svg",
+    material.Box,
     {
-      className: cn("animate-spin shrink-0", spinnerSize),
-      xmlns: "http://www.w3.org/2000/svg",
-      fill: "none",
-      viewBox: "0 0 24 24",
+      onClick,
+      className: cn(className, "text-sm!"),
+      sx: __spreadValues({
+        width,
+        margin,
+        height,
+        borderRadius,
+        "@media (max-width: 768px)": { width: "100%" },
+        boxShadow: "0 0.15rem 0.5rem rgba(0, 0, 0, 0.16)"
+      }, onClick && { cursor: "pointer !important" }),
       children: [
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "circle",
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          material.Box,
           {
-            className: "opacity-25",
-            cx: "12",
-            cy: "12",
-            r: "10",
-            stroke: "currentColor",
-            strokeWidth: "4"
+            sx: {
+              justifyContent,
+              height: "24px",
+              color: "white",
+              display: "flex",
+              width: titleWidth,
+              overflow: "hidden",
+              padding: "0px 15px",
+              alignItems: "center",
+              flexDirection: "row",
+              borderRadius: borderTitle,
+              backgroundColor: titleColor
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "min-w-0 flex-1 font-semibold! truncate!", children: /* @__PURE__ */ jsxRuntime.jsx(
+                core.Tooltip,
+                {
+                  withArrow: true,
+                  radius: "md",
+                  label: title,
+                  arrowSize: 6,
+                  position: "top",
+                  arrowOffset: 15,
+                  disabled: !toolTip,
+                  color: titleColor,
+                  classNames: { tooltip: "text-xs!" },
+                  offset: { mainAxis: 11, crossAxis: -21 },
+                  transitionProps: { transition: "fade", duration: 100 },
+                  children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "block! truncate!", children: title })
+                }
+              ) }),
+              /* @__PURE__ */ jsxRuntime.jsx("div", { children: icon })
+            ]
           }
         ),
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "path",
-          {
-            className: "opacity-75",
-            fill: "currentColor",
-            d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-          }
-        )
+        children
       ]
     }
   );
 }
-var sizeStyles2 = {
-  sm: "h-8 px-2.5 text-sm",
-  md: "h-10 px-3 text-sm",
-  lg: "h-12 px-4 text-base"
-};
-function Input(_a) {
-  var _b = _a, {
-    label,
-    hint,
-    error,
-    size = "md",
-    leftAddon,
-    rightAddon,
-    fullWidth = false,
-    className,
-    id
-  } = _b, props = __objRest(_b, [
-    "label",
-    "hint",
-    "error",
-    "size",
-    "leftAddon",
-    "rightAddon",
-    "fullWidth",
-    "className",
-    "id"
-  ]);
-  const inputId = id != null ? id : label == null ? void 0 : label.toLowerCase().replace(/\s+/g, "-");
-  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: cn("flex flex-col gap-1.5", fullWidth && "w-full"), children: [
-    label && /* @__PURE__ */ jsxRuntime.jsx("label", { htmlFor: inputId, className: "text-sm font-medium text-gray-700", children: label }),
-    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "relative flex items-center", children: [
-      leftAddon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "absolute left-3 flex items-center text-gray-500", children: leftAddon }),
-      /* @__PURE__ */ jsxRuntime.jsx(
-        "input",
-        __spreadValues({
-          id: inputId,
-          className: cn(
-            "w-full rounded-md border bg-white text-gray-900 placeholder:text-gray-400",
-            "transition-colors duration-150",
-            "focus:outline-none focus:ring-2 focus:ring-offset-0",
-            "disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500",
-            sizeStyles2[size],
-            error ? "border-red-400 focus:border-red-400 focus:ring-red-300" : "border-gray-300 focus:border-blue-500 focus:ring-blue-300",
-            leftAddon && "pl-9",
-            rightAddon && "pr-9",
-            className
-          )
-        }, props)
-      ),
-      rightAddon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "absolute right-3 flex items-center text-gray-500", children: rightAddon })
-    ] }),
-    (hint || error) && /* @__PURE__ */ jsxRuntime.jsx("p", { className: cn("text-xs", error ? "text-red-500" : "text-gray-500"), children: error != null ? error : hint })
-  ] });
-}
-var shadowStyles = {
-  none: "",
-  sm: "shadow-sm",
-  md: "shadow-md",
-  lg: "shadow-lg"
-};
-var paddingStyles = {
-  none: "",
-  sm: "p-4",
-  md: "p-6",
-  lg: "p-8"
-};
-function Card(_a) {
-  var _b = _a, {
-    shadow = "sm",
-    hoverable = false,
-    bordered = true,
-    padding = "md",
-    className,
-    children
-  } = _b, props = __objRest(_b, [
-    "shadow",
-    "hoverable",
-    "bordered",
-    "padding",
-    "className",
-    "children"
-  ]);
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    "div",
-    __spreadProps(__spreadValues({
-      className: cn(
-        "rounded-xl bg-white",
-        shadowStyles[shadow],
-        paddingStyles[padding],
-        bordered && "border border-gray-200",
-        hoverable && "cursor-pointer transition-shadow duration-200 hover:shadow-md",
-        className
-      )
-    }, props), {
-      children
-    })
-  );
-}
-function CardHeader(_a) {
-  var _b = _a, { className, children } = _b, props = __objRest(_b, ["className", "children"]);
-  return /* @__PURE__ */ jsxRuntime.jsx("div", __spreadProps(__spreadValues({ className: cn("mb-4 flex flex-col gap-1", className) }, props), { children }));
-}
-function CardTitle(_a) {
-  var _b = _a, { className, children } = _b, props = __objRest(_b, ["className", "children"]);
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    "h3",
-    __spreadProps(__spreadValues({
-      className: cn("text-lg font-semibold text-gray-900", className)
-    }, props), {
-      children
-    })
-  );
-}
-function CardDescription(_a) {
-  var _b = _a, {
-    className,
-    children
-  } = _b, props = __objRest(_b, [
-    "className",
-    "children"
-  ]);
-  return /* @__PURE__ */ jsxRuntime.jsx("p", __spreadProps(__spreadValues({ className: cn("text-sm text-gray-500", className) }, props), { children }));
-}
-function CardContent(_a) {
-  var _b = _a, {
-    className,
-    children
-  } = _b, props = __objRest(_b, [
-    "className",
-    "children"
-  ]);
-  return /* @__PURE__ */ jsxRuntime.jsx("div", __spreadProps(__spreadValues({ className: cn("text-sm text-gray-700", className) }, props), { children }));
-}
-function CardFooter(_a) {
-  var _b = _a, { className, children } = _b, props = __objRest(_b, ["className", "children"]);
-  return /* @__PURE__ */ jsxRuntime.jsx("div", __spreadProps(__spreadValues({ className: cn("mt-4 flex items-center gap-2", className) }, props), { children }));
-}
-var variantStyles2 = {
-  default: "bg-gray-100 text-gray-700",
-  primary: "bg-blue-100 text-blue-700",
-  success: "bg-green-100 text-green-700",
-  warning: "bg-yellow-100 text-yellow-700",
-  danger: "bg-red-100 text-red-700",
-  info: "bg-sky-100 text-sky-700"
-};
-var dotStyles = {
-  default: "bg-gray-500",
-  primary: "bg-blue-500",
-  success: "bg-green-500",
-  warning: "bg-yellow-500",
-  danger: "bg-red-500",
-  info: "bg-sky-500"
-};
-function Badge(_a) {
-  var _b = _a, {
-    variant = "default",
-    dot = false,
-    className,
-    children
-  } = _b, props = __objRest(_b, [
-    "variant",
-    "dot",
-    "className",
-    "children"
-  ]);
-  return /* @__PURE__ */ jsxRuntime.jsxs(
-    "span",
-    __spreadProps(__spreadValues({
-      className: cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium",
-        variantStyles2[variant],
-        className
-      )
-    }, props), {
-      children: [
-        dot && /* @__PURE__ */ jsxRuntime.jsx("span", { className: cn("h-1.5 w-1.5 rounded-full", dotStyles[variant]) }),
-        children
-      ]
-    })
-  );
-}
-var sizeStyles3 = {
-  xs: "h-6 w-6 text-xs",
-  sm: "h-8 w-8 text-sm",
-  md: "h-10 w-10 text-sm",
-  lg: "h-12 w-12 text-base",
-  xl: "h-16 w-16 text-lg"
-};
-function getInitials(name) {
-  return name.split(" ").slice(0, 2).map((word) => {
-    var _a, _b;
-    return (_b = (_a = word[0]) == null ? void 0 : _a.toUpperCase()) != null ? _b : "";
-  }).join("");
-}
-function Avatar(_a) {
-  var _b = _a, {
-    src,
-    alt = "",
-    fallback,
-    size = "md",
-    className
-  } = _b, props = __objRest(_b, [
-    "src",
-    "alt",
-    "fallback",
-    "size",
-    "className"
-  ]);
-  const [imgError, setImgError] = React__default.default.useState(false);
-  const showFallback = !src || imgError;
-  const initials = fallback ? getInitials(fallback) : alt ? getInitials(alt) : "?";
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    "span",
-    __spreadProps(__spreadValues({
-      className: cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200",
-        sizeStyles3[size],
-        className
-      )
-    }, props), {
-      children: !showFallback ? /* @__PURE__ */ jsxRuntime.jsx(
-        "img",
-        {
-          src,
-          alt,
-          className: "h-full w-full object-cover",
-          onError: () => setImgError(true)
-        }
-      ) : /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium text-gray-600 select-none", children: initials })
-    })
-  );
-}
+var card_default = Card;
 
-exports.Avatar = Avatar;
-exports.Badge = Badge;
-exports.Button = Button;
-exports.Card = Card;
-exports.CardContent = CardContent;
-exports.CardDescription = CardDescription;
-exports.CardFooter = CardFooter;
-exports.CardHeader = CardHeader;
-exports.CardTitle = CardTitle;
-exports.Input = Input;
+// src/components/ui/dialog/utils/constants.ts
+var DIALOG_BACKDROP_STYLE = {
+  backdropFilter: "blur(4px)",
+  backgroundColor: "rgba(0, 0, 0, 0.5)"
+};
+function Dialog({
+  open,
+  title,
+  onClose,
+  actions,
+  children,
+  maxWidth,
+  blurBackdrop = false
+}) {
+  const backdropStyle = blurBackdrop ? DIALOG_BACKDROP_STYLE : {};
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    DialogMui__default.default,
+    {
+      fullWidth: true,
+      open,
+      onClose,
+      maxWidth,
+      slotProps: { backdrop: { sx: backdropStyle } },
+      children: [
+        title && /* @__PURE__ */ jsxRuntime.jsx(DialogTitle__default.default, { children: /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-sm font-semibold text-black-de", children: title }) }),
+        /* @__PURE__ */ jsxRuntime.jsx(DialogContent__default.default, { className: "text-black", children }),
+        actions && /* @__PURE__ */ jsxRuntime.jsx(DialogActions__default.default, { children: actions })
+      ]
+    }
+  );
+}
+var dialog_default = Dialog;
+
+exports.Card = card_default;
+exports.Dialog = dialog_default;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

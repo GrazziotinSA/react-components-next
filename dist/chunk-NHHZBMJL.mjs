@@ -1,11 +1,24 @@
-'use strict';
+import { twMerge } from 'tailwind-merge';
+import { clsx } from 'clsx';
 
-var tailwindMerge = require('tailwind-merge');
-var clsx = require('clsx');
-
-// src/functions/cn/cn.ts
+var __defProp = Object.defineProperty;
+var __getOwnPropSymbols = Object.getOwnPropertySymbols;
+var __hasOwnProp = Object.prototype.hasOwnProperty;
+var __propIsEnum = Object.prototype.propertyIsEnumerable;
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __spreadValues = (a, b) => {
+  for (var prop in b || (b = {}))
+    if (__hasOwnProp.call(b, prop))
+      __defNormalProp(a, prop, b[prop]);
+  if (__getOwnPropSymbols)
+    for (var prop of __getOwnPropSymbols(b)) {
+      if (__propIsEnum.call(b, prop))
+        __defNormalProp(a, prop, b[prop]);
+    }
+  return a;
+};
 function cn(...values) {
-  return tailwindMerge.twMerge(clsx.clsx(values));
+  return twMerge(clsx(values));
 }
 
 // src/functions/nvl/nvl.ts
@@ -46,9 +59,6 @@ function formatPhoneBr(phone) {
   return digits.replace(/(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
 }
 
-exports.cn = cn;
-exports.formatCpfCnpj = formatCpfCnpj;
-exports.formatPhoneBr = formatPhoneBr;
-exports.nvl = nvl;
-//# sourceMappingURL=index.js.map
-//# sourceMappingURL=index.js.map
+export { __spreadValues, cn, formatCpfCnpj, formatPhoneBr, nvl };
+//# sourceMappingURL=chunk-NHHZBMJL.mjs.map
+//# sourceMappingURL=chunk-NHHZBMJL.mjs.map

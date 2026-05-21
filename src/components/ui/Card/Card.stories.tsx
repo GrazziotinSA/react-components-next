@@ -1,160 +1,125 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "./Card";
-import { Button } from "../Button";
-import { Badge } from "../Badge";
+import { action } from "storybook/actions";
+import Card from "./index";
+import cardConstants from "./utils/constants";
 
-const meta: Meta<typeof Card> = {
+const meta = {
   title: "UI/Card",
   component: Card,
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
-    docs: {
-      description: {
-        component: `
-Container flexível com subcomponentes compostos para header, conteúdo e rodapé.
-
-**Importação:**
-\`\`\`tsx
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "react-components-next";
-\`\`\`
-
-**Uso básico:**
-\`\`\`tsx
-<Card>
-  <CardHeader>
-    <CardTitle>Título</CardTitle>
-    <CardDescription>Descrição</CardDescription>
-  </CardHeader>
-  <CardContent>Conteúdo do card.</CardContent>
-  <CardFooter>
-    <Button size="sm">Ação</Button>
-  </CardFooter>
-</Card>
-\`\`\`
-        `,
-      },
-    },
+    docs: { description: { component: cardConstants } },
   },
   argTypes: {
-    shadow: {
+    title: { control: "text" },
+    toolTip: { control: "boolean" },
+    width: { control: "text" },
+    height: { control: "text" },
+    margin: { control: "text" },
+    titleWidth: { control: "text" },
+    titleColor: { control: "color" },
+    borderTitle: { control: "text" },
+    borderRadius: { control: "text" },
+    justifyContent: {
       control: "select",
-      options: ["none", "sm", "md", "lg"],
+      options: [
+        "flex-start",
+        "center",
+        "flex-end",
+        "space-between",
+        "space-around",
+      ],
     },
-    padding: {
-      control: "select",
-      options: ["none", "sm", "md", "lg"],
-    },
-    hoverable: { control: "boolean" },
-    bordered: { control: "boolean" },
+    onClick: { action: "clicked" },
+    className: { control: "text" },
+    icon: { control: false },
+    children: { control: false },
   },
-};
+  args: {
+    title: "Título do card",
+    toolTip: false,
+    width: "360px",
+    borderRadius: "10px",
+    borderTitle: "10px 10px 0 0",
+    children: (
+      <div className="p-4 text-gray-700">
+        Conteúdo principal do card. Ajuste as props no painel Controls.
+      </div>
+    ),
+  },
+} satisfies Meta<typeof Card>;
 
 export default meta;
-type Story = StoryObj<typeof Card>;
+type Story = StoryObj<typeof meta>;
 
-export const Default: Story = {
-  render: (args) => (
-    <Card {...args} className="w-72">
-      <CardHeader>
-        <CardTitle>Título do Card</CardTitle>
-        <CardDescription>Descrição breve do conteúdo</CardDescription>
-      </CardHeader>
-      <CardContent>
-        Conteúdo principal do card com texto de exemplo para demonstrar o
-        layout.
-      </CardContent>
-      <CardFooter>
-        <Button size="sm">Ação</Button>
-        <Button size="sm" variant="ghost">
-          Cancelar
-        </Button>
-      </CardFooter>
-    </Card>
-  ),
+export const Padrao: Story = {};
+
+export const ComTooltip: Story = {
   args: {
-    shadow: "sm",
-    padding: "md",
-    bordered: true,
-    hoverable: false,
+    title:
+      "Título muito longo que será truncado no cabeçalho mas aparece completo no tooltip",
+    toolTip: true,
+    width: "280px",
   },
 };
 
-export const Hoverable: Story = {
-  render: () => (
-    <Card hoverable className="w-72">
-      <CardHeader>
-        <CardTitle>Card clicável</CardTitle>
-        <CardDescription>Passe o mouse para ver o efeito</CardDescription>
-      </CardHeader>
-      <CardContent>Este card tem o efeito de hover habilitado.</CardContent>
-    </Card>
-  ),
+export const ComIcone: Story = {
+  args: {
+    title: "Novo pedido",
+    icon: (
+      <button
+        type="button"
+        className="rounded px-2 py-0.5 text-xs font-medium text-white"
+      >
+        +
+      </button>
+    ),
+  },
 };
 
-export const NoBorder: Story = {
-  render: () => (
-    <Card bordered={false} shadow="md" className="w-72">
-      <CardHeader>
-        <CardTitle>Sem borda</CardTitle>
-      </CardHeader>
-      <CardContent>Card com sombra mas sem borda.</CardContent>
-    </Card>
-  ),
+export const Clicavel: Story = {
+  args: {
+    title: "Card clicável",
+    onClick: action("card-click"),
+    width: "320px",
+    children: (
+      <p className="p-4 text-gray-600">
+        Passe o mouse: o cursor deve ser <code>pointer</code>.
+      </p>
+    ),
+  },
 };
 
-export const ProductCard: Story = {
-  render: () => (
-    <Card className="w-72">
-      <CardHeader>
-        <div className="flex items-start justify-between">
-          <CardTitle>Plano Pro</CardTitle>
-          <Badge variant="primary">Popular</Badge>
-        </div>
-        <CardDescription>Para times em crescimento</CardDescription>
-      </CardHeader>
-      <CardContent>
-        <p className="text-3xl font-bold text-gray-900">
-          R$ 49
-          <span className="text-base font-normal text-gray-500">/mês</span>
-        </p>
-        <ul className="mt-3 space-y-1 text-sm text-gray-600">
-          <li>✓ 10 projetos</li>
-          <li>✓ 5 colaboradores</li>
-          <li>✓ 100 GB de armazenamento</li>
-        </ul>
-      </CardContent>
-      <CardFooter>
-        <Button fullWidth>Começar agora</Button>
-      </CardFooter>
-    </Card>
-  ),
+export const TituloTruncado: Story = {
+  args: {
+    title: "Relatório consolidado de vendas do trimestre",
+    width: "240px",
+    toolTip: false,
+  },
 };
 
-export const AllShadows: Story = {
-  render: () => (
-    <div className="flex flex-wrap gap-4">
-      {(["none", "sm", "md", "lg"] as const).map((shadow) => (
-        <Card key={shadow} shadow={shadow} className="w-36">
-          <CardHeader>
-            <CardTitle className="text-sm">shadow: {shadow}</CardTitle>
-          </CardHeader>
-        </Card>
-      ))}
-    </div>
-  ),
+export const CorCabecalhoCustomizada: Story = {
+  args: {
+    title: "Alerta",
+    titleColor: "#e03131",
+    children: (
+      <p className="p-4 text-gray-700">Cabeçalho com cor customizada.</p>
+    ),
+  },
+};
+
+export const TituloMetadeDoCard: Story = {
+  args: {
+    title: "Título com 55% da largura",
+    titleWidth: "55%",
+    width: "400px",
+    borderTitle: "10px 0 10px 0",
+    children: (
+      <p className="p-4 text-gray-700">
+        O cabeçalho colorido usa <code>titleWidth=&quot;55%&quot;</code> — cerca
+        da metade da largura do card.
+      </p>
+    ),
+  },
 };

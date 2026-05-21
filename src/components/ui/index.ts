@@ -1,5 +1,4 @@
-export * from "./Button";
-export * from "./Input";
-export * from "./Card";
-export * from "./Badge";
-export * from "./Avatar";
+export { default as Card } from "./card";
+export type { CardProps, CardClassName } from "./card/utils/interface";
+export { default as Dialog } from "./dialog";
+export type { DialogProps } from "./dialog/utils/interface";

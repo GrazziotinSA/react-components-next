@@ -2,16 +2,22 @@
 
 var tailwindMerge = require('tailwind-merge');
 var clsx = require('clsx');
+var material = require('@mui/material');
+var core = require('@mantine/core');
 var jsxRuntime = require('react/jsx-runtime');
-var React = require('react');
+var DialogMui = require('@mui/material/Dialog');
+var DialogTitle = require('@mui/material/DialogTitle');
+var DialogActions = require('@mui/material/DialogActions');
+var DialogContent = require('@mui/material/DialogContent');
 
 function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
 
-var React__default = /*#__PURE__*/_interopDefault(React);
+var DialogMui__default = /*#__PURE__*/_interopDefault(DialogMui);
+var DialogTitle__default = /*#__PURE__*/_interopDefault(DialogTitle);
+var DialogActions__default = /*#__PURE__*/_interopDefault(DialogActions);
+var DialogContent__default = /*#__PURE__*/_interopDefault(DialogContent);
 
 var __defProp = Object.defineProperty;
-var __defProps = Object.defineProperties;
-var __getOwnPropDescs = Object.getOwnPropertyDescriptors;
 var __getOwnPropSymbols = Object.getOwnPropertySymbols;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __propIsEnum = Object.prototype.propertyIsEnumerable;
@@ -27,356 +33,185 @@ var __spreadValues = (a, b) => {
     }
   return a;
 };
-var __spreadProps = (a, b) => __defProps(a, __getOwnPropDescs(b));
-var __objRest = (source, exclude) => {
-  var target = {};
-  for (var prop in source)
-    if (__hasOwnProp.call(source, prop) && exclude.indexOf(prop) < 0)
-      target[prop] = source[prop];
-  if (source != null && __getOwnPropSymbols)
-    for (var prop of __getOwnPropSymbols(source)) {
-      if (exclude.indexOf(prop) < 0 && __propIsEnum.call(source, prop))
-        target[prop] = source[prop];
+
+// #style-inject:#style-inject
+function styleInject(css, { insertAt } = {}) {
+  if (typeof document === "undefined") return;
+  const head = document.head || document.getElementsByTagName("head")[0];
+  const style = document.createElement("style");
+  style.type = "text/css";
+  if (insertAt === "top") {
+    if (head.firstChild) {
+      head.insertBefore(style, head.firstChild);
+    } else {
+      head.appendChild(style);
     }
-  return target;
-};
+  } else {
+    head.appendChild(style);
+  }
+  if (style.styleSheet) {
+    style.styleSheet.cssText = css;
+  } else {
+    style.appendChild(document.createTextNode(css));
+  }
+}
+
+// src/styles/tailwind-output.css
+styleInject('/*! tailwindcss v4.3.0 | MIT License | https://tailwindcss.com */\n@layer properties {\n  @supports (((-webkit-hyphens:none)) and (not (margin-trim:inline))) or ((-moz-orient:inline) and (not (color:rgb(from red r g b)))) {\n    *,\n    :before,\n    :after,\n    ::backdrop {\n      --tw-border-style:solid;\n      --tw-font-weight:initial;\n      --tw-shadow:0 0 #0000;\n      --tw-shadow-color:initial;\n      --tw-shadow-alpha:100%;\n      --tw-inset-shadow:0 0 #0000;\n      --tw-inset-shadow-color:initial;\n      --tw-inset-shadow-alpha:100%;\n      --tw-ring-color:initial;\n      --tw-ring-shadow:0 0 #0000;\n      --tw-inset-ring-color:initial;\n      --tw-inset-ring-shadow:0 0 #0000;\n      --tw-ring-inset:initial;\n      --tw-ring-offset-width:0px;\n      --tw-ring-offset-color:#fff;\n      --tw-ring-offset-shadow:0 0 #0000;\n      --tw-outline-style:solid;\n      --tw-blur:initial;\n      --tw-brightness:initial;\n      --tw-contrast:initial;\n      --tw-grayscale:initial;\n      --tw-hue-rotate:initial;\n      --tw-invert:initial;\n      --tw-opacity:initial;\n      --tw-saturate:initial;\n      --tw-sepia:initial;\n      --tw-drop-shadow:initial;\n      --tw-drop-shadow-color:initial;\n      --tw-drop-shadow-alpha:100%;\n      --tw-drop-shadow-size:initial;\n    }\n  }\n}\n@layer theme {\n  :root,\n  :host {\n    --font-sans:ui-sans-serif,\n      system-ui,\n      sans-serif,\n      "Apple Color Emoji",\n      "Segoe UI Emoji",\n      "Segoe UI Symbol",\n      "Noto Color Emoji";\n    --font-mono:ui-monospace,\n      SFMono-Regular,\n      Menlo,\n      Monaco,\n      Consolas,\n      "Liberation Mono",\n      "Courier New",\n      monospace;\n    --color-red-600:oklch(57.7% .245 27.325);\n    --color-green-50:oklch(98.2% .018 155.826);\n    --color-green-400:oklch(79.2% .209 151.711);\n    --color-green-500:oklch(72.3% .219 149.579);\n    --color-blue-500:oklch(62.3% .214 259.815);\n    --color-gray-50:oklch(98.5% .002 247.839);\n    --color-gray-100:oklch(96.7% .003 264.542);\n    --color-gray-200:oklch(92.8% .006 264.531);\n    --color-gray-500:oklch(55.1% .027 264.364);\n    --color-gray-600:oklch(44.6% .03 256.802);\n    --color-gray-700:oklch(37.3% .034 259.733);\n    --color-gray-900:oklch(21% .034 264.665);\n    --color-black:#000;\n    --color-white:#fff;\n    --spacing:.25rem;\n    --text-xs:.75rem;\n    --text-xs--line-height:calc(1 / .75);\n    --text-sm:.875rem;\n    --text-sm--line-height:calc(1.25 / .875);\n    --text-2xl:1.5rem;\n    --text-2xl--line-height:calc(2 / 1.5);\n    --font-weight-medium:500;\n    --font-weight-semibold:600;\n    --font-weight-bold:700;\n    --radius-lg:.5rem;\n    --default-transition-duration:.15s;\n    --default-transition-timing-function:cubic-bezier(.4, 0, .2, 1);\n    --default-font-family:var(--font-sans);\n    --default-mono-font-family:var(--font-mono);\n  }\n}\n@layer base {\n  *,\n  :after,\n  :before,\n  ::backdrop {\n    box-sizing: border-box;\n    border: 0 solid;\n    margin: 0;\n    padding: 0;\n  }\n  ::file-selector-button {\n    box-sizing: border-box;\n    border: 0 solid;\n    margin: 0;\n    padding: 0;\n  }\n  html,\n  :host {\n    -webkit-text-size-adjust: 100%;\n    tab-size: 4;\n    line-height: 1.5;\n    font-family: var(--default-font-family,ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji");\n    font-feature-settings: var(--default-font-feature-settings,normal);\n    font-variation-settings: var(--default-font-variation-settings,normal);\n    -webkit-tap-highlight-color: transparent;\n  }\n  hr {\n    height: 0;\n    color: inherit;\n    border-top-width: 1px;\n  }\n  abbr:where([title]) {\n    -webkit-text-decoration: underline dotted;\n    text-decoration: underline dotted;\n  }\n  h1,\n  h2,\n  h3,\n  h4,\n  h5,\n  h6 {\n    font-size: inherit;\n    font-weight: inherit;\n  }\n  a {\n    color: inherit;\n    -webkit-text-decoration: inherit;\n    -webkit-text-decoration: inherit;\n    -webkit-text-decoration: inherit;\n    text-decoration: inherit;\n  }\n  b,\n  strong {\n    font-weight: bolder;\n  }\n  code,\n  kbd,\n  samp,\n  pre {\n    font-family: var(--default-mono-font-family,ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace);\n    font-feature-settings: var(--default-mono-font-feature-settings,normal);\n    font-variation-settings: var(--default-mono-font-variation-settings,normal);\n    font-size: 1em;\n  }\n  small {\n    font-size: 80%;\n  }\n  sub,\n  sup {\n    vertical-align: baseline;\n    font-size: 75%;\n    line-height: 0;\n    position: relative;\n  }\n  sub {\n    bottom: -.25em;\n  }\n  sup {\n    top: -.5em;\n  }\n  table {\n    text-indent: 0;\n    border-color: inherit;\n    border-collapse: collapse;\n  }\n  :-moz-focusring {\n    outline: auto;\n  }\n  progress {\n    vertical-align: baseline;\n  }\n  summary {\n    display: list-item;\n  }\n  ol,\n  ul,\n  menu {\n    list-style: none;\n  }\n  img,\n  svg,\n  video,\n  canvas,\n  audio,\n  iframe,\n  embed,\n  object {\n    vertical-align: middle;\n    display: block;\n  }\n  img,\n  video {\n    max-width: 100%;\n    height: auto;\n  }\n  button,\n  input,\n  select,\n  optgroup,\n  textarea {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    opacity: 1;\n    background-color: #0000;\n    border-radius: 0;\n  }\n  ::file-selector-button {\n    font: inherit;\n    font-feature-settings: inherit;\n    font-variation-settings: inherit;\n    letter-spacing: inherit;\n    color: inherit;\n    opacity: 1;\n    background-color: #0000;\n    border-radius: 0;\n  }\n  :where(select:is([multiple], [size])) optgroup {\n    font-weight: bolder;\n  }\n  :where(select:is([multiple], [size])) optgroup option {\n    padding-inline-start: 20px;\n  }\n  ::file-selector-button {\n    margin-inline-end: 4px;\n  }\n  ::placeholder {\n    opacity: 1;\n  }\n  @supports (not ((-webkit-appearance:-apple-pay-button))) or (contain-intrinsic-size:1px) {\n    ::placeholder {\n      color: currentColor;\n    }\n    @supports (color:color-mix(in lab, red, red)) {\n      ::placeholder {\n        color: color-mix(in oklab, currentcolor 50%, transparent);\n      }\n    }\n  }\n  textarea {\n    resize: vertical;\n  }\n  ::-webkit-search-decoration {\n    -webkit-appearance: none;\n  }\n  ::-webkit-date-and-time-value {\n    min-height: 1lh;\n    text-align: inherit;\n  }\n  ::-webkit-datetime-edit {\n    display: inline-flex;\n  }\n  ::-webkit-datetime-edit-fields-wrapper {\n    padding: 0;\n  }\n  ::-webkit-datetime-edit {\n    padding-block: 0;\n  }\n  ::-webkit-datetime-edit-year-field {\n    padding-block: 0;\n  }\n  ::-webkit-datetime-edit-month-field {\n    padding-block: 0;\n  }\n  ::-webkit-datetime-edit-day-field {\n    padding-block: 0;\n  }\n  ::-webkit-datetime-edit-hour-field {\n    padding-block: 0;\n  }\n  ::-webkit-datetime-edit-minute-field {\n    padding-block: 0;\n  }\n  ::-webkit-datetime-edit-second-field {\n    padding-block: 0;\n  }\n  ::-webkit-datetime-edit-millisecond-field {\n    padding-block: 0;\n  }\n  ::-webkit-datetime-edit-meridiem-field {\n    padding-block: 0;\n  }\n  ::-webkit-calendar-picker-indicator {\n    line-height: 1;\n  }\n  :-moz-ui-invalid {\n    box-shadow: none;\n  }\n  button,\n  input:where([type=button], [type=reset], [type=submit]) {\n    appearance: button;\n  }\n  ::file-selector-button {\n    appearance: button;\n  }\n  ::-webkit-inner-spin-button {\n    height: auto;\n  }\n  ::-webkit-outer-spin-button {\n    height: auto;\n  }\n  [hidden]:where(:not([hidden=until-found])) {\n    display: none !important;\n  }\n}\n@layer components;\n@layer utilities {\n  .container {\n    width: 100%;\n  }\n  @media (min-width: 40rem) {\n    .container {\n      max-width: 40rem;\n    }\n  }\n  @media (min-width: 48rem) {\n    .container {\n      max-width: 48rem;\n    }\n  }\n  @media (min-width: 64rem) {\n    .container {\n      max-width: 64rem;\n    }\n  }\n  @media (min-width: 80rem) {\n    .container {\n      max-width: 80rem;\n    }\n  }\n  @media (min-width: 96rem) {\n    .container {\n      max-width: 96rem;\n    }\n  }\n  .mt-2 {\n    margin-top: calc(var(--spacing) * 2);\n  }\n  .mt-4 {\n    margin-top: calc(var(--spacing) * 4);\n  }\n  .block\\! {\n    display: block !important;\n  }\n  .flex {\n    display: flex;\n  }\n  .hidden {\n    display: none;\n  }\n  .inline-block {\n    display: inline-block;\n  }\n  .min-h-screen {\n    min-height: 100vh;\n  }\n  .min-w-0 {\n    min-width: calc(var(--spacing) * 0);\n  }\n  .flex-1 {\n    flex: 1;\n  }\n  .flex-col {\n    flex-direction: column;\n  }\n  .items-center {\n    align-items: center;\n  }\n  .justify-center {\n    justify-content: center;\n  }\n  .gap-2 {\n    gap: calc(var(--spacing) * 2);\n  }\n  .gap-3 {\n    gap: calc(var(--spacing) * 3);\n  }\n  .truncate\\! {\n    text-overflow: ellipsis !important;\n    white-space: nowrap !important;\n    overflow: hidden !important;\n  }\n  .rounded {\n    border-radius: .25rem;\n  }\n  .rounded-lg {\n    border-radius: var(--radius-lg);\n  }\n  .border {\n    border-style: var(--tw-border-style);\n    border-width: 1px;\n  }\n  .border-green-500 {\n    border-color: var(--color-green-500);\n  }\n  .bg-blue-500 {\n    background-color: var(--color-blue-500);\n  }\n  .bg-gray-50 {\n    background-color: var(--color-gray-50);\n  }\n  .bg-gray-100 {\n    background-color: var(--color-gray-100);\n  }\n  .bg-gray-200 {\n    background-color: var(--color-gray-200);\n  }\n  .bg-gray-900 {\n    background-color: var(--color-gray-900);\n  }\n  .bg-green-50 {\n    background-color: var(--color-green-50);\n  }\n  .bg-red-600 {\n    background-color: var(--color-red-600);\n  }\n  .p-4 {\n    padding: calc(var(--spacing) * 4);\n  }\n  .px-2 {\n    padding-inline: calc(var(--spacing) * 2);\n  }\n  .px-4 {\n    padding-inline: calc(var(--spacing) * 4);\n  }\n  .px-6 {\n    padding-inline: calc(var(--spacing) * 6);\n  }\n  .py-0\\.5 {\n    padding-block: calc(var(--spacing) * .5);\n  }\n  .py-1 {\n    padding-block: calc(var(--spacing) * 1);\n  }\n  .py-2 {\n    padding-block: calc(var(--spacing) * 2);\n  }\n  .py-3 {\n    padding-block: calc(var(--spacing) * 3);\n  }\n  .text-center {\n    text-align: center;\n  }\n  .font-mono {\n    font-family: var(--font-mono);\n  }\n  .text-2xl {\n    font-size: var(--text-2xl);\n    line-height: var(--tw-leading,var(--text-2xl--line-height));\n  }\n  .text-sm {\n    font-size: var(--text-sm);\n    line-height: var(--tw-leading,var(--text-sm--line-height));\n  }\n  .text-sm\\! {\n    font-size: var(--text-sm) !important;\n    line-height: var(--tw-leading,var(--text-sm--line-height)) !important;\n  }\n  .text-xs {\n    font-size: var(--text-xs);\n    line-height: var(--tw-leading,var(--text-xs--line-height));\n  }\n  .text-xs\\! {\n    font-size: var(--text-xs) !important;\n    line-height: var(--tw-leading,var(--text-xs--line-height)) !important;\n  }\n  .font-bold {\n    --tw-font-weight:var(--font-weight-bold);\n    font-weight: var(--font-weight-bold);\n  }\n  .font-medium {\n    --tw-font-weight:var(--font-weight-medium);\n    font-weight: var(--font-weight-medium);\n  }\n  .font-semibold {\n    --tw-font-weight:var(--font-weight-semibold);\n    font-weight: var(--font-weight-semibold);\n  }\n  .font-semibold\\! {\n    --tw-font-weight:var(--font-weight-semibold) !important;\n    font-weight: var(--font-weight-semibold) !important;\n  }\n  .text-black {\n    color: var(--color-black);\n  }\n  .text-gray-500 {\n    color: var(--color-gray-500);\n  }\n  .text-gray-600 {\n    color: var(--color-gray-600);\n  }\n  .text-gray-700 {\n    color: var(--color-gray-700);\n  }\n  .text-gray-900 {\n    color: var(--color-gray-900);\n  }\n  .text-green-400 {\n    color: var(--color-green-400);\n  }\n  .text-white {\n    color: var(--color-white);\n  }\n  .antialiased {\n    -webkit-font-smoothing: antialiased;\n    -moz-osx-font-smoothing: grayscale;\n  }\n  .shadow {\n    --tw-shadow:0 1px 3px 0 var(--tw-shadow-color,#0000001a), 0 1px 2px -1px var(--tw-shadow-color,#0000001a);\n    box-shadow:\n      var(--tw-inset-shadow),\n      var(--tw-inset-ring-shadow),\n      var(--tw-ring-offset-shadow),\n      var(--tw-ring-shadow),\n      var(--tw-shadow);\n  }\n  .outline {\n    outline-style: var(--tw-outline-style);\n    outline-width: 1px;\n  }\n  .blur {\n    --tw-blur:blur(8px);\n    filter: var(--tw-blur,) var(--tw-brightness,) var(--tw-contrast,) var(--tw-grayscale,) var(--tw-hue-rotate,) var(--tw-invert,) var(--tw-saturate,) var(--tw-sepia,) var(--tw-drop-shadow,);\n  }\n  .transition {\n    transition-property:\n      color,\n      background-color,\n      border-color,\n      outline-color,\n      text-decoration-color,\n      fill,\n      stroke,\n      --tw-gradient-from,\n      --tw-gradient-via,\n      --tw-gradient-to,\n      opacity,\n      box-shadow,\n      transform,\n      translate,\n      scale,\n      rotate,\n      filter,\n      -webkit-backdrop-filter,\n      backdrop-filter,\n      display,\n      content-visibility,\n      overlay,\n      pointer-events;\n    transition-timing-function: var(--tw-ease,var(--default-transition-timing-function));\n    transition-duration: var(--tw-duration,var(--default-transition-duration));\n  }\n}\n@property --tw-border-style { syntax:"*";inherits:false;initial-value:solid }\n@property --tw-font-weight { syntax:"*";inherits:false }\n@property --tw-shadow { syntax:"*";inherits:false;initial-value:0 0 #0000 }\n@property --tw-shadow-color { syntax:"*";inherits:false }\n@property --tw-shadow-alpha { syntax:"<percentage>";inherits:false;initial-value:100% }\n@property --tw-inset-shadow { syntax:"*";inherits:false;initial-value:0 0 #0000 }\n@property --tw-inset-shadow-color { syntax:"*";inherits:false }\n@property --tw-inset-shadow-alpha { syntax:"<percentage>";inherits:false;initial-value:100% }\n@property --tw-ring-color { syntax:"*";inherits:false }\n@property --tw-ring-shadow { syntax:"*";inherits:false;initial-value:0 0 #0000 }\n@property --tw-inset-ring-color { syntax:"*";inherits:false }\n@property --tw-inset-ring-shadow { syntax:"*";inherits:false;initial-value:0 0 #0000 }\n@property --tw-ring-inset { syntax:"*";inherits:false }\n@property --tw-ring-offset-width { syntax:"<length>";inherits:false;initial-value:0 }\n@property --tw-ring-offset-color { syntax:"*";inherits:false;initial-value:#fff }\n@property --tw-ring-offset-shadow { syntax:"*";inherits:false;initial-value:0 0 #0000 }\n@property --tw-outline-style { syntax:"*";inherits:false;initial-value:solid }\n@property --tw-blur { syntax:"*";inherits:false }\n@property --tw-brightness { syntax:"*";inherits:false }\n@property --tw-contrast { syntax:"*";inherits:false }\n@property --tw-grayscale { syntax:"*";inherits:false }\n@property --tw-hue-rotate { syntax:"*";inherits:false }\n@property --tw-invert { syntax:"*";inherits:false }\n@property --tw-opacity { syntax:"*";inherits:false }\n@property --tw-saturate { syntax:"*";inherits:false }\n@property --tw-sepia { syntax:"*";inherits:false }\n@property --tw-drop-shadow { syntax:"*";inherits:false }\n@property --tw-drop-shadow-color { syntax:"*";inherits:false }\n@property --tw-drop-shadow-alpha { syntax:"<percentage>";inherits:false;initial-value:100% }\n@property --tw-drop-shadow-size { syntax:"*";inherits:false }\n');
 function cn(...values) {
   return tailwindMerge.twMerge(clsx.clsx(values));
 }
-var variantStyles = {
-  primary: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus-visible:ring-blue-500",
-  secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300 focus-visible:ring-gray-400",
-  outline: "border border-gray-300 bg-transparent text-gray-900 hover:bg-gray-50 active:bg-gray-100 focus-visible:ring-gray-400",
-  ghost: "bg-transparent text-gray-700 hover:bg-gray-100 active:bg-gray-200 focus-visible:ring-gray-400",
-  destructive: "bg-red-600 text-white hover:bg-red-700 active:bg-red-800 focus-visible:ring-red-500"
-};
-var sizeStyles = {
-  sm: "h-8 px-3 text-sm gap-1.5",
-  md: "h-10 px-4 text-sm gap-2",
-  lg: "h-12 px-6 text-base gap-2.5"
-};
-function Button(_a) {
-  var _b = _a, {
-    variant = "primary",
-    size = "md",
-    loading = false,
-    leftIcon,
-    rightIcon,
-    fullWidth = false,
-    children,
-    className,
-    disabled
-  } = _b, props = __objRest(_b, [
-    "variant",
-    "size",
-    "loading",
-    "leftIcon",
-    "rightIcon",
-    "fullWidth",
-    "children",
-    "className",
-    "disabled"
-  ]);
-  const isDisabled = disabled || loading;
-  return /* @__PURE__ */ jsxRuntime.jsxs(
-    "button",
-    __spreadProps(__spreadValues({
-      className: cn(
-        "inline-flex items-center justify-center rounded-md font-medium",
-        "transition-colors duration-150 ease-in-out",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-        "disabled:pointer-events-none disabled:opacity-50",
-        variantStyles[variant],
-        sizeStyles[size],
-        fullWidth && "w-full",
-        className
-      ),
-      disabled: isDisabled
-    }, props), {
-      children: [
-        loading ? /* @__PURE__ */ jsxRuntime.jsx(Spinner, { size }) : leftIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "shrink-0", children: leftIcon }),
-        children,
-        !loading && rightIcon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "shrink-0", children: rightIcon })
-      ]
-    })
-  );
+
+// src/functions/nvl/nvl.ts
+function nvl(value, defaultValue) {
+  return value != null ? value : defaultValue;
 }
-function Spinner({ size }) {
-  const spinnerSize = size === "sm" ? "h-3 w-3" : size === "lg" ? "h-5 w-5" : "h-4 w-4";
+
+// src/core/remove-digits.ts
+function removeDigits(value) {
+  return value.replace(/\D/g, "");
+}
+
+// src/functions/format-cpf-cnpj/format-cpf-cnpj.ts
+function formatCpfCnpj(data) {
+  if (!data) return "";
+  const value = removeDigits(data);
+  if (!value) return "";
+  if (value.length <= 11) {
+    const cpf = value.slice(0, 11);
+    return cpf.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+  const cnpj = value.slice(0, 14);
+  return cnpj.replace(/^(\d{2})(\d)/, "$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3").replace(/\.(\d{3})(\d)/, ".$1/$2").replace(/(\d{4})(\d)/, "$1-$2");
+}
+
+// src/functions/format-phone-br/format-phone-br.ts
+function formatPhoneBr(phone) {
+  if (!phone) return "";
+  const digits = removeDigits(phone).slice(0, 11);
+  if (!digits) return "";
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 6) {
+    return digits.replace(/(\d{2})(\d+)/, "($1) $2");
+  }
+  if (digits.length <= 10) {
+    return digits.replace(/(\d{2})(\d{4})(\d+)/, "($1) $2-$3");
+  }
+  return digits.replace(/(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
+}
+function Card({
+  margin,
+  onClick,
+  title,
+  toolTip,
+  className,
+  borderTitle,
+  children,
+  borderRadius,
+  width = "100%",
+  height = "auto",
+  titleWidth = "100%",
+  justifyContent = "space-between",
+  titleColor = "var(--color-primary)",
+  icon
+}) {
   return /* @__PURE__ */ jsxRuntime.jsxs(
-    "svg",
+    material.Box,
     {
-      className: cn("animate-spin shrink-0", spinnerSize),
-      xmlns: "http://www.w3.org/2000/svg",
-      fill: "none",
-      viewBox: "0 0 24 24",
+      onClick,
+      className: cn(className, "text-sm!"),
+      sx: __spreadValues({
+        width,
+        margin,
+        height,
+        borderRadius,
+        "@media (max-width: 768px)": { width: "100%" },
+        boxShadow: "0 0.15rem 0.5rem rgba(0, 0, 0, 0.16)"
+      }, onClick && { cursor: "pointer !important" }),
       children: [
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "circle",
+        /* @__PURE__ */ jsxRuntime.jsxs(
+          material.Box,
           {
-            className: "opacity-25",
-            cx: "12",
-            cy: "12",
-            r: "10",
-            stroke: "currentColor",
-            strokeWidth: "4"
+            sx: {
+              justifyContent,
+              height: "24px",
+              color: "white",
+              display: "flex",
+              width: titleWidth,
+              overflow: "hidden",
+              padding: "0px 15px",
+              alignItems: "center",
+              flexDirection: "row",
+              borderRadius: borderTitle,
+              backgroundColor: titleColor
+            },
+            children: [
+              /* @__PURE__ */ jsxRuntime.jsx("span", { className: "min-w-0 flex-1 font-semibold! truncate!", children: /* @__PURE__ */ jsxRuntime.jsx(
+                core.Tooltip,
+                {
+                  withArrow: true,
+                  radius: "md",
+                  label: title,
+                  arrowSize: 6,
+                  position: "top",
+                  arrowOffset: 15,
+                  disabled: !toolTip,
+                  color: titleColor,
+                  classNames: { tooltip: "text-xs!" },
+                  offset: { mainAxis: 11, crossAxis: -21 },
+                  transitionProps: { transition: "fade", duration: 100 },
+                  children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "block! truncate!", children: title })
+                }
+              ) }),
+              /* @__PURE__ */ jsxRuntime.jsx("div", { children: icon })
+            ]
           }
         ),
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "path",
-          {
-            className: "opacity-75",
-            fill: "currentColor",
-            d: "M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
-          }
-        )
+        children
       ]
     }
   );
 }
-var sizeStyles2 = {
-  sm: "h-8 px-2.5 text-sm",
-  md: "h-10 px-3 text-sm",
-  lg: "h-12 px-4 text-base"
-};
-function Input(_a) {
-  var _b = _a, {
-    label,
-    hint,
-    error,
-    size = "md",
-    leftAddon,
-    rightAddon,
-    fullWidth = false,
-    className,
-    id
-  } = _b, props = __objRest(_b, [
-    "label",
-    "hint",
-    "error",
-    "size",
-    "leftAddon",
-    "rightAddon",
-    "fullWidth",
-    "className",
-    "id"
-  ]);
-  const inputId = id != null ? id : label == null ? void 0 : label.toLowerCase().replace(/\s+/g, "-");
-  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: cn("flex flex-col gap-1.5", fullWidth && "w-full"), children: [
-    label && /* @__PURE__ */ jsxRuntime.jsx("label", { htmlFor: inputId, className: "text-sm font-medium text-gray-700", children: label }),
-    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "relative flex items-center", children: [
-      leftAddon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "absolute left-3 flex items-center text-gray-500", children: leftAddon }),
-      /* @__PURE__ */ jsxRuntime.jsx(
-        "input",
-        __spreadValues({
-          id: inputId,
-          className: cn(
-            "w-full rounded-md border bg-white text-gray-900 placeholder:text-gray-400",
-            "transition-colors duration-150",
-            "focus:outline-none focus:ring-2 focus:ring-offset-0",
-            "disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-500",
-            sizeStyles2[size],
-            error ? "border-red-400 focus:border-red-400 focus:ring-red-300" : "border-gray-300 focus:border-blue-500 focus:ring-blue-300",
-            leftAddon && "pl-9",
-            rightAddon && "pr-9",
-            className
-          )
-        }, props)
-      ),
-      rightAddon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "absolute right-3 flex items-center text-gray-500", children: rightAddon })
-    ] }),
-    (hint || error) && /* @__PURE__ */ jsxRuntime.jsx("p", { className: cn("text-xs", error ? "text-red-500" : "text-gray-500"), children: error != null ? error : hint })
-  ] });
-}
-var shadowStyles = {
-  none: "",
-  sm: "shadow-sm",
-  md: "shadow-md",
-  lg: "shadow-lg"
-};
-var paddingStyles = {
-  none: "",
-  sm: "p-4",
-  md: "p-6",
-  lg: "p-8"
-};
-function Card(_a) {
-  var _b = _a, {
-    shadow = "sm",
-    hoverable = false,
-    bordered = true,
-    padding = "md",
-    className,
-    children
-  } = _b, props = __objRest(_b, [
-    "shadow",
-    "hoverable",
-    "bordered",
-    "padding",
-    "className",
-    "children"
-  ]);
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    "div",
-    __spreadProps(__spreadValues({
-      className: cn(
-        "rounded-xl bg-white",
-        shadowStyles[shadow],
-        paddingStyles[padding],
-        bordered && "border border-gray-200",
-        hoverable && "cursor-pointer transition-shadow duration-200 hover:shadow-md",
-        className
-      )
-    }, props), {
-      children
-    })
-  );
-}
-function CardHeader(_a) {
-  var _b = _a, { className, children } = _b, props = __objRest(_b, ["className", "children"]);
-  return /* @__PURE__ */ jsxRuntime.jsx("div", __spreadProps(__spreadValues({ className: cn("mb-4 flex flex-col gap-1", className) }, props), { children }));
-}
-function CardTitle(_a) {
-  var _b = _a, { className, children } = _b, props = __objRest(_b, ["className", "children"]);
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    "h3",
-    __spreadProps(__spreadValues({
-      className: cn("text-lg font-semibold text-gray-900", className)
-    }, props), {
-      children
-    })
-  );
-}
-function CardDescription(_a) {
-  var _b = _a, {
-    className,
-    children
-  } = _b, props = __objRest(_b, [
-    "className",
-    "children"
-  ]);
-  return /* @__PURE__ */ jsxRuntime.jsx("p", __spreadProps(__spreadValues({ className: cn("text-sm text-gray-500", className) }, props), { children }));
-}
-function CardContent(_a) {
-  var _b = _a, {
-    className,
-    children
-  } = _b, props = __objRest(_b, [
-    "className",
-    "children"
-  ]);
-  return /* @__PURE__ */ jsxRuntime.jsx("div", __spreadProps(__spreadValues({ className: cn("text-sm text-gray-700", className) }, props), { children }));
-}
-function CardFooter(_a) {
-  var _b = _a, { className, children } = _b, props = __objRest(_b, ["className", "children"]);
-  return /* @__PURE__ */ jsxRuntime.jsx("div", __spreadProps(__spreadValues({ className: cn("mt-4 flex items-center gap-2", className) }, props), { children }));
-}
-var variantStyles2 = {
-  default: "bg-gray-100 text-gray-700",
-  primary: "bg-blue-100 text-blue-700",
-  success: "bg-green-100 text-green-700",
-  warning: "bg-yellow-100 text-yellow-700",
-  danger: "bg-red-100 text-red-700",
-  info: "bg-sky-100 text-sky-700"
-};
-var dotStyles = {
-  default: "bg-gray-500",
-  primary: "bg-blue-500",
-  success: "bg-green-500",
-  warning: "bg-yellow-500",
-  danger: "bg-red-500",
-  info: "bg-sky-500"
-};
-function Badge(_a) {
-  var _b = _a, {
-    variant = "default",
-    dot = false,
-    className,
-    children
-  } = _b, props = __objRest(_b, [
-    "variant",
-    "dot",
-    "className",
-    "children"
-  ]);
-  return /* @__PURE__ */ jsxRuntime.jsxs(
-    "span",
-    __spreadProps(__spreadValues({
-      className: cn(
-        "inline-flex items-center gap-1.5 rounded-full px-2.5 py-0.5 text-xs font-medium",
-        variantStyles2[variant],
-        className
-      )
-    }, props), {
-      children: [
-        dot && /* @__PURE__ */ jsxRuntime.jsx("span", { className: cn("h-1.5 w-1.5 rounded-full", dotStyles[variant]) }),
-        children
-      ]
-    })
-  );
-}
-var sizeStyles3 = {
-  xs: "h-6 w-6 text-xs",
-  sm: "h-8 w-8 text-sm",
-  md: "h-10 w-10 text-sm",
-  lg: "h-12 w-12 text-base",
-  xl: "h-16 w-16 text-lg"
-};
-function getInitials(name) {
-  return name.split(" ").slice(0, 2).map((word) => {
-    var _a, _b;
-    return (_b = (_a = word[0]) == null ? void 0 : _a.toUpperCase()) != null ? _b : "";
-  }).join("");
-}
-function Avatar(_a) {
-  var _b = _a, {
-    src,
-    alt = "",
-    fallback,
-    size = "md",
-    className
-  } = _b, props = __objRest(_b, [
-    "src",
-    "alt",
-    "fallback",
-    "size",
-    "className"
-  ]);
-  const [imgError, setImgError] = React__default.default.useState(false);
-  const showFallback = !src || imgError;
-  const initials = fallback ? getInitials(fallback) : alt ? getInitials(alt) : "?";
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    "span",
-    __spreadProps(__spreadValues({
-      className: cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200",
-        sizeStyles3[size],
-        className
-      )
-    }, props), {
-      children: !showFallback ? /* @__PURE__ */ jsxRuntime.jsx(
-        "img",
-        {
-          src,
-          alt,
-          className: "h-full w-full object-cover",
-          onError: () => setImgError(true)
-        }
-      ) : /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium text-gray-600 select-none", children: initials })
-    })
-  );
-}
+var card_default = Card;
 
-exports.Avatar = Avatar;
-exports.Badge = Badge;
-exports.Button = Button;
-exports.Card = Card;
-exports.CardContent = CardContent;
-exports.CardDescription = CardDescription;
-exports.CardFooter = CardFooter;
-exports.CardHeader = CardHeader;
-exports.CardTitle = CardTitle;
-exports.Input = Input;
+// src/components/ui/dialog/utils/constants.ts
+var DIALOG_BACKDROP_STYLE = {
+  backdropFilter: "blur(4px)",
+  backgroundColor: "rgba(0, 0, 0, 0.5)"
+};
+function Dialog({
+  open,
+  title,
+  onClose,
+  actions,
+  children,
+  maxWidth,
+  blurBackdrop = false
+}) {
+  const backdropStyle = blurBackdrop ? DIALOG_BACKDROP_STYLE : {};
+  return /* @__PURE__ */ jsxRuntime.jsxs(
+    DialogMui__default.default,
+    {
+      fullWidth: true,
+      open,
+      onClose,
+      maxWidth,
+      slotProps: { backdrop: { sx: backdropStyle } },
+      children: [
+        title && /* @__PURE__ */ jsxRuntime.jsx(DialogTitle__default.default, { children: /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-sm font-semibold text-black-de", children: title }) }),
+        /* @__PURE__ */ jsxRuntime.jsx(DialogContent__default.default, { className: "text-black", children }),
+        actions && /* @__PURE__ */ jsxRuntime.jsx(DialogActions__default.default, { children: actions })
+      ]
+    }
+  );
+}
+var dialog_default = Dialog;
+
+exports.Card = card_default;
+exports.Dialog = dialog_default;
 exports.cn = cn;
+exports.formatCpfCnpj = formatCpfCnpj;
+exports.formatPhoneBr = formatPhoneBr;
+exports.nvl = nvl;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

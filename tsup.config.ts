@@ -17,5 +17,6 @@ export default defineConfig({
   sourcemap: true,
   minify: false,
   treeshake: true,
+  injectStyle: true,
   outDir: "dist",
 });

@@ -27,11 +27,15 @@
   "files": [
     "dist"
   ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "build:css": "tailwindcss -i ./src/styles/index.css -o ./dist/index.css --minify",
-    "build:lib": "tsup && npm run build:css",
+    "build:css:src": "tailwindcss -i ./src/styles/index.css -o ./src/styles/tailwind-output.css --minify",
+    "build:lib": "npm run build:css:src && tsup && npm run build:css",
     "build:lib:watch": "tsup --watch",
     "type-check": "tsc --noEmit",
     "lint": "eslint src/",
@@ -51,6 +55,11 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.1",
+    "@mantine/core": "^9.2.1",
+    "@mantine/hooks": "^9.2.1",
+    "@mui/material": "^9.0.1",
     "clsx": "^2.1.1",
     "next": "^15.5.18",
     "react": ">=18.0.0",
@@ -80,6 +89,8 @@
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-storybook": "^10.4.0",
     "playwright": "^1.60.0",
+    "postcss-preset-mantine": "^1.18.0",
+    "postcss-simple-vars": "^7.0.1",
     "prettier": "^3.8.3",
     "storybook": "^10.4.0",
     "tailwindcss": "^4",
