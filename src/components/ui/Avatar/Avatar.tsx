@@ -35,22 +35,25 @@ export function Avatar({
   size = "md",
   className,
   ...props
-}: AvatarProps) {
+}: Readonly<AvatarProps>) {
   const [imgError, setImgError] = React.useState(false);
   const showFallback = !src || imgError;
-  const initials = fallback ? getInitials(fallback) : alt ? getInitials(alt) : "?";
+  const initials = fallback
+    ? getInitials(fallback)
+    : alt
+      ? getInitials(alt)
+      : "?";
 
   return (
     <span
       className={cn(
         "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gray-200",
         sizeStyles[size],
-        className
+        className,
       )}
       {...props}
     >
       {!showFallback ? (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={src}
           alt={alt}

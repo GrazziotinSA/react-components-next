@@ -9,8 +9,7 @@ export type ButtonVariant =
   | "destructive";
 export type ButtonSize = "sm" | "md" | "lg";
 
-export interface ButtonProps
-  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   variant?: ButtonVariant;
   size?: ButtonSize;
   loading?: boolean;
@@ -62,7 +61,7 @@ export function Button({
         variantStyles[variant],
         sizeStyles[size],
         fullWidth && "w-full",
-        className
+        className,
       )}
       disabled={isDisabled}
       {...props}
@@ -73,15 +72,14 @@ export function Button({
         leftIcon && <span className="shrink-0">{leftIcon}</span>
       )}
       {children}
-      {!loading && rightIcon && (
-        <span className="shrink-0">{rightIcon}</span>
-      )}
+      {!loading && rightIcon && <span className="shrink-0">{rightIcon}</span>}
     </button>
   );
 }
 
 function Spinner({ size }: { size: ButtonSize }) {
-  const spinnerSize = size === "sm" ? "h-3 w-3" : size === "lg" ? "h-5 w-5" : "h-4 w-4";
+  const spinnerSize =
+    size === "sm" ? "h-3 w-3" : size === "lg" ? "h-5 w-5" : "h-4 w-4";
   return (
     <svg
       className={cn("animate-spin shrink-0", spinnerSize)}

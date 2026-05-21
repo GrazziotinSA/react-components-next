@@ -31,7 +31,6 @@ Acesse em [http://localhost:6006](http://localhost:6006).
 
 ## Scripts disponíveis
 
-
 | Comando                   | Descrição                                               |
 | ------------------------- | ------------------------------------------------------- |
 | `npm run storybook`       | Inicia o Storybook em modo desenvolvimento (porta 6006) |
@@ -40,7 +39,6 @@ Acesse em [http://localhost:6006](http://localhost:6006).
 | `npm run build:lib:watch` | Rebuild automático da biblioteca ao salvar              |
 | `npm run type-check`      | Verifica os tipos com TypeScript                        |
 | `npm run lint`            | Verifica o código com ESLint                            |
-
 
 ---
 
@@ -67,7 +65,12 @@ export interface MeuComponenteProps extends React.HTMLAttributes<HTMLDivElement>
   variant?: "default" | "primary";
 }
 
-export function MeuComponente({ variant = "default", className, children, ...props }: MeuComponenteProps) {
+export function MeuComponente({
+  variant = "default",
+  className,
+  children,
+  ...props
+}: MeuComponenteProps) {
   return (
     <div className={cn("...", className)} {...props}>
       {children}
@@ -124,12 +127,11 @@ npm run build:lib
 
 Os arquivos gerados ficam em `dist/` com os seguintes formatos:
 
-
-| Arquivo           | Formato          |
-| ----------------- | ---------------- |
-| `dist/index.js`   | CommonJS (CJS)   |
-| `dist/index.mjs`  | ES Module (ESM)  |
-| `dist/index.d.ts` | Tipos TypeScript |
+| Arquivo           | Formato                                            |
+| ----------------- | -------------------------------------------------- |
+| `dist/index.js`   | CommonJS (CJS)                                     |
+| `dist/index.mjs`  | ES Module (ESM)                                    |
+| `dist/index.d.ts` | Tipos TypeScript                                   |
 | `dist/index.css`  | CSS compilado com todas as classes dos componentes |
 
 ---
@@ -186,11 +188,13 @@ npm link react-components-next
 A partir deste momento, `import { Button } from "react-components-next"` apontará para os arquivos locais em `dist/`.
 
 > **Se o projeto de destino for Next.js** e continuar com erro "Module not found" mesmo após o link, adicione o pacote ao `transpilePackages` no `next.config` do projeto de destino:
+>
 > ```js
 > const nextConfig = {
 >   transpilePackages: ["react-components-next"],
 > };
 > ```
+>
 > Reinicie o servidor de dev depois.
 
 ### Passo 3 — Atualizar após mudanças
@@ -243,4 +247,3 @@ npm login
 # 3. Publicar (o build:lib roda automaticamente via prepublishOnly)
 npm publish
 ```
-

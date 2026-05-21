@@ -104,10 +104,29 @@ export const AllSizes: Story = {
 export const AvatarGroup: Story = {
   render: () => (
     <div className="flex -space-x-2">
-      <Avatar src="https://i.pravatar.cc/150?img=1" alt="User 1" size="md" className="ring-2 ring-white" />
-      <Avatar src="https://i.pravatar.cc/150?img=2" alt="User 2" size="md" className="ring-2 ring-white" />
-      <Avatar src="https://i.pravatar.cc/150?img=3" alt="User 3" size="md" className="ring-2 ring-white" />
-      <Avatar fallback="+3" size="md" className="ring-2 ring-white bg-gray-300" />
+      <Avatar
+        src="https://i.pravatar.cc/150?img=1"
+        alt="User 1"
+        size="md"
+        className="ring-2 ring-white"
+      />
+      <Avatar
+        src="https://i.pravatar.cc/150?img=2"
+        alt="User 2"
+        size="md"
+        className="ring-2 ring-white"
+      />
+      <Avatar
+        src="https://i.pravatar.cc/150?img=3"
+        alt="User 3"
+        size="md"
+        className="ring-2 ring-white"
+      />
+      <Avatar
+        fallback="+3"
+        size="md"
+        className="ring-2 ring-white bg-gray-300"
+      />
     </div>
   ),
 };

@@ -3,8 +3,10 @@ import { cn } from "../../../lib/utils";
 
 export type InputSize = "sm" | "md" | "lg";
 
-export interface InputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, "size"> {
+export interface InputProps extends Omit<
+  React.InputHTMLAttributes<HTMLInputElement>,
+  "size"
+> {
   label?: string;
   hint?: string;
   error?: string;
@@ -37,10 +39,7 @@ export function Input({
   return (
     <div className={cn("flex flex-col gap-1.5", fullWidth && "w-full")}>
       {label && (
-        <label
-          htmlFor={inputId}
-          className="text-sm font-medium text-gray-700"
-        >
+        <label htmlFor={inputId} className="text-sm font-medium text-gray-700">
           {label}
         </label>
       )}
@@ -63,7 +62,7 @@ export function Input({
               : "border-gray-300 focus:border-blue-500 focus:ring-blue-300",
             leftAddon && "pl-9",
             rightAddon && "pr-9",
-            className
+            className,
           )}
           {...props}
         />

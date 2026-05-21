@@ -85,11 +85,21 @@ export const AllVariants: Story = {
 export const AllWithDot: Story = {
   render: () => (
     <div className="flex flex-wrap gap-2">
-      <Badge variant="default" dot>Offline</Badge>
-      <Badge variant="success" dot>Online</Badge>
-      <Badge variant="warning" dot>Ausente</Badge>
-      <Badge variant="danger" dot>Ocupado</Badge>
-      <Badge variant="info" dot>Em reunião</Badge>
+      <Badge variant="default" dot>
+        Offline
+      </Badge>
+      <Badge variant="success" dot>
+        Online
+      </Badge>
+      <Badge variant="warning" dot>
+        Ausente
+      </Badge>
+      <Badge variant="danger" dot>
+        Ocupado
+      </Badge>
+      <Badge variant="info" dot>
+        Em reunião
+      </Badge>
     </div>
   ),
 };

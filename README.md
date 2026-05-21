@@ -12,18 +12,27 @@ npm install react-components-next
 
 ## Componentes disponíveis
 
-| Componente | Descrição |
-|------------|-----------|
-| `Button` | Botão com variantes, tamanhos, loading e ícones |
-| `Input` | Campo de entrada com label, hint, erro e addons |
-| `Card` | Container com header, content e footer compostos |
-| `Badge` | Etiqueta colorida para status e categorias |
-| `Avatar` | Foto de perfil com fallback de iniciais |
+| Componente | Descrição                                        |
+| ---------- | ------------------------------------------------ |
+| `Button`   | Botão com variantes, tamanhos, loading e ícones  |
+| `Input`    | Campo de entrada com label, hint, erro e addons  |
+| `Card`     | Container com header, content e footer compostos |
+| `Badge`    | Etiqueta colorida para status e categorias       |
+| `Avatar`   | Foto de perfil com fallback de iniciais          |
 
 ## Uso
 
 ```tsx
-import { Button, Card, CardHeader, CardTitle, CardContent, Input, Badge, Avatar } from "react-components-next";
+import {
+  Button,
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  Input,
+  Badge,
+  Avatar,
+} from "react-components-next";
 
 export function Example() {
   return (
@@ -36,11 +45,15 @@ export function Example() {
           <Avatar fallback="João Silva" size="md" />
           <div>
             <p>João Silva</p>
-            <Badge variant="success" dot>Online</Badge>
+            <Badge variant="success" dot>
+              Online
+            </Badge>
           </div>
         </div>
         <Input label="E-mail" type="email" placeholder="joao@exemplo.com" />
-        <Button variant="primary" fullWidth>Salvar</Button>
+        <Button variant="primary" fullWidth>
+          Salvar
+        </Button>
       </CardContent>
     </Card>
   );
@@ -53,11 +66,11 @@ export function Example() {
 
 ```tsx
 <Button
-  variant="primary"    // "primary" | "secondary" | "outline" | "ghost" | "destructive"
-  size="md"            // "sm" | "md" | "lg"
-  loading={false}      // boolean
-  fullWidth={false}    // boolean
-  leftIcon={<Icon />}  // ReactNode
+  variant="primary" // "primary" | "secondary" | "outline" | "ghost" | "destructive"
+  size="md" // "sm" | "md" | "lg"
+  loading={false} // boolean
+  fullWidth={false} // boolean
+  leftIcon={<Icon />} // ReactNode
   rightIcon={<Icon />} // ReactNode
 >
   Clique aqui
@@ -72,9 +85,9 @@ export function Example() {
   placeholder="Digite..."
   hint="Texto de ajuda"
   error="Mensagem de erro"
-  size="md"              // "sm" | "md" | "lg"
-  leftAddon={<Icon />}   // ReactNode
-  rightAddon={<Icon />}  // ReactNode
+  size="md" // "sm" | "md" | "lg"
+  leftAddon={<Icon />} // ReactNode
+  rightAddon={<Icon />} // ReactNode
   fullWidth={false}
 />
 ```
@@ -98,8 +111,8 @@ export function Example() {
 
 ```tsx
 <Badge
-  variant="success"  // "default" | "primary" | "success" | "warning" | "danger" | "info"
-  dot={false}        // boolean - exibe um ponto colorido
+  variant="success" // "default" | "primary" | "success" | "warning" | "danger" | "info"
+  dot={false} // boolean - exibe um ponto colorido
 >
   Online
 </Badge>
@@ -109,10 +122,10 @@ export function Example() {
 
 ```tsx
 <Avatar
-  src="https://..."        // URL da imagem (opcional)
+  src="https://..." // URL da imagem (opcional)
   alt="Nome do usuário"
-  fallback="João Silva"    // usado para gerar as iniciais
-  size="md"                // "xs" | "sm" | "md" | "lg" | "xl"
+  fallback="João Silva" // usado para gerar as iniciais
+  size="md" // "xs" | "sm" | "md" | "lg" | "xl"
 />
 ```
 

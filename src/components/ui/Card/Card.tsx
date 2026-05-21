@@ -40,7 +40,7 @@ export function Card({
         bordered && "border border-gray-200",
         hoverable &&
           "cursor-pointer transition-shadow duration-200 hover:shadow-md",
-        className
+        className,
       )}
       {...props}
     >
@@ -72,8 +72,7 @@ export function CardTitle({ className, children, ...props }: CardTitleProps) {
   );
 }
 
-export interface CardDescriptionProps
-  extends React.HTMLAttributes<HTMLParagraphElement> {}
+export interface CardDescriptionProps extends React.HTMLAttributes<HTMLParagraphElement> {}
 
 export function CardDescription({
   className,
@@ -105,10 +104,7 @@ export interface CardFooterProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function CardFooter({ className, children, ...props }: CardFooterProps) {
   return (
-    <div
-      className={cn("mt-4 flex items-center gap-2", className)}
-      {...props}
-    >
+    <div className={cn("mt-4 flex items-center gap-2", className)} {...props}>
       {children}
     </div>
   );
