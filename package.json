@@ -12,6 +12,16 @@
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
     },
+    "./ui": {
+      "types": "./dist/ui/index.d.ts",
+      "import": "./dist/ui/index.mjs",
+      "require": "./dist/ui/index.js"
+    },
+    "./functions": {
+      "types": "./dist/functions/index.d.ts",
+      "import": "./dist/functions/index.mjs",
+      "require": "./dist/functions/index.js"
+    },
     "./styles": "./dist/index.css"
   },
   "files": [
@@ -41,9 +51,14 @@
     "react-dom": ">=18.0.0"
   },
   "dependencies": {
-    "next": "16.2.6",
+    "clsx": "^2.1.1",
+    "next": "^15.5.18",
     "react": ">=18.0.0",
-    "react-dom": ">=18.0.0"
+    "react-dom": ">=18.0.0",
+    "tailwind-merge": "^3.6.0"
+  },
+  "overrides": {
+    "caniuse-lite": "1.0.30001792"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^5.2.1",
@@ -51,7 +66,7 @@
     "@storybook/addon-docs": "^10.4.0",
     "@storybook/addon-mcp": "^0.6.0",
     "@storybook/addon-vitest": "^10.4.0",
-    "@storybook/nextjs-vite": "^10.4.0",
+    "@storybook/react-vite": "^10.4.0",
     "@tailwindcss/cli": "^4.3.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
@@ -60,7 +75,7 @@
     "@vitest/browser-playwright": "^4.1.7",
     "@vitest/coverage-v8": "^4.1.7",
     "eslint": "^9",
-    "eslint-config-next": "16.2.6",
+    "eslint-config-next": "^16.2.6",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.5",
     "eslint-plugin-storybook": "^10.4.0",

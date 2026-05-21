@@ -1,0 +1,29 @@
+---
+description: Sempre usar CRLF ao criar ou editar arquivos de texto
+alwaysApply: true
+---
+
+# Line Endings (CRLF)
+
+Este projeto usa **CRLF** (`\r\n`) em todos os arquivos de texto.
+
+## Ao criar ou editar arquivos
+
+- Escreva quebras de linha como `\r\n`, nunca apenas `\n`.
+- Ao usar Write/StrReplace, garanta que o conteúdo final no disco termine com CRLF.
+- Não deixe arquivos novos em LF; isso quebra `prettier/prettier` e `"files.eol": "\r\n"`.
+
+## Referências do projeto
+
+- ESLint: `endOfLine: "crlf"` em `eslint.config.mjs`
+- VS Code: `"files.eol": "\r\n"` em `.vscode/settings.json`
+- Git: `.gitattributes` com `eol=crlf`
+- EditorConfig: `end_of_line = crlf`
+
+## Após criar arquivos
+
+Se houver dúvida sobre o EOL, normalize com:
+
+```bash
+npx prettier --write --end-of-line crlf "<arquivo>"
+```

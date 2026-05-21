@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../functions/cn/cn";
 
 export interface CardProps extends React.HTMLAttributes<HTMLDivElement> {
   shadow?: "none" | "sm" | "md" | "lg";

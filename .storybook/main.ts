@@ -1,4 +1,4 @@
-import type { StorybookConfig } from "@storybook/nextjs-vite";
+import type { StorybookConfig } from "@storybook/react-vite";
 
 const config: StorybookConfig = {
   stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -9,7 +9,7 @@ const config: StorybookConfig = {
     "@storybook/addon-docs",
     "@storybook/addon-mcp",
   ],
-  framework: "@storybook/nextjs-vite",
+  framework: "@storybook/react-vite",
   staticDirs: [String.raw`..\public`],
 };
 export default config;

@@ -1,5 +1,7 @@
 'use strict';
 
+var tailwindMerge = require('tailwind-merge');
+var clsx = require('clsx');
 var jsxRuntime = require('react/jsx-runtime');
 var React = require('react');
 
@@ -38,22 +40,8 @@ var __objRest = (source, exclude) => {
     }
   return target;
 };
-
-// src/lib/utils.ts
-function cn(...inputs) {
-  const result = [];
-  for (const input of inputs) {
-    if (!input && input !== 0) continue;
-    if (typeof input === "string") {
-      result.push(input);
-    } else if (typeof input === "number" || typeof input === "bigint") {
-      result.push(String(input));
-    } else if (Array.isArray(input)) {
-      const nested = cn(...input);
-      if (nested) result.push(nested);
-    }
-  }
-  return result.join(" ").replace(/\s+/g, " ").trim();
+function cn(...values) {
+  return tailwindMerge.twMerge(clsx.clsx(values));
 }
 var variantStyles = {
   primary: "bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800 focus-visible:ring-blue-500",
@@ -175,14 +163,7 @@ function Input(_a) {
   ]);
   const inputId = id != null ? id : label == null ? void 0 : label.toLowerCase().replace(/\s+/g, "-");
   return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: cn("flex flex-col gap-1.5", fullWidth && "w-full"), children: [
-    label && /* @__PURE__ */ jsxRuntime.jsx(
-      "label",
-      {
-        htmlFor: inputId,
-        className: "text-sm font-medium text-gray-700",
-        children: label
-      }
-    ),
+    label && /* @__PURE__ */ jsxRuntime.jsx("label", { htmlFor: inputId, className: "text-sm font-medium text-gray-700", children: label }),
     /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "relative flex items-center", children: [
       leftAddon && /* @__PURE__ */ jsxRuntime.jsx("span", { className: "absolute left-3 flex items-center text-gray-500", children: leftAddon }),
       /* @__PURE__ */ jsxRuntime.jsx(
@@ -288,14 +269,7 @@ function CardContent(_a) {
 }
 function CardFooter(_a) {
   var _b = _a, { className, children } = _b, props = __objRest(_b, ["className", "children"]);
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    "div",
-    __spreadProps(__spreadValues({
-      className: cn("mt-4 flex items-center gap-2", className)
-    }, props), {
-      children
-    })
-  );
+  return /* @__PURE__ */ jsxRuntime.jsx("div", __spreadProps(__spreadValues({ className: cn("mt-4 flex items-center gap-2", className) }, props), { children }));
 }
 var variantStyles2 = {
   default: "bg-gray-100 text-gray-700",
@@ -335,12 +309,7 @@ function Badge(_a) {
       )
     }, props), {
       children: [
-        dot && /* @__PURE__ */ jsxRuntime.jsx(
-          "span",
-          {
-            className: cn("h-1.5 w-1.5 rounded-full", dotStyles[variant])
-          }
-        ),
+        dot && /* @__PURE__ */ jsxRuntime.jsx("span", { className: cn("h-1.5 w-1.5 rounded-full", dotStyles[variant]) }),
         children
       ]
     })
@@ -385,17 +354,14 @@ function Avatar(_a) {
         className
       )
     }, props), {
-      children: !showFallback ? (
-        // eslint-disable-next-line @next/next/no-img-element
-        /* @__PURE__ */ jsxRuntime.jsx(
-          "img",
-          {
-            src,
-            alt,
-            className: "h-full w-full object-cover",
-            onError: () => setImgError(true)
-          }
-        )
+      children: !showFallback ? /* @__PURE__ */ jsxRuntime.jsx(
+        "img",
+        {
+          src,
+          alt,
+          className: "h-full w-full object-cover",
+          onError: () => setImgError(true)
+        }
       ) : /* @__PURE__ */ jsxRuntime.jsx("span", { className: "font-medium text-gray-600 select-none", children: initials })
     })
   );
@@ -411,5 +377,6 @@ exports.CardFooter = CardFooter;
 exports.CardHeader = CardHeader;
 exports.CardTitle = CardTitle;
 exports.Input = Input;
+exports.cn = cn;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

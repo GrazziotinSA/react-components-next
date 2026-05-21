@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "../../../functions/cn/cn";
 
 export type InputSize = "sm" | "md" | "lg";
 

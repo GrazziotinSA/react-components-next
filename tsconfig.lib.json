@@ -5,8 +5,13 @@
     "declaration": true,
     "declarationDir": "./dist",
     "outDir": "./dist",
-    "rootDir": "./src/components"
+    "rootDir": "./src"
   },
-  "include": ["src/components/**/*.ts", "src/components/**/*.tsx"],
+  "include": [
+    "src/index.ts",
+    "src/components/**/*.ts",
+    "src/components/**/*.tsx",
+    "src/functions/**/*.ts"
+  ],
   "exclude": ["node_modules", "src/app", "dist"]
 }
