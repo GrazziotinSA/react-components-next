@@ -455,11 +455,14 @@ type FilterInputSelectItem<T, M extends boolean = false> = InputSelectProps<T, M
  * Campo {@link InputSelect} no drawer com tipos heterogêneos.
  * Cada item pode ter `options` de um tipo diferente na mesma lista.
  */
-type FilterInputSelectField<M extends boolean = boolean> = InputSelectProps<unknown, M> & InputSelectGridProps;
-/** Lista de campos {@link InputSelect} no drawer (tipos de opção independentes por item). */
-type FilterInputSelectProps<M extends boolean = boolean> = FilterInputSelectField<M>[];
+type FilterInputSelectField<M extends boolean = false> = InputSelectProps<unknown, M> & InputSelectGridProps;
+/**
+ * Lista de campos {@link InputSelect} no drawer.
+ * Cada item pode ter tipo de opção e seleção única/múltipla diferentes.
+ */
+type FilterInputSelectProps = (FilterInputSelectField<false> | FilterInputSelectField<true>)[];
 /** Campo do drawer: {@link Input} ou {@link InputSelect}. */
-type FilterDrawerField = FilterInputProps | FilterInputSelectField;
+type FilterDrawerField = FilterInputProps | FilterInputSelectField<false> | FilterInputSelectField<true>;
 /**
  * Propriedades do componente {@link FilterDrawer}.
  */
@@ -514,6 +517,6 @@ declare const Filter: ({ title, inputs, onClear, onSubmit, inputSelect, }: Filte
  *   order: 1,
  * })
  */
-declare function filterInputSelect<T extends object, M extends boolean = false>(props: InputSelectProps<T, M> & InputSelectGridProps): FilterInputSelectField<M>;
+declare function filterInputSelect<T extends object, M extends boolean = false>(props: InputSelectProps<T, M> & InputSelectGridProps): M extends true ? FilterInputSelectField<true> : FilterInputSelectField<false>;
 
 export { Card, type CardClassName, type CardProps, DataTable, type DataTableProps, Dialog, type DialogProps, Filter, type FilterCardProps, type FilterDrawerField, type FilterDrawerProps, type FilterInputProps, type FilterInputSelectField, type FilterInputSelectItem, type FilterInputSelectProps, type FilterProps, Input, type InputProps, InputSelect, type InputSelectGridProps, type InputSelectProps, type InputType, Tab, type TabColorProps, type TabProps, Tabs, type TabsProps, filterInputSelect };
