@@ -3,7 +3,7 @@ Retorna o valor quando não é \`null\` nem \`undefined\`; caso contrário, reto
 
 **Importação:**
 \`\`\`tsx
-import { nvl } from "react-components-next/functions";
+import { nvl } from "@grazziotin/react-components-next/functions";
 \`\`\`
 
 **Uso básico:**

@@ -1,0 +1,52 @@
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import { formatItem170 } from "../format-item-170";
+import type { FormatItem170ExampleProps } from "./interface";
+import formatItem170Constants from "./constants";
+
+const meta: Meta = {
+  title: "Functions/format-item-170",
+  tags: ["autodocs"],
+  parameters: {
+    layout: "centered",
+    docs: { description: { component: formatItem170Constants } },
+  },
+};
+
+export default meta;
+type Story = StoryObj;
+
+function Example({ label, result }: FormatItem170ExampleProps) {
+  return (
+    <div className="flex flex-col gap-2">
+      <code className="rounded bg-gray-100 px-2 py-1 text-sm">{label}</code>
+      <p className="text-sm text-gray-700">
+        Resultado:{" "}
+        <strong className="font-mono text-gray-900">
+          {JSON.stringify(result)}
+        </strong>
+      </p>
+    </div>
+  );
+}
+
+export const Vazio: Story = {
+  render: () => <Example label={"formatItem170()"} result={formatItem170()} />,
+};
+
+export const Parcial: Story = {
+  render: () => (
+    <Example
+      label={'formatItem170("123456")'}
+      result={formatItem170("123456")}
+    />
+  ),
+};
+
+export const Completo: Story = {
+  render: () => (
+    <Example
+      label={'formatItem170("123456789012")'}
+      result={formatItem170("123456789012")}
+    />
+  ),
+};

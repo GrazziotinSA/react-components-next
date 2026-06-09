@@ -3,7 +3,7 @@ Combina classes com \`clsx\` e remove conflitos do Tailwind com \`twMerge\`.
 
 **Importação:**
 \`\`\`tsx
-import { cn } from "react-components-next/functions";
+import { cn } from "@grazziotin/react-components-next/functions";
 \`\`\`
 
 **Uso básico:**

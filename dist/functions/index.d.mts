@@ -35,4 +35,39 @@ declare function formatCpfCnpj(data?: string): string;
  */
 declare function formatPhoneBr(phone?: string): string;
 
-export { cn, formatCpfCnpj, formatPhoneBr, nvl };
+/**
+ * Formata um valor como moeda brasileira (BRL).
+ *
+ * - **string** — máscara de input: remove não dígitos, divide por 100 (centavos)
+ * - **number** — valor já em reais
+ *
+ * @param value - Valor digitado ou numérico em reais
+ * @returns Valor formatado (ex.: `R$ 1.234,56`) ou string vazia se ausente
+ * @example
+ * formatPriceBrl("123456") // "R$ 1.234,56" (input)
+ * formatPriceBrl(1234.56) // "R$ 1.234,56" (número)
+ * formatPriceBrl(0) // "R$ 0,00"
+ */
+declare function formatPriceBrl(value?: string | number | null): string;
+
+/**
+ * Formata máscara de item 170 (até 12 dígitos) no padrão `00.00.00.00.0.000`.
+ * Remove caracteres não numéricos antes de formatar.
+ * @param item - Valor com ou sem formatação
+ * @returns Item formatado ou string vazia se ausente
+ * @example
+ * formatItem170("123456789012") // "12.34.56.78.9.012"
+ */
+declare function formatItem170(item?: string): string;
+
+/**
+ * Formata máscara de item 150 (até 10 dígitos) no padrão `00.00.00.0.000`.
+ * Remove caracteres não numéricos antes de formatar.
+ * @param item - Valor com ou sem formatação
+ * @returns Item formatado ou string vazia se ausente
+ * @example
+ * formatItem150("1234567890") // "12.34.56.7.890"
+ */
+declare function formatItem150(item?: string): string;
+
+export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl };

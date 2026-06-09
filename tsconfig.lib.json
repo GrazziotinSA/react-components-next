@@ -8,7 +8,6 @@
     "rootDir": "./src"
   },
   "include": [
-    "src/index.ts",
     "src/components/**/*.ts",
     "src/components/**/*.tsx",
     "src/functions/**/*.ts"

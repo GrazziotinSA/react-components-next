@@ -46,9 +46,45 @@ function formatPhoneBr(phone) {
   return digits.replace(/(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
 }
 
+// src/functions/format-price-brl/format-price-brl.ts
+function formatPriceBrl(value) {
+  if (value === void 0 || value === null) return "";
+  if (typeof value === "string") {
+    const digits = removeDigits(value);
+    if (!digits) return "";
+    const price = Number(digits) / 100;
+    if (Number.isNaN(price)) return "";
+    return price.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+  }
+  if (Number.isNaN(value)) return "";
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+// src/functions/format-item-170/format-item-170.ts
+function formatItem170(item) {
+  if (!item) return "";
+  const digits = removeDigits(item).slice(0, 12);
+  if (!digits) return "";
+  return digits.replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})\.(\d)(\d{1,3})$/, "$1.$2.$3");
+}
+
+// src/functions/format-item-150/format-item-150.ts
+function formatItem150(item) {
+  if (!item) return "";
+  const digits = removeDigits(item).slice(0, 10);
+  if (!digits) return "";
+  return digits.replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})\.(\d)(\d{1,3})$/, "$1.$2.$3");
+}
+
 exports.cn = cn;
 exports.formatCpfCnpj = formatCpfCnpj;
+exports.formatItem150 = formatItem150;
+exports.formatItem170 = formatItem170;
 exports.formatPhoneBr = formatPhoneBr;
+exports.formatPriceBrl = formatPriceBrl;
 exports.nvl = nvl;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

@@ -4,7 +4,6 @@
 
 :root {
   --primary-color: #00B2A6;
-  --input-accent: #00B2A6;
   --font-poppins: 'Poppins', sans-serif;
   --font-family: var(--font-poppins);
   --default-font-family: var(--font-poppins);

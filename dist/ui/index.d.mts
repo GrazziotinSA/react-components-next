@@ -1,7 +1,7 @@
 import * as _mui_material from '@mui/material';
-import { CSSProperties, Breakpoint, TabProps as TabProps$1, TabsProps as TabsProps$1 } from '@mui/material';
+import { CSSProperties, Breakpoint, TabProps as TabProps$1, TabsProps as TabsProps$1, TextFieldProps, AutocompleteProps, AutocompleteChangeReason, AutocompleteChangeDetails } from '@mui/material';
 import * as react from 'react';
-import react__default, { ComponentPropsWithoutRef } from 'react';
+import react__default, { ComponentPropsWithoutRef, Dispatch, SetStateAction, SubmitEventHandler, ReactElement } from 'react';
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import { DataGridProps } from '@mui/x-data-grid';
 import * as _emotion_styled from '@emotion/styled';
@@ -311,6 +311,209 @@ declare const Tabs: _emotion_styled.StyledComponent<_mui_material.TabsOwnProps &
  * <Tab label="Configurações" color="#00B2A6" />
  * ```
  */
-declare const Tab: _emotion_styled.StyledComponent<_mui_material.TabOwnProps & Omit<_mui_material.ButtonBaseOwnProps, keyof _mui_material.TabOwnProps> & Omit<_mui_material.ButtonBaseOwnProps, "tabIndex" | "type" | "touchRippleRef" | "action" | "centerRipple" | "disableRipple" | "disableTouchRipple" | "focusRipple" | "focusVisibleClassName" | "LinkComponent" | "nativeButton" | "onFocusVisible" | "TouchRippleProps" | keyof _mui_material.TabOwnProps> & _mui_material_OverridableComponent.CommonProps & Omit<react.DetailedHTMLProps<react.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "label" | "style" | "className" | "tabIndex" | "children" | "icon" | "sx" | "type" | "classes" | "disabled" | "touchRippleRef" | "value" | "action" | "centerRipple" | "disableRipple" | "disableTouchRipple" | "focusRipple" | "focusVisibleClassName" | "LinkComponent" | "nativeButton" | "onFocusVisible" | "TouchRippleProps" | "disableFocusRipple" | "iconPosition" | "wrapped"> & _mui_system.MUIStyledCommonProps<_mui_material.Theme> & TabColorProps, {}, {}>;
+declare const Tab: _emotion_styled.StyledComponent<_mui_material.TabOwnProps & Omit<_mui_material.ButtonBaseOwnProps, keyof _mui_material.TabOwnProps> & Omit<_mui_material.ButtonBaseOwnProps, "tabIndex" | "type" | "touchRippleRef" | "action" | "centerRipple" | "disableRipple" | "disableTouchRipple" | "focusRipple" | "focusVisibleClassName" | "LinkComponent" | "nativeButton" | "onFocusVisible" | "TouchRippleProps" | keyof _mui_material.TabOwnProps> & _mui_material_OverridableComponent.CommonProps & Omit<react.DetailedHTMLProps<react.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "style" | "label" | "className" | "tabIndex" | "children" | "icon" | "sx" | "type" | "classes" | "disabled" | "touchRippleRef" | "value" | "action" | "centerRipple" | "disableRipple" | "disableTouchRipple" | "focusRipple" | "focusVisibleClassName" | "LinkComponent" | "nativeButton" | "onFocusVisible" | "TouchRippleProps" | "disableFocusRipple" | "iconPosition" | "wrapped"> & _mui_system.MUIStyledCommonProps<_mui_material.Theme> & TabColorProps, {}, {}>;
 
-export { Card, type CardClassName, type CardProps, DataTable, type DataTableProps, Dialog, type DialogProps, Tab, type TabColorProps, type TabProps, Tabs, type TabsProps };
+type InputType = TextFieldProps["type"] | "cpf-cnpj" | "numeric" | "price" | "text-only" | "text-no-number" | "item-170" | "item-150";
+type InputProps = Omit<TextFieldProps, "color" | "type" | "size"> & {
+    /**
+     * Cor do input.
+     */
+    color?: string;
+    /**
+     * Se true, exibe um botão de toggle para mostrar/ocultar a senha.
+     */
+    isPassword?: boolean;
+    /**
+     * Aceita os tipos padrão do TextField e tipos customizados do projeto.
+     * Padrão: `"text"`.
+     */
+    type?: InputType;
+    /**
+     * Tamanho do campo conforme o MUI TextField.
+     * Padrão: `"small"`.
+     */
+    size?: TextFieldProps["size"];
+};
+
+/**
+ * Campo de texto baseado no MUI TextField, com máscaras e tipos customizados do projeto.
+ */
+declare const Input: ({ color, onChange, isPassword, type, size, ...rest }: Readonly<InputProps>) => react_jsx_runtime.JSX.Element;
+
+/**
+ * Propriedades de layout em grid para o campo do {@link InputSelect}.
+ */
+interface InputSelectGridProps {
+    /**
+     * Ordem de exibição do input.
+     */
+    order?: number;
+    /**
+     * Tamanho do grid para o input.
+     */
+    xs?: number;
+}
+/**
+ * Propriedades do componente {@link InputSelect}.
+ *
+ * Estende o Autocomplete do MUI, substituindo `renderInput` pelo {@link Input} do projeto
+ * e tipando `onChange` conforme seleção única ou múltipla.
+ *
+ * @template T - Tipo dos itens de opções no seletor.
+ * @template M - Valor booleano que define se a seleção pode ser múltipla.
+ */
+interface InputSelectProps<T, M extends boolean = false> extends Omit<AutocompleteProps<T, M, boolean | undefined, boolean | undefined>, "renderInput" | "onChange"> {
+    /**
+     * Propriedades repassadas ao {@link Input} interno.
+     * Aceita label, color, type, máscaras e demais props do TextField do projeto.
+     */
+    input?: InputProps & InputSelectGridProps;
+    /**
+     * Opções exibidas no seletor.
+     */
+    options: T[];
+    /**
+     * Retorna a string exibida como rótulo de uma opção.
+     * @param data - Item da lista `options`.
+     */
+    optionLabel: (data: T) => string;
+    /**
+     * Define se o seletor permite múltiplas seleções.
+     * Padrão: `false`.
+     */
+    multiple?: M;
+    /**
+     * Callback disparado quando o valor do seletor é alterado.
+     * @param event - Evento que disparou a alteração.
+     * @param value - Novo valor (`T | null` ou `T[]` quando `multiple`).
+     * @param reason - Motivo da alteração (MUI `AutocompleteChangeReason`).
+     * @param details - Detalhes adicionais da alteração (opcional).
+     */
+    onChange?: (event: React.SyntheticEvent, value: M extends true ? T[] : T | null, reason: AutocompleteChangeReason, details?: AutocompleteChangeDetails<T>) => void;
+}
+
+/**
+ * Componente InputSelect que encapsula o Autocomplete do Material-UI com o {@link Input} do projeto.
+ *
+ * Permite a seleção de uma ou mais opções com base nos parâmetros fornecidos.
+ * É configurável via props do Autocomplete do MUI, com campo de entrada customizável
+ * através de `input` (mesmas props do {@link Input}: cor, label, máscaras, etc.).
+ *
+ * @template T - Tipo dos itens de opções exibidos no seletor.
+ * @template M - Define se o seletor permite múltiplas seleções. Padrão: `false` (seletor único).
+ *
+ * @param props - Propriedades do componente. Detalhes em {@link InputSelectProps}.
+ * @param props.multiple - Se `true`, permite selecionar várias opções. Padrão: `false`.
+ * @param props.optionLabel - Função que recebe uma opção e retorna o rótulo exibido.
+ * @param props.onChange - Callback ao alterar o valor (evento, valor, motivo e detalhes).
+ * @param props.input - Props repassadas ao {@link Input} interno (label, color, type, etc.).
+ * @param props.options - Lista de opções disponíveis no seletor.
+ * @param props.rest - Demais props do Autocomplete do MUI (exceto `renderInput` e `onChange`).
+ *
+ * @returns Autocomplete com campo de entrada personalizado.
+ *
+ * @example
+ * ```tsx
+ * const options = [
+ *   { id: 1, label: "Opção 1" },
+ *   { id: 2, label: "Opção 2" },
+ * ];
+ *
+ * <InputSelect
+ *   options={options}
+ *   optionLabel={(option) => option.label}
+ *   input={{ label: "Selecione", color: "#00b2a6" }}
+ *   onChange={(_event, value) => console.log("Valor selecionado:", value)}
+ *   multiple
+ * />
+ * ```
+ */
+declare function InputSelect<T, M extends boolean = false>({ multiple, optionLabel, onChange, input, ...rest }: Readonly<InputSelectProps<T, M>>): react_jsx_runtime.JSX.Element;
+
+/**
+ * Propriedades do componente {@link FilterCard}.
+ */
+interface FilterCardProps {
+    /** Título do cartão de filtros. */
+    title?: string;
+    /** Indica se o botão de filtros deve ser exibido. */
+    renderFilter: boolean;
+    /** Controla a abertura do drawer de filtros. */
+    setOpen: Dispatch<SetStateAction<boolean>>;
+}
+/**
+ * {@link Input} no grid do drawer de filtros.
+ * Inclui `order` e `xs` para posicionamento no grid responsivo.
+ */
+type FilterInputProps = InputProps & InputSelectGridProps;
+/**
+ * {@link InputSelect} tipado no grid do drawer.
+ * Use {@link filterInputSelect} para inferir `T` por campo sem casts.
+ */
+type FilterInputSelectItem<T, M extends boolean = false> = InputSelectProps<T, M> & InputSelectGridProps;
+/**
+ * Campo {@link InputSelect} no drawer com tipos heterogêneos.
+ * Cada item pode ter `options` de um tipo diferente na mesma lista.
+ */
+type FilterInputSelectField<M extends boolean = boolean> = InputSelectProps<unknown, M> & InputSelectGridProps;
+/** Lista de campos {@link InputSelect} no drawer (tipos de opção independentes por item). */
+type FilterInputSelectProps<M extends boolean = boolean> = FilterInputSelectField<M>[];
+/** Campo do drawer: {@link Input} ou {@link InputSelect}. */
+type FilterDrawerField = FilterInputProps | FilterInputSelectField;
+/**
+ * Propriedades do componente {@link FilterDrawer}.
+ */
+interface FilterDrawerProps {
+    /** Drawer aberto. */
+    open?: boolean;
+    /** Controla a abertura do drawer. */
+    setOpen: Dispatch<SetStateAction<boolean>>;
+    /** Campos {@link Input}. */
+    inputs?: FilterInputProps[];
+    /** Campos {@link InputSelect}. */
+    inputSelect?: FilterInputSelectProps;
+    /** Callback ao limpar filtros. */
+    onClear?: () => void;
+    /** Callback ao submeter o formulário de filtros. */
+    onSubmit?: SubmitEventHandler<HTMLFormElement>;
+}
+/**
+ * Propriedades do componente {@link Filter}.
+ *
+ * Combina título do card com campos e callbacks do drawer.
+ */
+interface FilterProps extends Omit<FilterCardProps, "renderFilter" | "setOpen">, Omit<FilterDrawerProps, "open" | "setOpen"> {
+}
+
+/**
+ * Filtro com card de título e drawer contendo {@link Input} e {@link InputSelect}.
+ *
+ * O card exibe o título da página/relatório e um botão para abrir o drawer quando
+ * há campos em `inputs` ou `inputSelect`. O drawer renderiza os campos em grid
+ * responsivo, com ações de limpar e pesquisar.
+ *
+ * @param props - Propriedades do componente. Detalhes em {@link FilterProps}.
+ * @param props.title - Título exibido no card.
+ * @param props.inputs - Campos de texto/máscara ({@link Input}).
+ * @param props.inputSelect - Campos de seleção ({@link InputSelect}).
+ * @param props.onClear - Callback ao limpar filtros.
+ * @param props.onSubmit - Callback ao pesquisar.
+ * @returns Elemento React com card e drawer de filtros.
+ */
+declare const Filter: ({ title, inputs, onClear, onSubmit, inputSelect, }: FilterProps) => ReactElement;
+
+/**
+ * Define um campo {@link InputSelect} no filter preservando a inferência de `T`.
+ * Permite montar listas com tipos de opção diferentes sem union nem `as`.
+ *
+ * @example
+ * filterInputSelect({
+ *   options: networks,
+ *   optionLabel: (v) => v.desRede,
+ *   input: { label: "Rede" },
+ *   order: 1,
+ * })
+ */
+declare function filterInputSelect<T extends object, M extends boolean = false>(props: InputSelectProps<T, M> & InputSelectGridProps): FilterInputSelectField<M>;
+
+export { Card, type CardClassName, type CardProps, DataTable, type DataTableProps, Dialog, type DialogProps, Filter, type FilterCardProps, type FilterDrawerField, type FilterDrawerProps, type FilterInputProps, type FilterInputSelectField, type FilterInputSelectItem, type FilterInputSelectProps, type FilterProps, Input, type InputProps, InputSelect, type InputSelectGridProps, type InputSelectProps, type InputType, Tab, type TabColorProps, type TabProps, Tabs, type TabsProps, filterInputSelect };

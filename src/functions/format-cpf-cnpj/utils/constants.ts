@@ -3,7 +3,7 @@ Formata CPF (até 11 dígitos) ou CNPJ (12–14 dígitos) a partir de uma string
 
 **Importação:**
 \`\`\`tsx
-import { formatCpfCnpj } from "react-components-next/functions";
+import { formatCpfCnpj } from "@grazziotin/react-components-next/functions";
 \`\`\`
 
 **Uso básico:**

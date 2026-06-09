@@ -3,7 +3,7 @@ Formata telefone brasileiro (até 11 dígitos): fixo com 10 dígitos ou celular 
 
 **Importação:**
 \`\`\`tsx
-import { formatPhoneBr } from "react-components-next/functions";
+import { formatPhoneBr } from "@grazziotin/react-components-next/functions";
 \`\`\`
 
 **Uso básico:**

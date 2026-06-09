@@ -1,17 +1,9 @@
 {
   "name": "@grazziotin/react-components-next",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Biblioteca de componentes React reutilizáveis",
   "private": false,
-  "main": "./dist/index.js",
-  "module": "./dist/index.mjs",
-  "types": "./dist/index.d.ts",
   "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
-    },
     "./ui": {
       "types": "./dist/ui/index.d.ts",
       "import": "./dist/ui/index.mjs",
@@ -21,6 +13,11 @@
       "types": "./dist/functions/index.d.ts",
       "import": "./dist/functions/index.mjs",
       "require": "./dist/functions/index.js"
+    },
+    "./accessibility": {
+      "types": "./dist/accessibility/index.d.ts",
+      "import": "./dist/accessibility/index.mjs",
+      "require": "./dist/accessibility/index.js"
     },
     "./styles": "./dist/index.css"
   },
@@ -65,6 +62,8 @@
     "next": "^15.5.18",
     "react": ">=18.0.0",
     "react-dom": ">=18.0.0",
+    "react-icons": "^5.6.0",
+    "react-say": "^2.2.1",
     "tailwind-merge": "^3.6.0"
   },
   "overrides": {

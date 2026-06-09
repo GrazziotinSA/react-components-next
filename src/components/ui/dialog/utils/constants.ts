@@ -17,9 +17,7 @@ Suporta \`maxWidth\` e backdrop com blur via \`blurBackdrop\`.
 
 **Importação:**
 \`\`\`tsx
-import Dialog from "@/components/ui/dialog";
-// ou, no pacote publicado:
-// import { Dialog } from "@grazziotin/react-components-next/ui";
+import { Dialog } from "@grazziotin/react-components-next/ui";
 \`\`\`
 
 **Fonte do projeto (CSS global):**

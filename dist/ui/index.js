@@ -11,6 +11,10 @@ var DialogActions = require('@mui/material/DialogActions');
 var DialogContent = require('@mui/material/DialogContent');
 var locales = require('@mui/x-data-grid/locales');
 var xDataGrid = require('@mui/x-data-grid');
+var react = require('react');
+var md = require('react-icons/md');
+var Autocomplete = require('@mui/material/Autocomplete');
+var fa = require('react-icons/fa');
 
 function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
 
@@ -18,6 +22,7 @@ var DialogMui__default = /*#__PURE__*/_interopDefault(DialogMui);
 var DialogTitle__default = /*#__PURE__*/_interopDefault(DialogTitle);
 var DialogActions__default = /*#__PURE__*/_interopDefault(DialogActions);
 var DialogContent__default = /*#__PURE__*/_interopDefault(DialogContent);
+var Autocomplete__default = /*#__PURE__*/_interopDefault(Autocomplete);
 
 var __defProp = Object.defineProperty;
 var __defProps = Object.defineProperties;
@@ -52,6 +57,78 @@ var __objRest = (source, exclude) => {
 };
 function cn(...values) {
   return tailwindMerge.twMerge(clsx.clsx(values));
+}
+
+// src/core/remove-digits.ts
+function removeDigits(value) {
+  return value.replace(/\D/g, "");
+}
+function removeNonDigits(value) {
+  return value.replaceAll(/\d/g, "");
+}
+function removeTextOnly(value) {
+  return value.replaceAll(/[^\p{L}]/gu, "");
+}
+
+// src/functions/format-cpf-cnpj/format-cpf-cnpj.ts
+function formatCpfCnpj(data) {
+  if (!data) return "";
+  const value = removeDigits(data);
+  if (!value) return "";
+  if (value.length <= 11) {
+    const cpf = value.slice(0, 11);
+    return cpf.replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d)/, "$1.$2").replace(/(\d{3})(\d{1,2})$/, "$1-$2");
+  }
+  const cnpj = value.slice(0, 14);
+  return cnpj.replace(/^(\d{2})(\d)/, "$1.$2").replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3").replace(/\.(\d{3})(\d)/, ".$1/$2").replace(/(\d{4})(\d)/, "$1-$2");
+}
+
+// src/functions/format-phone-br/format-phone-br.ts
+function formatPhoneBr(phone) {
+  if (!phone) return "";
+  const digits = removeDigits(phone).slice(0, 11);
+  if (!digits) return "";
+  if (digits.length <= 2) return digits;
+  if (digits.length <= 6) {
+    return digits.replace(/(\d{2})(\d+)/, "($1) $2");
+  }
+  if (digits.length <= 10) {
+    return digits.replace(/(\d{2})(\d{4})(\d+)/, "($1) $2-$3");
+  }
+  return digits.replace(/(\d{2})(\d{5})(\d+)/, "($1) $2-$3");
+}
+
+// src/functions/format-price-brl/format-price-brl.ts
+function formatPriceBrl(value) {
+  if (value === void 0 || value === null) return "";
+  if (typeof value === "string") {
+    const digits = removeDigits(value);
+    if (!digits) return "";
+    const price = Number(digits) / 100;
+    if (Number.isNaN(price)) return "";
+    return price.toLocaleString("pt-BR", {
+      style: "currency",
+      currency: "BRL"
+    });
+  }
+  if (Number.isNaN(value)) return "";
+  return value.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+}
+
+// src/functions/format-item-170/format-item-170.ts
+function formatItem170(item) {
+  if (!item) return "";
+  const digits = removeDigits(item).slice(0, 12);
+  if (!digits) return "";
+  return digits.replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})\.(\d)(\d{1,3})$/, "$1.$2.$3");
+}
+
+// src/functions/format-item-150/format-item-150.ts
+function formatItem150(item) {
+  if (!item) return "";
+  const digits = removeDigits(item).slice(0, 10);
+  if (!digits) return "";
+  return digits.replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})\.(\d)(\d{1,3})$/, "$1.$2.$3");
 }
 function Card({
   margin,
@@ -506,10 +583,418 @@ var Tab = material.styled(material.Tab, {
   })
 );
 
+// src/core/css-var.ts
+function withCssVar(style, name, value) {
+  if (value == null || value === "") return style;
+  return __spreadProps(__spreadValues({}, style), { [name]: value });
+}
+var DEFAULT_ACCENT = "var(--primary-color)";
+var accent = "var(--primary-color)";
+var errorColor = "#D32F2F";
+var focusLabel = { color: accent };
+var errorLabel = { color: errorColor };
+var borderAccent = { borderColor: accent };
+var borderError = { borderColor: errorColor };
+var underlineAccent = { borderBottomColor: accent };
+var underlineError = { borderBottomColor: errorColor };
+var disabledText = { color: "#9E9E9E", cursor: "not-allowed" };
+var disabledBorder = { borderColor: "#9E9E9E", cursor: "not-allowed" };
+var input = {
+  color: "#333",
+  fontSize: "13px !important",
+  fontFamily: "var(--font-poppins) !important"
+};
+var InputTextField = material.styled(material.TextField)({
+  fontFamily: "var(--font-poppins) !important",
+  "& input": input,
+  "& label": input,
+  "& label.Mui-focused": focusLabel,
+  "& label.Mui-error": errorLabel,
+  "& .MuiInput-underline:after": underlineAccent,
+  "& .MuiInput-underline.Mui-error:after": underlineError,
+  "& .MuiOutlinedInput-root": {
+    "& fieldset": borderAccent,
+    "&:hover fieldset": borderAccent,
+    "&.Mui-disabled fieldset": disabledBorder,
+    "&.Mui-focused fieldset": borderAccent,
+    "&.Mui-error fieldset": borderError,
+    "&.Mui-error:hover fieldset": borderError,
+    "&.Mui-error.Mui-focused fieldset": borderError
+  },
+  "& .MuiFilledInput-root": {
+    backgroundColor: "#F9FAFB",
+    "&:after": underlineAccent,
+    "&:before": underlineAccent,
+    "&:hover:before": underlineAccent,
+    "&.Mui-error:after": underlineError,
+    "&.Mui-error:before": underlineError,
+    "&:hover": { backgroundColor: "#F5F5F5" },
+    "&.Mui-error:hover:before": underlineError,
+    fontFamily: "var(--font-poppins) !important",
+    "&.Mui-disabled": __spreadProps(__spreadValues({}, disabledText), { backgroundColor: "#F9FAFB" })
+  },
+  "& .MuiInputBase-input": __spreadProps(__spreadValues({}, input), { "&.Mui-disabled": disabledText }),
+  "& .MuiFormHelperText-root": {
+    fontSize: "11px",
+    marginLeft: 2,
+    fontFamily: "var(--font-poppins) !important"
+  },
+  "& .MuiFormHelperText-root.Mui-error": { color: errorColor },
+  "& .Mui-disabled": disabledText
+});
+var css_default = react.memo(InputTextField);
+function useInputMasker({ type, onChange }) {
+  const formatValue = react.useCallback(
+    (v) => {
+      if (!v) return "";
+      switch (type) {
+        case "cpf-cnpj":
+          return formatCpfCnpj(v);
+        case "numeric":
+          return removeDigits(v);
+        case "tel":
+          return formatPhoneBr(v);
+        case "price":
+          return formatPriceBrl(v);
+        case "text-only":
+          return removeTextOnly(v);
+        case "text-no-number":
+          return removeNonDigits(v);
+        case "item-170":
+          return formatItem170(v);
+        case "item-150":
+          return formatItem150(v);
+        default:
+          return v;
+      }
+    },
+    [type]
+  );
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    onChange == null ? void 0 : onChange(__spreadProps(__spreadValues({}, e), {
+      target: __spreadProps(__spreadValues({}, e.target), { value: formatValue(newValue) })
+    }));
+  };
+  return { handleChange };
+}
+function withPasswordToggle({
+  showPwd,
+  canToggle,
+  slotProps,
+  setShowPwd,
+  color = DEFAULT_ACCENT
+}) {
+  if (!canToggle) return slotProps;
+  const Icon = showPwd ? md.MdVisibilityOff : md.MdVisibility;
+  return __spreadProps(__spreadValues({}, slotProps), {
+    input: __spreadProps(__spreadValues({}, slotProps == null ? void 0 : slotProps.input), {
+      endAdornment: /* @__PURE__ */ jsxRuntime.jsx(material.InputAdornment, { position: "end", children: /* @__PURE__ */ jsxRuntime.jsx(
+        material.IconButton,
+        {
+          edge: "end",
+          size: "small",
+          sx: { color },
+          onClick: () => setShowPwd((prev) => !prev),
+          children: /* @__PURE__ */ jsxRuntime.jsx(Icon, { size: 20 })
+        }
+      ) })
+    })
+  });
+}
+function buildSlotProps(args) {
+  return withPasswordToggle(args);
+}
+var CUSTOM_INPUT_TYPES = /* @__PURE__ */ new Set([
+  "cpf-cnpj",
+  "numeric",
+  "price",
+  "item-170",
+  "item-150",
+  "text-only",
+  "text-no-number"
+]);
+function resolveHtmlInputType(type) {
+  if (!type || CUSTOM_INPUT_TYPES.has(type)) return "text";
+  return type;
+}
+var Input = (_a) => {
+  var _b = _a, {
+    color,
+    onChange,
+    isPassword,
+    type = "text",
+    size = "small"
+  } = _b, rest = __objRest(_b, [
+    "color",
+    "onChange",
+    "isPassword",
+    "type",
+    "size"
+  ]);
+  const [showPwd, setShowPwd] = react.useState(false);
+  const isPwd = type === "password";
+  const canToggle = isPwd && isPassword;
+  const htmlType = resolveHtmlInputType(type);
+  const inputType = canToggle && showPwd ? "text" : htmlType;
+  const style = react.useMemo(
+    () => withCssVar(rest.style, "--primary-color", color),
+    [color, rest.style]
+  );
+  const slotProps = react.useMemo(
+    () => buildSlotProps({
+      color,
+      showPwd,
+      canToggle,
+      setShowPwd,
+      slotProps: rest.slotProps
+    }),
+    [canToggle, color, showPwd, rest.slotProps]
+  );
+  const { handleChange } = useInputMasker({ type, onChange });
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    css_default,
+    __spreadProps(__spreadValues({}, rest), {
+      size,
+      style,
+      type: inputType,
+      slotProps,
+      onChange: handleChange,
+      className: cn("select-none", rest.className)
+    })
+  );
+};
+var input_default = Input;
+
+// src/components/ui/input-select/utils/css.ts
+var optionText = {
+  fontSize: "13px !important",
+  fontFamily: "var(--font-poppins) !important"
+};
+var selectMui = {
+  "& .MuiAutocomplete-option": __spreadProps(__spreadValues({
+    padding: "8px 12px"
+  }, optionText), {
+    lineHeight: "25px !important"
+  }),
+  "& .MuiAutocomplete-noOptions": optionText,
+  "& .MuiAutocomplete-listbox": { padding: "5px" }
+};
+function InputSelect(_a) {
+  var _b = _a, {
+    multiple,
+    optionLabel,
+    onChange,
+    input: input2
+  } = _b, rest = __objRest(_b, [
+    "multiple",
+    "optionLabel",
+    "onChange",
+    "input"
+  ]);
+  const handleChange = (event, value, reason, details) => {
+    onChange == null ? void 0 : onChange(event, value, reason, details);
+  };
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    Autocomplete__default.default,
+    __spreadProps(__spreadValues({}, rest), {
+      size: "small",
+      multiple,
+      onChange: handleChange,
+      slotProps: { paper: { sx: selectMui } },
+      getOptionLabel: (option) => typeof option === "string" ? "" : optionLabel(option),
+      isOptionEqualToValue: (option, value) => JSON.stringify(option) === JSON.stringify(value),
+      renderInput: (params) => {
+        var _a2;
+        return /* @__PURE__ */ jsxRuntime.jsx(input_default, __spreadProps(__spreadValues(__spreadValues({}, params), input2), { size: (_a2 = input2 == null ? void 0 : input2.size) != null ? _a2 : "small" }));
+      }
+    })
+  );
+}
+var input_select_default = InputSelect;
+var FilterCard = ({
+  title,
+  setOpen,
+  renderFilter
+}) => {
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "h-15 flex items-center w-full bg-white mb-2 rounded-md shadow-[0_2px_6px_-1px_rgba(0,0,0,.16),0_6px_18px_-1px_rgba(0,0,0,.06)]", children: [
+    /* @__PURE__ */ jsxRuntime.jsx("div", { className: "h-full w-2 bg-(--primary-color) rounded-tl-md rounded-bl-md" }),
+    /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "w-full flex justify-between items-center p-3", children: [
+      /* @__PURE__ */ jsxRuntime.jsx("h1", { className: "font-medium text-lg whitespace-nowrap text-ellipsis overflow-hidden ml-1 text-black/80", children: title }),
+      /* @__PURE__ */ jsxRuntime.jsx("div", { className: "flex items-center space-x-4", children: renderFilter && /* @__PURE__ */ jsxRuntime.jsx(
+        core.Tooltip,
+        {
+          withArrow: true,
+          arrowSize: 4,
+          color: "#00b2a6",
+          arrowOffset: 20,
+          label: "Ver filtros",
+          className: "text-xs!",
+          transitionProps: { transition: "pop", duration: 300 },
+          children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "flex items-center", children: /* @__PURE__ */ jsxRuntime.jsx(
+            core.ActionIcon,
+            {
+              size: 40,
+              radius: "md",
+              "aria-label": "Ver filtros",
+              color: "var(--primary-color)",
+              onClick: () => setOpen(true),
+              children: /* @__PURE__ */ jsxRuntime.jsx(fa.FaFilter, { className: "h-5 w-5 text-white" })
+            }
+          ) })
+        }
+      ) })
+    ] })
+  ] });
+};
+var card_default2 = FilterCard;
+
+// src/components/ui/filter/utils/constants.ts
+var FILTER_DEFAULT_ORDER = 99;
+var FILTER_DRAWER_PAPER_SX = {
+  ["& .MuiDrawer-paper"]: { borderRadius: "0px 0px 20px 20px" }
+};
+function hasFilterFields(inputs, inputSelect) {
+  var _a, _b;
+  return ((_a = inputs == null ? void 0 : inputs.length) != null ? _a : 0) > 0 || ((_b = inputSelect == null ? void 0 : inputSelect.length) != null ? _b : 0) > 0;
+}
+function isInputSelect(field) {
+  return "options" in field;
+}
+function filterInputSelect(props) {
+  return props;
+}
+function sortFilterFields(fields) {
+  return [...fields].sort(
+    (a, b) => {
+      var _a, _b;
+      return ((_a = a.order) != null ? _a : FILTER_DEFAULT_ORDER) - ((_b = b.order) != null ? _b : FILTER_DEFAULT_ORDER);
+    }
+  );
+}
+function mergeFilterFields(inputs, inputSelect) {
+  return sortFilterFields([...inputs, ...inputSelect]);
+}
+function getFilterGridColumns(isMobile, isTablet) {
+  if (isMobile) return 1;
+  if (isTablet) return 3;
+  return 7;
+}
+var FilterDrawer = ({
+  open,
+  setOpen,
+  onClear,
+  onSubmit,
+  inputs = [],
+  inputSelect = []
+}) => {
+  const m640 = material.useMediaQuery("(max-width:640px)");
+  const m1120 = material.useMediaQuery("(max-width:1120px)");
+  const allInputs = mergeFilterFields(inputs, inputSelect);
+  const renderField = (field, index) => {
+    var _a, _b;
+    if (isInputSelect(field)) {
+      return /* @__PURE__ */ jsxRuntime.jsx(material.Grid, { size: (_a = field.xs) != null ? _a : 1, children: /* @__PURE__ */ jsxRuntime.jsx(input_select_default, __spreadProps(__spreadValues({}, field), { id: `inputSM${index}`, fullWidth: true })) }, `inputSelect-${index}`);
+    }
+    return /* @__PURE__ */ jsxRuntime.jsx(material.Grid, { size: (_b = field.xs) != null ? _b : 1, children: /* @__PURE__ */ jsxRuntime.jsx(input_default, __spreadProps(__spreadValues({}, field), { fullWidth: true })) }, `input-${index}`);
+  };
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    if (!onSubmit) return;
+    onSubmit(event);
+    setOpen(false);
+  };
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    material.Drawer,
+    {
+      open,
+      anchor: "top",
+      onClose: () => setOpen(false),
+      sx: FILTER_DRAWER_PAPER_SX,
+      children: /* @__PURE__ */ jsxRuntime.jsxs(
+        "form",
+        {
+          onSubmit: handleSubmit,
+          className: "flex w-full select-none flex-col py-4 pl-5",
+          children: [
+            /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-lg font-medium text-system-900", children: "Filtros" }),
+            /* @__PURE__ */ jsxRuntime.jsx("p", { className: "pb-5 pt-1 text-sm text-black/80", children: "Para que possamos apresentar dados espec\xEDficos, por favor, preencha os campos abaixo." }),
+            /* @__PURE__ */ jsxRuntime.jsx(
+              material.Grid,
+              {
+                container: true,
+                rowSpacing: 2,
+                className: "pr-5",
+                columnSpacing: 1,
+                columns: getFilterGridColumns(Boolean(m640), Boolean(m1120)),
+                children: allInputs.map((field, index) => renderField(field, index))
+              }
+            ),
+            /* @__PURE__ */ jsxRuntime.jsxs("div", { className: "flex justify-end space-x-4 pr-4 pt-4", children: [
+              onClear && /* @__PURE__ */ jsxRuntime.jsx(
+                core.Button,
+                {
+                  radius: "sm",
+                  color: "#253E56",
+                  variant: "outline",
+                  onClick: onClear,
+                  size: "xs",
+                  children: "LIMPAR FILTROS"
+                }
+              ),
+              onSubmit && /* @__PURE__ */ jsxRuntime.jsx(
+                core.Button,
+                {
+                  size: "xs",
+                  radius: "sm",
+                  type: "submit",
+                  variant: "filled",
+                  color: "var(--primary-color)",
+                  children: "PESQUISAR"
+                }
+              )
+            ] })
+          ]
+        }
+      )
+    }
+  );
+};
+var filter_default = FilterDrawer;
+var Filter = ({
+  title,
+  inputs,
+  onClear,
+  onSubmit,
+  inputSelect
+}) => {
+  const [open, setOpen] = react.useState(false);
+  const hasFields = hasFilterFields(inputs, inputSelect);
+  return /* @__PURE__ */ jsxRuntime.jsxs("div", { children: [
+    /* @__PURE__ */ jsxRuntime.jsx(card_default2, { title, setOpen, renderFilter: hasFields }),
+    /* @__PURE__ */ jsxRuntime.jsx(
+      filter_default,
+      {
+        open,
+        inputs,
+        setOpen,
+        onClear,
+        onSubmit,
+        inputSelect
+      }
+    )
+  ] });
+};
+var filter_default2 = Filter;
+
 exports.Card = card_default;
 exports.DataTable = data_table_default;
 exports.Dialog = dialog_default;
+exports.Filter = filter_default2;
+exports.Input = input_default;
+exports.InputSelect = input_select_default;
 exports.Tab = Tab;
 exports.Tabs = Tabs;
+exports.filterInputSelect = filterInputSelect;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map
