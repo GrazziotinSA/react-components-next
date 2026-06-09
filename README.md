@@ -50,6 +50,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
 ## Componentes disponíveis
 
+
 | Componente   | Descrição                                                       |
 | ------------ | --------------------------------------------------------------- |
 | `Card`       | Container com cabeçalho colorido, título, ícone e tooltip       |
@@ -57,7 +58,9 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 | `DataTable`  | Tabela de dados com MUI DataGrid, filtros e textos em português |
 | `Tab`/`Tabs` | Abas estilizadas com indicador e tipografia customizáveis       |
 
+
 ## Funções utilitárias
+
 
 | Função          | Descrição                                        |
 | --------------- | ------------------------------------------------ |
@@ -65,6 +68,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 | `nvl`           | Retorna valor padrão quando `null`/`undefined`   |
 | `formatCpfCnpj` | Formata CPF ou CNPJ                              |
 | `formatPhoneBr` | Formata telefone brasileiro                      |
+
 
 ## Uso
 
@@ -103,12 +107,14 @@ export function Example() {
 
 A biblioteca expõe múltiplos pontos de entrada:
 
+
 | Import                                        | Conteúdo                                 |
 | --------------------------------------------- | ---------------------------------------- |
 | `@grazziotin/react-components-next`           | Componentes e funções (export principal) |
 | `@grazziotin/react-components-next/ui`        | Apenas componentes de UI                 |
 | `@grazziotin/react-components-next/functions` | Apenas funções utilitárias               |
 | `@grazziotin/react-components-next/styles`    | CSS compilado da biblioteca              |
+
 
 ## Componentes
 

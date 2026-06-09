@@ -11,65 +11,55 @@ export interface SayNotifyOptions {
 }
 
 export interface SayCallOptions {
-  /**
-   * Tipo de feedback.  desativa notificação.
-   * Padrão:  (via  do hook).
-   */
-  type?: SayFeedbackType | false;
+  /** Tipo do toast. */
+  type: SayFeedbackType;
 
   /**
-   * Exibe notificação via .
-   * Padrão: .
+   * Exibe notificação toast integrada.
+   * Padrão: `true`.
    */
   notify?: boolean;
 
   /**
-   * Dispara vibração conforme .
-   * Padrão: .
+   * Dispara vibração conforme `shouldVibrate`.
+   * Padrão: `true`.
    */
   vibrate?: boolean;
 
-  /** Duração da notificação em ms (repasse para ). */
+  /** Duração da notificação em ms. Padrão: `notifyAutoClose` do hook. */
   autoClose?: number;
 }
 
 export interface UseSayOptions {
   /**
-   * Callback de notificação visual (ex.: toast).
-   * Omitir para não exibir notificação.
-   */
-  onNotify?: (text: string, options: SayNotifyOptions) => void;
-
-  /**
-   * Tipo padrão da notificação.
-   * Padrão: .
-   */
-  defaultNotifyType?: SayFeedbackType;
-
-  /**
    * Auto-close padrão da notificação em ms.
-   * Padrão: .
+   * Padrão: `4500`.
    */
-  defaultNotifyAutoClose?: number;
+  notifyAutoClose?: number;
 
   /**
    * Duração padrão da vibração em ms.
-   * Padrão: .
+   * Padrão: `500`.
    */
   vibrateDuration?: number;
 
   /**
-   * Define se deve vibrar para o  informado.
-   * Padrão:  ( quando  é omitido ou ).
+   * Define se deve vibrar para o `type` informado.
+   * Padrão: vibra quando `type` é `"warning"`.
    */
-  shouldVibrate?: (type?: SayFeedbackType | false) => boolean;
+  shouldVibrate?: (type: SayFeedbackType) => boolean;
 }
 
 export interface UseSayReturn {
-  say: (text: string, options?: SayCallOptions) => void;
+  /**
+   * Dispara fala, toast (quando `notify !== false`) e vibração.
+   * @param text - Texto falado.
+   * @param options - Controle de notificação, vibração e tipo do toast.
+   */
   isSpeaking: boolean;
   textSpeaking: string;
   setIsSpeaking: React.Dispatch<React.SetStateAction<boolean>>;
+  handleSay: (text: string, options: SayCallOptions) => void;
 }
 
 export interface SayProps {
@@ -78,33 +68,31 @@ export interface SayProps {
   setIsSpeaking: React.Dispatch<React.SetStateAction<boolean>>;
 
   /**
-   * Nome da voz do .
-   * Padrão: .
+   * Nome da voz do `speechSynthesis`.
+   * Padrão: `"Google português do Brasil"`.
    */
   voice?: string;
 
   /**
    * Velocidade da fala.
-   * Padrão: .
+   * Padrão: `1.4`.
    */
   rate?: number;
 
   /**
    * Tom da voz.
-   * Padrão: .
+   * Padrão: `0.8`.
    */
   pitch?: number;
 
   /**
    * Volume da fala.
-   * Padrão: .
+   * Padrão: `1`.
    */
   volume?: number;
-
   onEnd?: () => void;
   onStart?: () => void;
 }
-
 export interface SpeechPonyfill {
   speechSynthesis: SpeechSynthesis;
   SpeechSynthesisUtterance: typeof SpeechSynthesisUtterance;

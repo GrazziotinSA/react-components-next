@@ -1,24 +1,22 @@
 import {
+  showSayNotify,
   defaultShouldVibrate,
-  DEFAULT_SAY_NOTIFY_AUTO_CLOSE,
   DEFAULT_SAY_VIBRATE_DURATION,
 } from "./utils/constants";
 import type {
+  SayCallOptions,
   UseSayReturn,
   UseSayOptions,
-  SayCallOptions,
 } from "./utils/interface";
 import { nvl } from "@/functions";
 import { useCallback, useState } from "react";
 
 /**
- * Hook para disparar fala, notificação e vibração de forma configurável.
+ * Hook para disparar fala, toast integrado e vibração.
  *
  * @example
  * ```tsx
- * const { say, isSpeaking, textSpeaking, setIsSpeaking } = useSay({
- *   onNotify: (text, { type }) => toast(text, { type }),
- * });
+ * const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay();
  *
  * <Say
  *   isSpeaking={isSpeaking}
@@ -26,34 +24,32 @@ import { useCallback, useState } from "react";
  *   setIsSpeaking={setIsSpeaking}
  * />
  *
- * <button type="button" onClick={() => say("Operação concluída")}>
- *   Falar
- * </button>
+ * handleSay("Operação concluída", { type: "success" });
+ * handleSay("Atenção", { type: "warning" });
+ * handleSay("Apenas fala", { type: "default", notify: false });
  * ```
  */
 export function useSay({
-  onNotify,
-  defaultNotifyType = "success",
+  notifyAutoClose = 4500,
   vibrateDuration = DEFAULT_SAY_VIBRATE_DURATION,
-  defaultNotifyAutoClose = DEFAULT_SAY_NOTIFY_AUTO_CLOSE,
   shouldVibrate = defaultShouldVibrate,
 }: UseSayOptions = {}): UseSayReturn {
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [textSpeaking, setTextSpeaking] = useState("");
 
-  const say = useCallback(
-    (text: string, options?: SayCallOptions) => {
-      const type = options?.type;
-      const notify = nvl(options?.notify, true);
-      const vibrate = nvl(options?.vibrate, true);
+  const handleSay = useCallback(
+    (text: string, options: SayCallOptions) => {
+      const notify = nvl(options.notify, true);
+      const vibrate = nvl(options.vibrate, true);
+      const { type } = options;
 
       setIsSpeaking(true);
       setTextSpeaking(text);
 
-      if (notify && type !== false && onNotify) {
-        onNotify(text, {
-          type: nvl(type, defaultNotifyType),
-          autoClose: nvl(options?.autoClose, defaultNotifyAutoClose),
+      if (notify) {
+        showSayNotify(text, {
+          type,
+          autoClose: nvl(options.autoClose, notifyAutoClose),
         });
       }
 
@@ -61,14 +57,8 @@ export function useSay({
         navigator.vibrate(vibrateDuration);
       }
     },
-    [
-      onNotify,
-      shouldVibrate,
-      vibrateDuration,
-      defaultNotifyType,
-      defaultNotifyAutoClose,
-    ],
+    [shouldVibrate, vibrateDuration, notifyAutoClose],
   );
 
-  return { say, isSpeaking, textSpeaking, setIsSpeaking };
+  return { handleSay, isSpeaking, textSpeaking, setIsSpeaking };
 }

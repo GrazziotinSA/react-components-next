@@ -1,5 +1,7 @@
 'use strict';
 
+require('react-toastify/dist/ReactToastify.css');
+var reactToastify = require('react-toastify');
 var SayEngine = require('react-say');
 var react = require('react');
 var jsxRuntime = require('react/jsx-runtime');
@@ -8,7 +10,12 @@ function _interopDefault (e) { return e && e.__esModule ? e : { default: e }; }
 
 var SayEngine__default = /*#__PURE__*/_interopDefault(SayEngine);
 
-// src/components/accessibility/say/utils/constants.ts
+// src/components/accessibility/say/index.tsx
+var DEFAULT_SAY_RATE = 1.4;
+var DEFAULT_SAY_VOLUME = 1;
+var DEFAULT_SAY_PITCH = 0.8;
+var DEFAULT_SAY_VIBRATE_DURATION = 500;
+var DEFAULT_SAY_VOICE = "Google portugu\xEAs do Brasil";
 var SPEECH_APIS = ["speechSynthesis", "SpeechSynthesisUtterance"];
 function hasSpeechSupport() {
   return SPEECH_APIS.every((api) => api in globalThis);
@@ -29,55 +36,11 @@ function getSpeechSupport() {
     SpeechSynthesisUtterance: globalThis.SpeechSynthesisUtterance
   };
 }
-var DEFAULT_SAY_VOICE = "Google portugu\xEAs do Brasil";
-var DEFAULT_SAY_RATE = 1.4;
-var DEFAULT_SAY_PITCH = 0.8;
-var DEFAULT_SAY_VOLUME = 1;
-var DEFAULT_SAY_NOTIFY_AUTO_CLOSE = 1500;
-var DEFAULT_SAY_VIBRATE_DURATION = 500;
 function defaultShouldVibrate(type) {
-  return !type || type === "warning";
+  return type === "warning";
 }
-
-// src/functions/nvl/nvl.ts
-function nvl(value, defaultValue) {
-  return value != null ? value : defaultValue;
-}
-function useSay({
-  onNotify,
-  defaultNotifyType = "success",
-  vibrateDuration = DEFAULT_SAY_VIBRATE_DURATION,
-  defaultNotifyAutoClose = DEFAULT_SAY_NOTIFY_AUTO_CLOSE,
-  shouldVibrate = defaultShouldVibrate
-} = {}) {
-  const [isSpeaking, setIsSpeaking] = react.useState(false);
-  const [textSpeaking, setTextSpeaking] = react.useState("");
-  const say = react.useCallback(
-    (text, options) => {
-      const type = options == null ? void 0 : options.type;
-      const notify = nvl(options == null ? void 0 : options.notify, true);
-      const vibrate = nvl(options == null ? void 0 : options.vibrate, true);
-      setIsSpeaking(true);
-      setTextSpeaking(text);
-      if (notify && type !== false && onNotify) {
-        onNotify(text, {
-          type: nvl(type, defaultNotifyType),
-          autoClose: nvl(options == null ? void 0 : options.autoClose, defaultNotifyAutoClose)
-        });
-      }
-      if (vibrate && shouldVibrate(type) && navigator.vibrate) {
-        navigator.vibrate(vibrateDuration);
-      }
-    },
-    [
-      onNotify,
-      shouldVibrate,
-      vibrateDuration,
-      defaultNotifyType,
-      defaultNotifyAutoClose
-    ]
-  );
-  return { say, isSpeaking, textSpeaking, setIsSpeaking };
+function showSayNotify(text, { type = "success", autoClose = 4500 }) {
+  reactToastify.toast(text, { type, autoClose });
 }
 function useSpeechPonyfill() {
   const ponyfill = react.useMemo(() => getSpeechSupport(), []);
@@ -111,26 +74,76 @@ function Say({
   volume = DEFAULT_SAY_VOLUME
 }) {
   const { voices, ponyfill } = useSpeechPonyfill();
+  const canSpeak = isSpeaking && voices.length > 0 && ponyfill;
   const handleEnd = react.useCallback(() => {
     setIsSpeaking(false);
     onEnd == null ? void 0 : onEnd();
   }, [setIsSpeaking, onEnd]);
-  if (!isSpeaking || voices.length === 0 || !ponyfill) return null;
-  return /* @__PURE__ */ jsxRuntime.jsx(
-    SayEngine__default.default,
-    {
-      text,
-      rate,
-      pitch,
-      volume,
-      onEnd: handleEnd,
-      onStart,
-      ponyfill,
-      voice: voices.find((v) => v.name === voice)
-    }
-  );
+  return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
+    /* @__PURE__ */ jsxRuntime.jsx(
+      reactToastify.ToastContainer,
+      {
+        limit: 3,
+        draggable: true,
+        newestOnTop: true,
+        pauseOnHover: true,
+        closeOnClick: true,
+        autoClose: 4500,
+        pauseOnFocusLoss: true,
+        closeButton: false,
+        position: "top-right",
+        style: { fontSize: "14px" }
+      }
+    ),
+    canSpeak && /* @__PURE__ */ jsxRuntime.jsx(
+      SayEngine__default.default,
+      {
+        text,
+        rate,
+        pitch,
+        volume,
+        onEnd: handleEnd,
+        onStart,
+        ponyfill,
+        voice: voices.find((v) => v.name === voice)
+      }
+    )
+  ] });
 }
 var say_default = Say;
+
+// src/functions/nvl/nvl.ts
+function nvl(value, defaultValue) {
+  return value != null ? value : defaultValue;
+}
+function useSay({
+  notifyAutoClose = 4500,
+  vibrateDuration = DEFAULT_SAY_VIBRATE_DURATION,
+  shouldVibrate = defaultShouldVibrate
+} = {}) {
+  const [isSpeaking, setIsSpeaking] = react.useState(false);
+  const [textSpeaking, setTextSpeaking] = react.useState("");
+  const handleSay = react.useCallback(
+    (text, options) => {
+      const notify = nvl(options.notify, true);
+      const vibrate = nvl(options.vibrate, true);
+      const { type } = options;
+      setIsSpeaking(true);
+      setTextSpeaking(text);
+      if (notify) {
+        showSayNotify(text, {
+          type,
+          autoClose: nvl(options.autoClose, notifyAutoClose)
+        });
+      }
+      if (vibrate && shouldVibrate(type) && navigator.vibrate) {
+        navigator.vibrate(vibrateDuration);
+      }
+    },
+    [shouldVibrate, vibrateDuration, notifyAutoClose]
+  );
+  return { handleSay, isSpeaking, textSpeaking, setIsSpeaking };
+}
 
 exports.Say = say_default;
 exports.useSay = useSay;

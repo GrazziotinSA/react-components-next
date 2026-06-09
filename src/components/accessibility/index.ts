@@ -1,9 +1,9 @@
 export type {
   SayCallOptions,
   SayFeedbackType,
-  SayNotifyOptions,
   SayProps,
   UseSayOptions,
   UseSayReturn,
 } from "./say/utils/interface";
-export { default as Say, useSay } from "./say";
+export { default as Say } from "./say";
+export { useSay } from "./say/use-say";

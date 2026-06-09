@@ -1,4 +1,5 @@
 "use client";
+import "react-toastify/dist/ReactToastify.css";
 
 import {
   DEFAULT_SAY_PITCH,
@@ -7,20 +8,18 @@ import {
   DEFAULT_SAY_VOLUME,
 } from "./utils/constants";
 import SayEngine from "react-say";
-export { useSay } from "./use-say";
 import React, { useCallback } from "react";
+import { ToastContainer } from "react-toastify";
 import type { SayProps } from "./utils/interface";
 import { useSpeechPonyfill } from "./use-speech-ponyfill";
 
 /**
  * Sintetiza texto em fala via Web Speech API (`react-say`).
- * Use com {@link useSay} para controlar `isSpeaking`, `text` e `setIsSpeaking`.
+ * Inclui toast integrado para notificações do {@link useSay}.
  *
  * @example
  * ```tsx
- * const { say, isSpeaking, textSpeaking, setIsSpeaking } = useSay({
- *   onNotify: (text, { type }) => toast(text, { type }),
- * });
+ * const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay();
  *
  * return (
  *   <>
@@ -28,10 +27,10 @@ import { useSpeechPonyfill } from "./use-speech-ponyfill";
  *       isSpeaking={isSpeaking}
  *       text={textSpeaking}
  *       setIsSpeaking={setIsSpeaking}
- *       voice="Google português do Brasil"
- *       rate={1.4}
  *     />
- *     <button type="button" onClick={() => say("Pronto")}>Falar</button>
+ *     <button type="button" onClick={() => handleSay("Pronto", { type: "success" })}>
+ *       Falar
+ *     </button>
  *   </>
  * );
  * ```
@@ -46,28 +45,42 @@ function Say({
   voice = DEFAULT_SAY_VOICE,
   pitch = DEFAULT_SAY_PITCH,
   volume = DEFAULT_SAY_VOLUME,
-}: Readonly<SayProps>): React.ReactElement | null {
+}: Readonly<SayProps>): React.ReactElement {
   const { voices, ponyfill } = useSpeechPonyfill();
+  const canSpeak = isSpeaking && voices.length > 0 && ponyfill;
 
   const handleEnd = useCallback(() => {
     setIsSpeaking(false);
     onEnd?.();
   }, [setIsSpeaking, onEnd]);
 
-  if (!isSpeaking || voices.length === 0 || !ponyfill) return null;
-
   return (
-    <SayEngine
-      text={text}
-      rate={rate}
-      pitch={pitch}
-      volume={volume}
-      onEnd={handleEnd}
-      onStart={onStart}
-      ponyfill={ponyfill}
-      voice={voices.find((v) => v.name === voice)}
-    />
+    <>
+      <ToastContainer
+        limit={3}
+        draggable
+        newestOnTop
+        pauseOnHover
+        closeOnClick
+        autoClose={4500}
+        pauseOnFocusLoss
+        closeButton={false}
+        position="top-right"
+        style={{ fontSize: "14px" }}
+      />
+      {canSpeak && (
+        <SayEngine
+          text={text}
+          rate={rate}
+          pitch={pitch}
+          volume={volume}
+          onEnd={handleEnd}
+          onStart={onStart}
+          ponyfill={ponyfill}
+          voice={voices.find((v) => v.name === voice)}
+        />
+      )}
+    </>
   );
 }
-
 export default Say;

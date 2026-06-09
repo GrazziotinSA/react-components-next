@@ -1,8 +1,9 @@
 import {
+  voicesAreEqual,
   getSpeechSupport,
   hasSpeechSupport,
-  voicesAreEqual,
 } from "./utils/constants";
+
 import { useEffect, useMemo, useState } from "react";
 
 export function useSpeechPonyfill() {
@@ -11,7 +12,6 @@ export function useSpeechPonyfill() {
 
   useEffect(() => {
     if (!hasSpeechSupport()) return;
-
     const synthesis = globalThis.speechSynthesis;
 
     const updateVoices = () => {
