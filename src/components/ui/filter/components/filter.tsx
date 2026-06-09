@@ -4,12 +4,16 @@ import {
   getFilterGridColumns,
   FILTER_DRAWER_PAPER_SX,
 } from "../utils/constants";
+import type {
+  FilterDrawerField,
+  FilterDrawerProps,
+  FilterInputSelectField,
+} from "../utils/interface";
 import Input from "../../input";
 import { Button } from "@mantine/core";
 import InputSelect from "../../input-select";
 import { Drawer, Grid, useMediaQuery } from "@mui/material";
 import type { ReactElement, SubmitEventHandler } from "react";
-import type { FilterDrawerField, FilterDrawerProps } from "../utils/interface";
 
 /**
  * Drawer com campos de filtro ({@link Input} e {@link InputSelect}).
@@ -39,9 +43,25 @@ const FilterDrawer = ({
 
   const renderField = (field: FilterDrawerField, index: number) => {
     if (isInputSelect(field)) {
+      if (field.multiple) {
+        return (
+          <Grid size={field.xs ?? 1} key={`inputSelect-${index}`}>
+            <InputSelect<unknown, true>
+              {...field}
+              id={`inputSM${index}`}
+              fullWidth
+            />
+          </Grid>
+        );
+      }
+
       return (
         <Grid size={field.xs ?? 1} key={`inputSelect-${index}`}>
-          <InputSelect {...field} id={`inputSM${index}`} fullWidth />
+          <InputSelect<unknown, false>
+            {...(field as FilterInputSelectField<false>)}
+            id={`inputSM${index}`}
+            fullWidth
+          />
         </Grid>
       );
     }

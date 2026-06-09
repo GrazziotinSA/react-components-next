@@ -36,15 +36,23 @@ export type FilterInputSelectItem<
  * Campo {@link InputSelect} no drawer com tipos heterogêneos.
  * Cada item pode ter `options` de um tipo diferente na mesma lista.
  */
-export type FilterInputSelectField<M extends boolean = boolean> =
+export type FilterInputSelectField<M extends boolean = false> =
   InputSelectProps<unknown, M> & InputSelectGridProps;
 
-/** Lista de campos {@link InputSelect} no drawer (tipos de opção independentes por item). */
-export type FilterInputSelectProps<M extends boolean = boolean> =
-  FilterInputSelectField<M>[];
+/**
+ * Lista de campos {@link InputSelect} no drawer.
+ * Cada item pode ter tipo de opção e seleção única/múltipla diferentes.
+ */
+export type FilterInputSelectProps = (
+  | FilterInputSelectField<false>
+  | FilterInputSelectField<true>
+)[];
 
 /** Campo do drawer: {@link Input} ou {@link InputSelect}. */
-export type FilterDrawerField = FilterInputProps | FilterInputSelectField;
+export type FilterDrawerField =
+  | FilterInputProps
+  | FilterInputSelectField<false>
+  | FilterInputSelectField<true>;
 
 /**
  * Propriedades do componente {@link FilterDrawer}.

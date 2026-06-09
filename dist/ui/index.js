@@ -892,11 +892,26 @@ var FilterDrawer = ({
   const m1120 = material.useMediaQuery("(max-width:1120px)");
   const allInputs = mergeFilterFields(inputs, inputSelect);
   const renderField = (field, index) => {
-    var _a, _b;
+    var _a, _b, _c;
     if (isInputSelect(field)) {
-      return /* @__PURE__ */ jsxRuntime.jsx(material.Grid, { size: (_a = field.xs) != null ? _a : 1, children: /* @__PURE__ */ jsxRuntime.jsx(input_select_default, __spreadProps(__spreadValues({}, field), { id: `inputSM${index}`, fullWidth: true })) }, `inputSelect-${index}`);
+      if (field.multiple) {
+        return /* @__PURE__ */ jsxRuntime.jsx(material.Grid, { size: (_a = field.xs) != null ? _a : 1, children: /* @__PURE__ */ jsxRuntime.jsx(
+          input_select_default,
+          __spreadProps(__spreadValues({}, field), {
+            id: `inputSM${index}`,
+            fullWidth: true
+          })
+        ) }, `inputSelect-${index}`);
+      }
+      return /* @__PURE__ */ jsxRuntime.jsx(material.Grid, { size: (_b = field.xs) != null ? _b : 1, children: /* @__PURE__ */ jsxRuntime.jsx(
+        input_select_default,
+        __spreadProps(__spreadValues({}, field), {
+          id: `inputSM${index}`,
+          fullWidth: true
+        })
+      ) }, `inputSelect-${index}`);
     }
-    return /* @__PURE__ */ jsxRuntime.jsx(material.Grid, { size: (_b = field.xs) != null ? _b : 1, children: /* @__PURE__ */ jsxRuntime.jsx(input_default, __spreadProps(__spreadValues({}, field), { fullWidth: true })) }, `input-${index}`);
+    return /* @__PURE__ */ jsxRuntime.jsx(material.Grid, { size: (_c = field.xs) != null ? _c : 1, children: /* @__PURE__ */ jsxRuntime.jsx(input_default, __spreadProps(__spreadValues({}, field), { fullWidth: true })) }, `input-${index}`);
   };
   const handleSubmit = (event) => {
     event.preventDefault();

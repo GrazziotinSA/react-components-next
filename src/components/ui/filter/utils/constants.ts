@@ -35,7 +35,7 @@ export function hasFilterFields(
  */
 export function isInputSelect(
   field: FilterDrawerField,
-): field is FilterInputSelectField {
+): field is FilterInputSelectField<false> | FilterInputSelectField<true> {
   return "options" in field;
 }
 
@@ -53,8 +53,12 @@ export function isInputSelect(
  */
 export function filterInputSelect<T extends object, M extends boolean = false>(
   props: InputSelectProps<T, M> & InputSelectGridProps,
-): FilterInputSelectField<M> {
-  return props as unknown as FilterInputSelectField<M>;
+): M extends true
+  ? FilterInputSelectField<true>
+  : FilterInputSelectField<false> {
+  return props as unknown as M extends true
+    ? FilterInputSelectField<true>
+    : FilterInputSelectField<false>;
 }
 
 /**
