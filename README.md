@@ -1,132 +1,205 @@
-# React Components Library
+# Grazziotin React Components Library
 
-Biblioteca de componentes React reutilizáveis, construída com TypeScript e Tailwind CSS.
+Biblioteca de componentes React reutilizáveis para o projeto Grazziotin, construída com TypeScript, Tailwind CSS, Material UI e Mantine.
 
 ## Instalação
 
 ```bash
-npm install react-components-next
+npm install @grazziotin/react-components-next
 ```
 
-> **Atenção:** esta biblioteca usa classes do Tailwind CSS. Certifique-se de que o Tailwind esteja configurado no seu projeto.
+### Requisitos
+
+- React `>= 18`
+- Tailwind CSS v4 configurado no projeto consumidor
+- `ThemeProvider` do MUI e `MantineProvider` do Mantine envolvendo a aplicação
+
+### Configuração no projeto consumidor
+
+Importe os estilos da biblioteca e configure as variáveis CSS do tema:
+
+```tsx
+import "@grazziotin/react-components-next/styles";
+
+import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
+import { MantineProvider } from "@mantine/core";
+import "@mantine/core/styles.css";
+
+const theme = createTheme({
+  typography: { fontFamily: "var(--font-family, inherit)" },
+});
+
+export function AppProviders({ children }: { children: React.ReactNode }) {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <MantineProvider>{children}</MantineProvider>
+    </ThemeProvider>
+  );
+}
+```
+
+```css
+:root {
+  --primary-color: #00b2a6;
+  --font-family: "Poppins", sans-serif;
+}
+```
+
+> **Atenção:** vários componentes usam classes do Tailwind CSS e dependem do MUI/Mantine. Certifique-se de que o Tailwind esteja configurado e os providers estejam na raiz da aplicação.
 
 ## Componentes disponíveis
 
-| Componente | Descrição                                        |
-| ---------- | ------------------------------------------------ |
-| `Button`   | Botão com variantes, tamanhos, loading e ícones  |
-| `Input`    | Campo de entrada com label, hint, erro e addons  |
-| `Card`     | Container com header, content e footer compostos |
-| `Badge`    | Etiqueta colorida para status e categorias       |
-| `Avatar`   | Foto de perfil com fallback de iniciais          |
+| Componente   | Descrição                                                       |
+| ------------ | --------------------------------------------------------------- |
+| `Card`       | Container com cabeçalho colorido, título, ícone e tooltip       |
+| `Dialog`     | Modal baseado no MUI com título, conteúdo e ações opcionais     |
+| `DataTable`  | Tabela de dados com MUI DataGrid, filtros e textos em português |
+| `Tab`/`Tabs` | Abas estilizadas com indicador e tipografia customizáveis       |
+
+## Funções utilitárias
+
+| Função          | Descrição                                        |
+| --------------- | ------------------------------------------------ |
+| `cn`            | Mescla classes CSS com `clsx` e `tailwind-merge` |
+| `nvl`           | Retorna valor padrão quando `null`/`undefined`   |
+| `formatCpfCnpj` | Formata CPF ou CNPJ                              |
+| `formatPhoneBr` | Formata telefone brasileiro                      |
 
 ## Uso
 
 ```tsx
 import {
-  Button,
   Card,
-  CardHeader,
-  CardTitle,
-  CardContent,
-  Input,
-  Badge,
-  Avatar,
-} from "react-components-next";
+  Dialog,
+  DataTable,
+  Tab,
+  Tabs,
+  cn,
+  formatCpfCnpj,
+} from "@grazziotin/react-components-next";
+import type { GridColDef } from "@mui/x-data-grid";
+
+const colunas: GridColDef[] = [
+  { field: "id", headerName: "ID", width: 80 },
+  { field: "nome", headerName: "Nome", flex: 1 },
+  { field: "documento", headerName: "CPF/CNPJ", width: 180 },
+];
+
+const linhas = [
+  { id: 1, nome: "Ana Silva", documento: formatCpfCnpj("12345678901") },
+];
 
 export function Example() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Perfil</CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="flex items-center gap-3">
-          <Avatar fallback="João Silva" size="md" />
-          <div>
-            <p>João Silva</p>
-            <Badge variant="success" dot>
-              Online
-            </Badge>
-          </div>
-        </div>
-        <Input label="E-mail" type="email" placeholder="joao@exemplo.com" />
-        <Button variant="primary" fullWidth>
-          Salvar
-        </Button>
-      </CardContent>
+    <Card title="Colaboradores" toolTip className={cn("max-w-3xl")}>
+      <DataTable rows={linhas} columns={colunas} pageSizeOptions={[10, 20]} />
     </Card>
   );
 }
 ```
 
+## Entry points
+
+A biblioteca expõe múltiplos pontos de entrada:
+
+| Import                                        | Conteúdo                                 |
+| --------------------------------------------- | ---------------------------------------- |
+| `@grazziotin/react-components-next`           | Componentes e funções (export principal) |
+| `@grazziotin/react-components-next/ui`        | Apenas componentes de UI                 |
+| `@grazziotin/react-components-next/functions` | Apenas funções utilitárias               |
+| `@grazziotin/react-components-next/styles`    | CSS compilado da biblioteca              |
+
 ## Componentes
-
-### Button
-
-```tsx
-<Button
-  variant="primary" // "primary" | "secondary" | "outline" | "ghost" | "destructive"
-  size="md" // "sm" | "md" | "lg"
-  loading={false} // boolean
-  fullWidth={false} // boolean
-  leftIcon={<Icon />} // ReactNode
-  rightIcon={<Icon />} // ReactNode
->
-  Clique aqui
-</Button>
-```
-
-### Input
-
-```tsx
-<Input
-  label="Nome"
-  placeholder="Digite..."
-  hint="Texto de ajuda"
-  error="Mensagem de erro"
-  size="md" // "sm" | "md" | "lg"
-  leftAddon={<Icon />} // ReactNode
-  rightAddon={<Icon />} // ReactNode
-  fullWidth={false}
-/>
-```
 
 ### Card
 
 ```tsx
-<Card shadow="sm" padding="md" hoverable bordered>
-  <CardHeader>
-    <CardTitle>Título</CardTitle>
-    <CardDescription>Descrição</CardDescription>
-  </CardHeader>
-  <CardContent>Conteúdo</CardContent>
-  <CardFooter>
-    <Button>Ação</Button>
-  </CardFooter>
+<Card
+  title="Título do card"
+  toolTip={false}
+  width="100%"
+  height="auto"
+  titleColor="var(--primary-color)"
+  borderRadius="10px"
+  borderTitle="10px 10px 0 0"
+  icon={<Icon />}
+  onClick={() => {}}
+  className="text-sm"
+>
+  Conteúdo do card
 </Card>
 ```
 
-### Badge
+### Dialog
 
 ```tsx
-<Badge
-  variant="success" // "default" | "primary" | "success" | "warning" | "danger" | "info"
-  dot={false} // boolean - exibe um ponto colorido
+<Dialog
+  open={open}
+  title="Confirmar exclusão"
+  onClose={() => setOpen(false)}
+  maxWidth="sm"
+  blurBackdrop={false}
+  actions={<button onClick={() => setOpen(false)}>OK</button>}
 >
-  Online
-</Badge>
+  Deseja realmente excluir este item?
+</Dialog>
 ```
 
-### Avatar
+### DataTable
+
+Wrapper sobre o MUI `DataGrid` com estilização, textos em português e operador de filtro "entre" automático para colunas `string` e `number`. Aceita todas as props do `DataGrid`.
 
 ```tsx
-<Avatar
-  src="https://..." // URL da imagem (opcional)
-  alt="Nome do usuário"
-  fallback="João Silva" // usado para gerar as iniciais
-  size="md" // "xs" | "sm" | "md" | "lg" | "xl"
+<DataTable
+  rows={dados}
+  columns={colunas}
+  loading={carregando}
+  pageSizeOptions={[10, 20, 50]}
 />
+```
+
+### Tab / Tabs
+
+```tsx
+const [value, setValue] = useState(0);
+
+<Tabs
+  value={value}
+  onChange={(_, newValue) => setValue(newValue)}
+  color="var(--primary-color)"
+>
+  <Tab label="Geral" />
+  <Tab label="Detalhes" />
+</Tabs>;
+```
+
+## Funções
+
+### cn
+
+```tsx
+cn("px-4 py-2", condicao && "bg-teal-500", "px-6");
+```
+
+### nvl
+
+```tsx
+nvl(valor, "padrão"); // retorna "padrão" se valor for null/undefined
+```
+
+### formatCpfCnpj
+
+```tsx
+formatCpfCnpj("12345678901"); // "123.456.789-01"
+formatCpfCnpj("12345678000199"); // "12.345.678/0001-99"
+```
+
+### formatPhoneBr
+
+```tsx
+formatPhoneBr("11987654321"); // "(11) 98765-4321"
+formatPhoneBr("1133334444"); // "(11) 3333-4444"
 ```
 
 ## Desenvolvimento
@@ -135,17 +208,20 @@ export function Example() {
 # Instalar dependências
 npm install
 
-# Rodar servidor de desenvolvimento com showcase
-npm run dev
+# Storybook (visualização e documentação dos componentes)
+npm run storybook
+
+# Build estático do Storybook
+npm run build-storybook
 
 # Build da biblioteca para npm
 npm run build:lib
 
-# Build completo (biblioteca + Next.js)
-npm run build:all
-
 # Verificar tipos TypeScript
 npm run type-check
+
+# Lint
+npm run lint
 ```
 
 ## Publicar no npm
@@ -162,24 +238,27 @@ npm publish
 
 ```
 src/
-├── app/                   # Next.js App Router (showcase)
-│   ├── page.tsx           # Página inicial com lista de componentes
-│   └── showcase/          # Páginas de demonstração
-│       ├── button/
-│       ├── input/
-│       ├── card/
-│       ├── badge/
-│       └── avatar/
-├── components/            # Biblioteca de componentes (publicada no npm)
-│   ├── index.ts           # Entrypoint principal
+├── app/                        # Next.js App Router (página inicial mínima)
+│   ├── globals.css             # Variáveis CSS e tema
+│   ├── layout.tsx              # Providers MUI + Mantine
+│   └── page.tsx
+├── components/
+│   ├── index.ts
 │   └── ui/
-│       ├── Button/
-│       ├── Input/
-│       ├── Card/
-│       ├── Badge/
-│       └── Avatar/
-└── lib/
-    └── utils.ts           # Utilitário cn() para classes CSS
+│       ├── card/
+│       ├── dialog/
+│       ├── data-table/
+│       └── tab/
+├── core/                       # Utilitários internos
+├── functions/
+│   ├── cn/
+│   ├── nvl/
+│   ├── format-cpf-cnpj/
+│   └── format-phone-br/
+├── providers/
+├── styles/
+│   └── index.css               # Entrada do Tailwind para o build CSS
+└── index.ts                    # Entrypoint principal da biblioteca
 ```
 
 ## Licença
