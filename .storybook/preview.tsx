@@ -6,7 +6,9 @@ import { MantineProvider } from "@mantine/core";
 import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
 import type { Preview } from "@storybook/react-vite";
 
-const muiTheme = createTheme();
+const muiTheme = createTheme({
+  typography: { fontFamily: "var(--font-family, inherit)" },
+});
 
 const preview: Preview = {
   decorators: [

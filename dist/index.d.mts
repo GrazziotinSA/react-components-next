@@ -1,5 +1,10 @@
-export { Card, CardClassName, CardProps, Dialog, DialogProps } from './ui/index.mjs';
+export { Card, CardClassName, CardProps, DataTable, DataTableProps, Dialog, DialogProps, Tab, TabColorProps, TabProps, Tabs, TabsProps } from './ui/index.mjs';
 export { cn, formatCpfCnpj, formatPhoneBr, nvl } from './functions/index.mjs';
 export { ClassValue } from 'clsx';
 import '@mui/material';
 import 'react';
+import 'react/jsx-runtime';
+import '@mui/x-data-grid';
+import '@emotion/styled';
+import '@mui/system';
+import '@mui/material/OverridableComponent';

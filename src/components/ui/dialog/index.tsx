@@ -4,7 +4,7 @@ import type { DialogProps } from "./utils/interface";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import { DIALOG_BACKDROP_STYLE } from "./utils/constants";
+import { DIALOG_BACKDROP_STYLE, DIALOG_PAPER_FONT_SX } from "./utils/constants";
 
 /**
  * Modal de diálogo baseado no MUI `Dialog`, com título, conteúdo e ações opcionais.
@@ -66,7 +66,10 @@ function Dialog({
       open={open}
       onClose={onClose}
       maxWidth={maxWidth}
-      slotProps={{ backdrop: { sx: backdropStyle } }}
+      slotProps={{
+        backdrop: { sx: backdropStyle },
+        paper: { sx: DIALOG_PAPER_FONT_SX },
+      }}
     >
       {title && (
         <DialogTitle>

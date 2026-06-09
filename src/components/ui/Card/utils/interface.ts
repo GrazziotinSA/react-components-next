@@ -62,7 +62,7 @@ export interface CardProps {
   /**
    * Cor de fundo do cabeçalho.
    * Aceita cores CSS (hex, rgb, variáveis CSS, etc.).
-   * @default "var(--color-primary)"
+   * @default "var(--primary-color)"
    */
   titleColor?: string;
 

@@ -1,5 +1,12 @@
-import { CSSProperties, Breakpoint } from '@mui/material';
-import React$1, { ComponentPropsWithoutRef } from 'react';
+import * as _mui_material from '@mui/material';
+import { CSSProperties, Breakpoint, TabProps as TabProps$1, TabsProps as TabsProps$1 } from '@mui/material';
+import * as react from 'react';
+import react__default, { ComponentPropsWithoutRef } from 'react';
+import * as react_jsx_runtime from 'react/jsx-runtime';
+import { DataGridProps } from '@mui/x-data-grid';
+import * as _emotion_styled from '@emotion/styled';
+import * as _mui_system from '@mui/system';
+import * as _mui_material_OverridableComponent from '@mui/material/OverridableComponent';
 
 /**
  * Tipo do atributo nativo `className` de um elemento `div` no React.
@@ -55,7 +62,7 @@ interface CardProps {
     /**
      * Cor de fundo do cabeçalho.
      * Aceita cores CSS (hex, rgb, variáveis CSS, etc.).
-     * @default "var(--color-primary)"
+     * @default "var(--primary-color)"
      */
     titleColor?: string;
     /**
@@ -104,7 +111,7 @@ interface CardProps {
  * @param props.toolTip - Habilita tooltip no título.
  * @param props.className - `className` nativo do React no container.
  * @param props.titleWidth - Largura da barra do cabeçalho. Padrão: `"100%"`.
- * @param props.titleColor - Cor de fundo do cabeçalho. Padrão: `var(--color-primary)`.
+ * @param props.titleColor - Cor de fundo do cabeçalho. Padrão: `var(--primary-color)`.
  * @param props.borderTitle - `border-radius` só do cabeçalho.
  * @param props.onClick - Clique no card; adiciona `cursor: pointer !important`.
  * @param props.borderRadius - `border-radius` do container.
@@ -219,6 +226,91 @@ interface DialogProps {
  * </Dialog>
  * ```
  */
-declare function Dialog({ open, title, onClose, actions, children, maxWidth, blurBackdrop, }: Readonly<DialogProps>): React$1.ReactElement;
+declare function Dialog({ open, title, onClose, actions, children, maxWidth, blurBackdrop, }: Readonly<DialogProps>): react__default.ReactElement;
 
-export { Card, type CardClassName, type CardProps, Dialog, type DialogProps };
+/**
+ * Propriedades do componente {@link DataTable}.
+ * Wrapper tipado sobre o MUI `DataGrid`, com estilização e textos em português.
+ */
+type DataTableProps = DataGridProps;
+
+/**
+ * Componente DataTable personalizado baseado no MUI DataGrid.
+ *
+ * Fornece uma tabela de dados com estilização customizada, filtros avançados,
+ * paginação, ordenação e gerenciamento de colunas.
+ *
+ * Recursos incluídos:
+ * - Operador de filtro "entre" automático para colunas string e number
+ * - Painel de filtros customizado
+ * - Painel de gerenciamento de colunas
+ * - Paginação estilizada
+ * - Overlay personalizado para "sem dados"
+ * - Textos em português brasileiro
+ *
+ * @param props - Todas as props do MUI DataGrid são suportadas. Ver {@link DataTableProps}.
+ *
+ * @example
+ * <DataTable
+ *   rows={dados}
+ *   columns={colunas}
+ *   loading={carregando}
+ *   pageSizeOptions={[10, 20, 50]}
+ * />
+ */
+declare const DataTable: ({ ...rest }: DataTableProps) => react_jsx_runtime.JSX.Element;
+
+/**
+ * Propriedades de estilo compartilhadas entre {@link Tab} e {@link Tabs}.
+ */
+interface TabColorProps {
+    /**
+     * Cor do indicador ativo e do rótulo da aba selecionada.
+     * @default "var(--primary-color)"
+     */
+    color?: string;
+    /**
+     * Família tipográfica do rótulo da aba.
+     * Defina `--font-family` no CSS do projeto ou passe esta prop diretamente.
+     * @default "var(--font-family, inherit)"
+     */
+    fontFamily?: string;
+}
+/**
+ * Propriedades do componente {@link Tab}.
+ * Estende o `Tab` do MUI com suporte a cor customizada via `color`.
+ */
+type TabProps = TabProps$1 & TabColorProps;
+/**
+ * Propriedades do componente {@link Tabs}.
+ * Estende o `Tabs` do MUI com suporte a cor customizada do indicador via `color`.
+ */
+type TabsProps = TabsProps$1 & TabColorProps;
+
+/**
+ * Container de abas baseado no MUI `Tabs`, com indicador colorido customizável.
+ *
+ * @param props.color - Cor do indicador da aba ativa. Padrão: `var(--primary-color)`.
+ *
+ * @example
+ * ```tsx
+ * <Tabs value={value} onChange={handleChange} color="#00B2A6">
+ *   <Tab label="Aba 1" />
+ * </Tabs>
+ * ```
+ */
+declare const Tabs: _emotion_styled.StyledComponent<_mui_material.TabsOwnProps & _mui_material_OverridableComponent.CommonProps & Omit<react.DetailedHTMLProps<react.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "style" | "className" | "aria-label" | "aria-labelledby" | "children" | "onChange" | "sx" | "classes" | "slots" | "slotProps" | "variant" | "value" | "action" | "allowScrollButtonsMobile" | "centered" | "indicatorColor" | "orientation" | "scrollButtons" | "selectionFollowsFocus" | "textColor" | "visibleScrollbar"> & _mui_system.MUIStyledCommonProps<_mui_material.Theme> & TabColorProps, {}, {}>;
+/**
+ * Aba individual baseada no MUI `Tab`, com tipografia e cor de seleção customizáveis.
+ *
+ * @param props.color - Cor do rótulo quando a aba está selecionada. Padrão: `var(--primary-color)`.
+ * @param props.fontFamily - Família tipográfica do rótulo. Padrão: `var(--font-family, inherit)`.
+ *
+ * @example
+ * ```tsx
+ * <Tab label="Configurações" color="#00B2A6" />
+ * ```
+ */
+declare const Tab: _emotion_styled.StyledComponent<_mui_material.TabOwnProps & Omit<_mui_material.ButtonBaseOwnProps, keyof _mui_material.TabOwnProps> & Omit<_mui_material.ButtonBaseOwnProps, "tabIndex" | "type" | "touchRippleRef" | "action" | "centerRipple" | "disableRipple" | "disableTouchRipple" | "focusRipple" | "focusVisibleClassName" | "LinkComponent" | "nativeButton" | "onFocusVisible" | "TouchRippleProps" | keyof _mui_material.TabOwnProps> & _mui_material_OverridableComponent.CommonProps & Omit<react.DetailedHTMLProps<react.HTMLAttributes<HTMLDivElement>, HTMLDivElement>, "label" | "style" | "className" | "tabIndex" | "children" | "icon" | "sx" | "type" | "classes" | "disabled" | "touchRippleRef" | "value" | "action" | "centerRipple" | "disableRipple" | "disableTouchRipple" | "focusRipple" | "focusVisibleClassName" | "LinkComponent" | "nativeButton" | "onFocusVisible" | "TouchRippleProps" | "disableFocusRipple" | "iconPosition" | "wrapped"> & _mui_system.MUIStyledCommonProps<_mui_material.Theme> & TabColorProps, {}, {}>;
+
+export { Card, type CardClassName, type CardProps, DataTable, type DataTableProps, Dialog, type DialogProps, Tab, type TabColorProps, type TabProps, Tabs, type TabsProps };

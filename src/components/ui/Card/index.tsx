@@ -19,7 +19,7 @@ import type { CardProps } from "./utils/interface";
  * @param props.toolTip - Habilita tooltip no título.
  * @param props.className - `className` nativo do React no container.
  * @param props.titleWidth - Largura da barra do cabeçalho. Padrão: `"100%"`.
- * @param props.titleColor - Cor de fundo do cabeçalho. Padrão: `var(--color-primary)`.
+ * @param props.titleColor - Cor de fundo do cabeçalho. Padrão: `var(--primary-color)`.
  * @param props.borderTitle - `border-radius` só do cabeçalho.
  * @param props.onClick - Clique no card; adiciona `cursor: pointer !important`.
  * @param props.borderRadius - `border-radius` do container.
@@ -60,7 +60,7 @@ function Card({
   height = "auto",
   titleWidth = "100%",
   justifyContent = "space-between",
-  titleColor = "var(--color-primary)",
+  titleColor = "var(--primary-color)",
   icon,
 }: Readonly<CardProps>): React.ReactElement {
   return (
