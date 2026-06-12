@@ -7,6 +7,7 @@ import Autocomplete, {
   type AutocompleteChangeDetails,
 } from "@mui/material/Autocomplete";
 import { selectMui } from "./utils/css";
+import { locale } from "./utils/constants";
 import type { InputSelectProps } from "./utils/interface";
 
 /**
@@ -46,10 +47,11 @@ import type { InputSelectProps } from "./utils/interface";
  * ```
  */
 function InputSelect<T, M extends boolean = false>({
-  multiple,
-  optionLabel,
-  onChange,
   input,
+  multiple,
+  onChange,
+  optionLabel,
+  noOptionsText = locale.noOptionsText,
   ...rest
 }: Readonly<InputSelectProps<T, M>>) {
   const handleChange = (
@@ -67,6 +69,7 @@ function InputSelect<T, M extends boolean = false>({
       size="small"
       multiple={multiple}
       onChange={handleChange}
+      noOptionsText={noOptionsText}
       slotProps={{ paper: { sx: selectMui } }}
       getOptionLabel={(option) =>
         typeof option === "string" ? "" : optionLabel(option)

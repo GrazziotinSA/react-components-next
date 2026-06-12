@@ -1,7 +1,7 @@
 import { useState } from "react";
 import InputSelect from "./index";
 import { action } from "storybook/actions";
-import inputSelectConstants from "./utils/constants";
+import inputSelectConstants, { locale } from "./utils/constants";
 import type { InputSelectProps } from "./utils/interface";
 import type { InputProps } from "../input/utils/interface";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -123,6 +123,62 @@ export const Desabilitado: Story = {
 
 export const ComErro: Story = {
   args: { error: true, helperText: "Campo obrigatório" },
+};
+
+export const SemResultados: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: `Ao buscar sem correspondências, exibe "${locale.noOptionsText}".`,
+      },
+    },
+  },
+  render: () => (
+    <div className="w-80">
+      <InputSelect
+        open
+        options={opcoes}
+        inputValue="Busca sem resultado"
+        optionLabel={(option) => option.label}
+        input={{
+          label: "Cidade",
+          color: "#00b2a6",
+          placeholder: "Buscar cidade...",
+        }}
+        onChange={action("onChange")}
+        onInputChange={action("onInputChange")}
+      />
+    </div>
+  ),
+};
+
+export const SemResultadosPersonalizado: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Passe `noOptionsText` para personalizar a mensagem exibida quando nenhuma opção corresponder à busca.",
+      },
+    },
+  },
+  render: () => (
+    <div className="w-80">
+      <InputSelect
+        open
+        options={opcoes}
+        inputValue="Busca sem resultado"
+        noOptionsText="Nenhuma cidade encontrada"
+        optionLabel={(option) => option.label}
+        input={{
+          label: "Cidade",
+          color: "#00b2a6",
+          placeholder: "Buscar cidade...",
+        }}
+        onChange={action("onChange")}
+        onInputChange={action("onInputChange")}
+      />
+    </div>
+  ),
 };
 
 export const Livre: Story = {

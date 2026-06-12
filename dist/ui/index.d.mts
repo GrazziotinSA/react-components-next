@@ -428,7 +428,7 @@ interface InputSelectProps<T, M extends boolean = false> extends Omit<Autocomple
  * />
  * ```
  */
-declare function InputSelect<T, M extends boolean = false>({ multiple, optionLabel, onChange, input, ...rest }: Readonly<InputSelectProps<T, M>>): react_jsx_runtime.JSX.Element;
+declare function InputSelect<T, M extends boolean = false>({ input, multiple, onChange, optionLabel, noOptionsText, ...rest }: Readonly<InputSelectProps<T, M>>): react_jsx_runtime.JSX.Element;
 
 /**
  * Propriedades do componente {@link FilterCard}.

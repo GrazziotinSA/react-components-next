@@ -780,17 +780,24 @@ var selectMui = {
   "& .MuiAutocomplete-noOptions": optionText,
   "& .MuiAutocomplete-listbox": { padding: "5px" }
 };
+
+// src/components/ui/input-select/utils/constants.ts
+var locale = {
+  noOptionsText: "Nenhum resultado encontrado"
+};
 function InputSelect(_a) {
   var _b = _a, {
+    input: input2,
     multiple,
-    optionLabel,
     onChange,
-    input: input2
+    optionLabel,
+    noOptionsText = locale.noOptionsText
   } = _b, rest = __objRest(_b, [
+    "input",
     "multiple",
-    "optionLabel",
     "onChange",
-    "input"
+    "optionLabel",
+    "noOptionsText"
   ]);
   const handleChange = (event, value, reason, details) => {
     onChange == null ? void 0 : onChange(event, value, reason, details);
@@ -801,6 +808,7 @@ function InputSelect(_a) {
       size: "small",
       multiple,
       onChange: handleChange,
+      noOptionsText,
       slotProps: { paper: { sx: selectMui } },
       getOptionLabel: (option) => typeof option === "string" ? "" : optionLabel(option),
       isOptionEqualToValue: (option, value) => JSON.stringify(option) === JSON.stringify(value),
