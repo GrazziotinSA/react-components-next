@@ -1220,9 +1220,6 @@ function GrazziotinProviders({
     /* @__PURE__ */ jsxRuntime.jsx(core.MantineProvider, { children })
   ] });
 }
-function MantineAppProvider({ children }) {
-  return /* @__PURE__ */ jsxRuntime.jsx(core.MantineProvider, { children });
-}
 
 exports.Card = card_default;
 exports.DataTable = data_table_default;
@@ -1231,7 +1228,6 @@ exports.Filter = filter_default2;
 exports.GrazziotinProviders = GrazziotinProviders;
 exports.Input = input_default;
 exports.InputSelect = input_select_default;
-exports.MantineAppProvider = MantineAppProvider;
 exports.Say = say_default;
 exports.Tab = Tab;
 exports.Tabs = Tabs;

@@ -9,8 +9,6 @@
 
 ## Instalação
 
-Clone o repositório e instale as dependências:
-
 ```bash
 git clone <url-do-repositorio>
 cd react-components-next
@@ -19,13 +17,17 @@ npm install
 
 ---
 
-## Subindo o Storybook
+## Ambiente de desenvolvimento
+
+O **Storybook** é o ambiente principal para visualizar e documentar componentes:
 
 ```bash
 npm run storybook
 ```
 
 Acesse em [http://localhost:6006](http://localhost:6006).
+
+Os providers (`GrazziotinProviders`) e estilos de desenvolvimento são configurados em `.storybook/preview.tsx`.
 
 ---
 
@@ -40,81 +42,87 @@ Acesse em [http://localhost:6006](http://localhost:6006).
 | `npm run type-check`      | Verifica os tipos com TypeScript                        |
 | `npm run lint`            | Verifica o código com ESLint                            |
 
+> **Importante:** `build:lib` executa `build:css:src` antes do tsup para gerar `src/styles/tailwind-output.css` (gitignored). Esse arquivo é necessário para o auto-inject de CSS nos bundles JS.
+
+---
+
+## Estrutura do projeto
+
+```
+src/
+├── components/
+│   ├── accessibility/          # Say, useSay
+│   └── ui/                       # card, dialog, data-table, tab, input, filter...
+├── core/                         # Utilitários internos (não exportados)
+├── functions/                    # cn, nvl, formatters
+├── providers/                    # GrazziotinProviders
+├── styles/
+│   ├── index.css                 # Entrada Tailwind para build npm (dist/index.css)
+│   └── storybook.css             # Estilos do ambiente Storybook
+└── index.ts                      # Entrypoint principal da biblioteca
+```
+
 ---
 
 ## Criando um novo componente
 
 ### 1. Estrutura de arquivos
 
-Crie uma pasta dentro de `src/components/ui/`:
+Crie uma pasta em `src/components/ui/` seguindo o padrão **kebab-case**:
 
 ```
-src/components/ui/MeuComponente/
-├── MeuComponente.tsx          # implementação do componente
-├── MeuComponente.stories.tsx  # stories do Storybook
-└── index.ts                   # exports públicos
+src/components/ui/meu-componente/
+├── index.tsx                     # implementação do componente
+├── meu-componente.stories.tsx    # stories do Storybook
+└── utils/
+    ├── constants.ts              # estilos, configurações
+    └── interface.ts              # tipos TypeScript
 ```
 
-### 2. Implementação (`MeuComponente.tsx`)
+### 2. Implementação (`index.tsx`)
 
 ```tsx
-import React from "react";
-import { cn } from "../../../lib/utils";
+import { cn } from "@/functions";
+import type { MeuComponenteProps } from "./utils/interface";
 
-export interface MeuComponenteProps extends React.HTMLAttributes<HTMLDivElement> {
-  variant?: "default" | "primary";
-}
-
-export function MeuComponente({
-  variant = "default",
+export default function MeuComponente({
   className,
   children,
-  ...props
-}: MeuComponenteProps) {
-  return (
-    <div className={cn("...", className)} {...props}>
-      {children}
-    </div>
-  );
+}: Readonly<MeuComponenteProps>) {
+  return <div className={cn("text-sm", className)}>{children}</div>;
 }
 ```
 
-> Se o componente usar hooks (`useState`, `useEffect`, etc.), adicione `"use client";` na primeira linha do arquivo.
+> Se o componente usar hooks (`useState`, `useEffect`, etc.), adicione `"use client";` na primeira linha.
 
-### 3. Story (`MeuComponente.stories.tsx`)
+### 3. Story (`meu-componente.stories.tsx`)
 
 ```tsx
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { MeuComponente } from "./MeuComponente";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import MeuComponente from "./index";
 
-const meta: Meta<typeof MeuComponente> = {
+const meta = {
   title: "UI/MeuComponente",
   component: MeuComponente,
   tags: ["autodocs"],
   parameters: { layout: "centered" },
-};
+} satisfies Meta<typeof MeuComponente>;
 
 export default meta;
-type Story = StoryObj<typeof MeuComponente>;
+type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: { children: "Exemplo" },
 };
 ```
 
-### 4. Barrel (`index.ts`)
+### 4. Registrar no barrel `ui`
+
+Adicione em `src/components/ui/index.ts`:
 
 ```ts
-export { MeuComponente } from "./MeuComponente";
-export type { MeuComponenteProps } from "./MeuComponente";
-```
-
-### 5. Registrar no index da pasta `ui`
-
-Adicione a linha em `src/components/ui/index.ts`:
-
-```ts
-export * from "./MeuComponente";
+export { default as MeuComponente } from "./meu-componente";
+export type { MeuComponenteProps } from "./meu-componente/utils/interface";
 ```
 
 ---
@@ -125,125 +133,74 @@ export * from "./MeuComponente";
 npm run build:lib
 ```
 
-Os arquivos gerados ficam em `dist/` com os seguintes formatos:
+Pipeline:
 
-| Arquivo           | Formato                                            |
-| ----------------- | -------------------------------------------------- |
-| `dist/index.js`   | CommonJS (CJS)                                     |
-| `dist/index.mjs`  | ES Module (ESM)                                    |
-| `dist/index.d.ts` | Tipos TypeScript                                   |
-| `dist/index.css`  | CSS compilado com todas as classes dos componentes |
-
----
-
-## Configurando estilos no projeto consumidor
-
-A biblioteca usa Tailwind CSS. Escolha uma das opções abaixo dependendo do seu projeto.
-
-### Opção A — Projeto com Tailwind CSS v4 (recomendado)
-
-Adicione uma linha no arquivo CSS onde o Tailwind é importado (geralmente `globals.css`):
-
-```css
-@import "tailwindcss";
-@source "../node_modules/react-components-next/dist/index.mjs";
+```
+build:css:src  →  src/styles/tailwind-output.css  (intermediário, gitignored)
+tsup           →  dist/ (JS + CSS injetado nos bundles)
+build:css      →  dist/index.css  (export /styles)
 ```
 
-O Tailwind vai escanear os componentes da biblioteca e incluir todos os estilos automaticamente. **Nenhuma outra configuração é necessária.**
+| Arquivo           | Formato                          |
+| ----------------- | -------------------------------- |
+| `dist/index.js`   | CommonJS (entry raiz)            |
+| `dist/index.mjs`  | ES Module (entry raiz)           |
+| `dist/index.d.ts` | Tipos TypeScript                 |
+| `dist/index.css`  | CSS compilado (export `/styles`) |
 
-### Opção B — Projeto sem Tailwind CSS
-
-Importe o CSS pré-compilado uma vez no ponto de entrada da aplicação (`layout.tsx`, `_app.tsx`, etc.):
-
-```tsx
-import "react-components-next/styles";
-```
+A pasta `dist/` é versionada no Git conforme exigência do projeto e também publicada via `prepublishOnly`.
 
 ---
 
 ## Usando a biblioteca em projetos locais (npm link)
 
-O `npm link` cria um link simbólico global da biblioteca, permitindo testá-la em outros projetos sem publicar no npm.
-
 ### Passo 1 — Registrar o link (neste repositório)
 
 ```bash
-# Gere o build da biblioteca primeiro
 npm run build:lib
-
-# Registre o pacote globalmente via link
 npm link
 ```
 
-### Passo 2 — Consumir o link no projeto de destino
+### Passo 2 — Consumir no projeto de destino
 
 ```bash
-# Vá para o outro projeto
-cd /caminho/do/meu-outro-projeto
-
-# Vincule a biblioteca local
-npm link react-components-next
+cd /caminho/do/meu-projeto
+npm link @grazziotin/react-components-next
+npm install @mui/material @mui/x-data-grid @emotion/react @emotion/styled @mantine/core @mantine/hooks
 ```
 
-A partir deste momento, `import { Button } from "react-components-next"` apontará para os arquivos locais em `dist/`.
+### Passo 3 — Configurar no projeto de destino
 
-> **Se o projeto de destino for Next.js** e continuar com erro "Module not found" mesmo após o link, adicione o pacote ao `transpilePackages` no `next.config` do projeto de destino:
->
-> ```js
-> const nextConfig = {
->   transpilePackages: ["react-components-next"],
-> };
-> ```
->
-> Reinicie o servidor de dev depois.
+```tsx
+import "@mantine/core/styles.css";
+import { GrazziotinProviders } from "@grazziotin/react-components-next/providers";
+import { Card } from "@grazziotin/react-components-next/ui";
+```
 
-### Passo 3 — Atualizar após mudanças
+Os estilos Tailwind da lib são carregados automaticamente ao importar de `/ui` ou do entry raiz.
 
-Sempre que alterar componentes, refaça o build:
+### Passo 4 — Atualizar após mudanças
 
 ```bash
 npm run build:lib
 ```
 
-O projeto vinculado já reflete as mudanças automaticamente.
-
-### Passo 4 — Desfazer o link
-
-```bash
-# No projeto de destino
-npm unlink react-components-next
-
-# Neste repositório (remove o link global)
-npm unlink
-```
-
 ### Dica: watch mode
-
-Para recompilar automaticamente enquanto desenvolve, rode em dois terminais:
-
-**Terminal 1 — rebuild da lib ao salvar:**
 
 ```bash
 npm run build:lib:watch
 ```
 
-**Terminal 2 — projeto de destino em dev:**
-
-```bash
-npm run dev
-```
+> O watch recompila JS ao salvar, mas não atualiza CSS automaticamente. Rode `npm run build:lib` completo após mudanças em classes Tailwind.
 
 ---
 
 ## Publicando no npm
 
 ```bash
-# 1. Atualizar a versão no package.json
 npm version patch   # ou minor / major
-
-# 2. Fazer login no npm (apenas na primeira vez)
 npm login
-
-# 3. Publicar (o build:lib roda automaticamente via prepublishOnly)
 npm publish
 ```
+
+O script `prepublishOnly` executa `build:lib` automaticamente.

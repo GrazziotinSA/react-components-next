@@ -15,5 +15,5 @@
     "src/providers/**/*.ts",
     "src/providers/**/*.tsx"
   ],
-  "exclude": ["node_modules", "src/app", "dist"]
+  "exclude": ["node_modules", "dist"]
 }

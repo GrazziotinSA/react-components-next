@@ -1,24 +1,16 @@
 import "@mantine/core/styles.css";
-import "../src/app/globals.css";
+import "../src/styles/storybook.css";
 
 import React from "react";
-import { MantineProvider } from "@mantine/core";
 import type { Preview } from "@storybook/react-vite";
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-
-const muiTheme = createTheme({
-  typography: { fontFamily: "var(--font-family, inherit)" },
-});
+import { GrazziotinProviders } from "../src/providers/app-providers";
 
 const preview: Preview = {
   decorators: [
     (Story) => (
-      <ThemeProvider theme={muiTheme}>
-        <CssBaseline />
-        <MantineProvider>
-          <Story />
-        </MantineProvider>
-      </ThemeProvider>
+      <GrazziotinProviders>
+        <Story />
+      </GrazziotinProviders>
     ),
   ],
   parameters: {

@@ -17,11 +17,7 @@ function GrazziotinProviders({
     /* @__PURE__ */ jsxRuntime.jsx(core.MantineProvider, { children })
   ] });
 }
-function MantineAppProvider({ children }) {
-  return /* @__PURE__ */ jsxRuntime.jsx(core.MantineProvider, { children });
-}
 
 exports.GrazziotinProviders = GrazziotinProviders;
-exports.MantineAppProvider = MantineAppProvider;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

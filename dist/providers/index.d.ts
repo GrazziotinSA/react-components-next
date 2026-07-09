@@ -7,9 +7,4 @@ type GrazziotinProvidersProps = {
 };
 declare function GrazziotinProviders({ children, muiTheme, }: GrazziotinProvidersProps): react_jsx_runtime.JSX.Element;
 
-type MantineAppProviderProps = {
-    readonly children: React.ReactNode;
-};
-declare function MantineAppProvider({ children }: MantineAppProviderProps): react_jsx_runtime.JSX.Element;
-
-export { GrazziotinProviders, MantineAppProvider };
+export { GrazziotinProviders };

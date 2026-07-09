@@ -15,10 +15,7 @@ function GrazziotinProviders({
     /* @__PURE__ */ jsx(MantineProvider, { children })
   ] });
 }
-function MantineAppProvider({ children }) {
-  return /* @__PURE__ */ jsx(MantineProvider, { children });
-}
 
-export { GrazziotinProviders, MantineAppProvider };
-//# sourceMappingURL=chunk-QLBDGAEM.mjs.map
-//# sourceMappingURL=chunk-QLBDGAEM.mjs.map
+export { GrazziotinProviders };
+//# sourceMappingURL=chunk-2ZJJRHPT.mjs.map
+//# sourceMappingURL=chunk-2ZJJRHPT.mjs.map

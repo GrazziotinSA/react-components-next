@@ -23,16 +23,23 @@ npm install @mui/material @mui/x-data-grid @emotion/react @emotion/styled @manti
 
 ### Configuração no projeto consumidor
 
-Configure os providers na raiz da aplicação. Os estilos Tailwind da biblioteca são carregados automaticamente ao importar componentes de `/ui` ou do entry point raiz — não é necessário importar `/styles` manualmente (o export `/styles` continua disponível para uso explícito).
+Configure os providers na raiz da aplicação. Os estilos Tailwind da biblioteca são carregados automaticamente ao importar componentes de `/ui` ou do entry point raiz.
+
+Carregue também a fonte **Poppins** e os estilos do Mantine:
 
 ```tsx
 import "@mantine/core/styles.css";
 
 import { GrazziotinProviders } from "@grazziotin/react-components-next/providers";
+```
 
-export function AppProviders({ children }: { children: React.ReactNode }) {
-  return <GrazziotinProviders>{children}</GrazziotinProviders>;
-}
+No HTML ou CSS global do projeto consumidor:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap"
+/>
 ```
 
 ```css
@@ -42,7 +49,13 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 }
 ```
 
-> **Atenção:** os estilos do Mantine (`@mantine/core/styles.css`) ainda precisam ser importados no projeto consumidor. Os providers MUI/Mantine são obrigatórios.
+```tsx
+export function AppProviders({ children }: { children: React.ReactNode }) {
+  return <GrazziotinProviders>{children}</GrazziotinProviders>;
+}
+```
+
+> **Atenção:** a biblioteca referencia `Poppins` via variáveis CSS, mas **não embute o arquivo da fonte** — o projeto consumidor precisa carregá-la. Os estilos do Mantine (`@mantine/core/styles.css`) também são obrigatórios.
 
 ## Componentes disponíveis
 
@@ -115,7 +128,7 @@ A biblioteca expõe múltiplos pontos de entrada:
 | `@grazziotin/react-components-next/ui`          | Apenas componentes de UI                      |
 | `@grazziotin/react-components-next/functions`   | Apenas funções utilitárias                    |
 | `@grazziotin/react-components-next/accessibility` | Componentes de acessibilidade (`Say`, `useSay`) |
-| `@grazziotin/react-components-next/providers`  | `GrazziotinProviders` e `MantineAppProvider`  |
+| `@grazziotin/react-components-next/providers`  | `GrazziotinProviders` |
 | `@grazziotin/react-components-next/styles`      | CSS compilado da biblioteca (opcional — já incluído ao importar `/ui` ou `.`) |
 
 ## Componentes
@@ -208,58 +221,6 @@ formatCpfCnpj("12345678000199"); // "12.345.678/0001-99"
 ```tsx
 formatPhoneBr("11987654321"); // "(11) 98765-4321"
 formatPhoneBr("1133334444"); // "(11) 3333-4444"
-```
-
-## Desenvolvimento
-
-```bash
-# Instalar dependências
-npm install
-
-# Storybook (visualização e documentação dos componentes)
-npm run storybook
-
-# Build estático do Storybook
-npm run build-storybook
-
-# Build da biblioteca para npm
-npm run build:lib
-
-# Verificar tipos TypeScript
-npm run type-check
-
-# Lint
-npm run lint
-```
-
-## Publicar no npm
-
-```bash
-# Fazer login no npm
-npm login
-
-# Publicar (executa build:lib automaticamente via prepublishOnly)
-npm publish
-```
-
-## Estrutura do projeto
-
-```
-src/
-├── app/                        # Next.js App Router (demo local, não publicado)
-│   ├── globals.css
-│   ├── layout.tsx
-│   └── page.tsx
-├── components/
-│   ├── accessibility/          # Say, useSay
-│   ├── index.ts
-│   └── ui/                     # Card, Dialog, DataTable, Tab, Input, Filter...
-├── core/                       # Utilitários internos (não exportados)
-├── functions/                  # cn, nvl, formatters
-├── providers/                  # GrazziotinProviders, MantineAppProvider
-├── styles/
-│   └── index.css               # Entrada do Tailwind para o build CSS
-└── index.ts                    # Entrypoint principal da biblioteca
 ```
 
 ## Licença

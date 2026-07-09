@@ -14,7 +14,6 @@ const config: StorybookConfig = {
     "@storybook/addon-mcp",
   ],
   framework: "@storybook/react-vite",
-  staticDirs: [join(__dirname, "../public")],
   viteFinal: async (config) => {
     const { mergeConfig } = await import("vite");
 
