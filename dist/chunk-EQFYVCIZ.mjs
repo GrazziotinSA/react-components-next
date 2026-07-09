@@ -83,13 +83,17 @@ function formatItem150(item) {
   return digits.replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})\.(\d)(\d{1,3})$/, "$1.$2.$3");
 }
 
-// src/functions/set-data-generic/set-data-generic.ts
-function setDataGeneric(setData, key, value) {
+// src/functions/set-immer-field/set-immer-field.ts
+function setImmerField({
+  setData,
+  key,
+  value
+}) {
   setData((draft) => {
     draft[key] = value;
   });
 }
 
-export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setDataGeneric };
-//# sourceMappingURL=chunk-FECYNHJH.mjs.map
-//# sourceMappingURL=chunk-FECYNHJH.mjs.map
+export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField };
+//# sourceMappingURL=chunk-EQFYVCIZ.mjs.map
+//# sourceMappingURL=chunk-EQFYVCIZ.mjs.map

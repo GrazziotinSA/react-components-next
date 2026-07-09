@@ -79,8 +79,12 @@ function formatItem150(item) {
   return digits.replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})\.(\d)(\d{1,3})$/, "$1.$2.$3");
 }
 
-// src/functions/set-data-generic/set-data-generic.ts
-function setDataGeneric(setData, key, value) {
+// src/functions/set-immer-field/set-immer-field.ts
+function setImmerField({
+  setData,
+  key,
+  value
+}) {
   setData((draft) => {
     draft[key] = value;
   });
@@ -93,6 +97,6 @@ exports.formatItem170 = formatItem170;
 exports.formatPhoneBr = formatPhoneBr;
 exports.formatPriceBrl = formatPriceBrl;
 exports.nvl = nvl;
-exports.setDataGeneric = setDataGeneric;
+exports.setImmerField = setImmerField;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

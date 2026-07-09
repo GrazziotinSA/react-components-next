@@ -71,19 +71,30 @@ declare function formatItem170(item?: string): string;
  */
 declare function formatItem150(item?: string): string;
 
+interface SetImmerFieldParams<T, K extends keyof T> {
+    readonly setData: Updater<T>;
+    readonly key: K;
+    readonly value: T[K];
+}
+interface SetImmerFieldExampleState {
+    readonly name: string;
+    readonly age: number;
+}
+
 /**
  * Atualiza uma chave específica de um estado gerenciado com `useImmer`.
  *
- * @param setData - Função setter retornada por `useImmer`
- * @param key - Chave do objeto a ser atualizada
- * @param value - Novo valor para a chave
+ * @param params.setData - Função setter retornada por `useImmer`
+ * @param params.key - Chave do objeto a ser atualizada
+ * @param params.value - Novo valor para a chave
  *
  * @example
  * ```tsx
  * const [data, setData] = useImmer({ name: "", age: 0 });
- * setDataGeneric(setData, "name", "João");
+ *
+ * setImmerField({ setData, key: "name", value: "João" });
  * ```
  */
-declare function setDataGeneric<T, K extends keyof T>(setData: Updater<T>, key: K, value: T[K]): void;
+declare function setImmerField<T, K extends keyof T>({ setData, key, value, }: SetImmerFieldParams<T, K>): void;
 
-export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, setDataGeneric };
+export { type SetImmerFieldExampleState, type SetImmerFieldParams, cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, setImmerField };
