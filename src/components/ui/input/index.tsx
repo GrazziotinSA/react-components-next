@@ -4,8 +4,8 @@ import { cn } from "@/functions";
 import { withCssVar } from "@/core";
 import InputTextField from "./utils/css";
 import { useMemo, useState } from "react";
-import { useInputMasker } from "./maskers";
-import { buildSlotProps } from "./slot-props";
+import { useInputMasker } from "./components/maskers";
+import { buildSlotProps } from "./components/slot-props";
 import { InputProps, InputType } from "./utils/interface";
 
 const CUSTOM_INPUT_TYPES = new Set<InputType>([

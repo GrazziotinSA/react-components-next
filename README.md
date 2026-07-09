@@ -8,34 +8,30 @@ Biblioteca de componentes React reutilizáveis para o projeto Grazziotin, constr
 npm install @grazziotin/react-components-next
 ```
 
+Instale também as peer dependencies necessárias:
+
+```bash
+npm install @mui/material @mui/x-data-grid @emotion/react @emotion/styled @mantine/core @mantine/hooks
+```
+
 ### Requisitos
 
 - React `>= 18`
-- Tailwind CSS v4 configurado no projeto consumidor
-- `ThemeProvider` do MUI e `MantineProvider` do Mantine envolvendo a aplicação
+- Material UI (`@mui/material`, `@mui/x-data-grid`) e Emotion
+- Mantine (`@mantine/core`, `@mantine/hooks`)
+- `GrazziotinProviders` (ou `ThemeProvider` do MUI + `MantineProvider`) envolvendo a aplicação
 
 ### Configuração no projeto consumidor
 
-Importe os estilos da biblioteca e configure as variáveis CSS do tema:
+Configure os providers na raiz da aplicação. Os estilos Tailwind da biblioteca são carregados automaticamente ao importar componentes de `/ui` ou do entry point raiz — não é necessário importar `/styles` manualmente (o export `/styles` continua disponível para uso explícito).
 
 ```tsx
-import "@grazziotin/react-components-next/styles";
-
-import { CssBaseline, ThemeProvider, createTheme } from "@mui/material";
-import { MantineProvider } from "@mantine/core";
 import "@mantine/core/styles.css";
 
-const theme = createTheme({
-  typography: { fontFamily: "var(--font-family, inherit)" },
-});
+import { GrazziotinProviders } from "@grazziotin/react-components-next/providers";
 
 export function AppProviders({ children }: { children: React.ReactNode }) {
-  return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <MantineProvider>{children}</MantineProvider>
-    </ThemeProvider>
-  );
+  return <GrazziotinProviders>{children}</GrazziotinProviders>;
 }
 ```
 
@@ -46,39 +42,45 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 }
 ```
 
-> **Atenção:** vários componentes usam classes do Tailwind CSS e dependem do MUI/Mantine. Certifique-se de que o Tailwind esteja configurado e os providers estejam na raiz da aplicação.
+> **Atenção:** os estilos do Mantine (`@mantine/core/styles.css`) ainda precisam ser importados no projeto consumidor. Os providers MUI/Mantine são obrigatórios.
 
 ## Componentes disponíveis
 
+| Componente     | Descrição                                                       |
+| -------------- | --------------------------------------------------------------- |
+| `Card`         | Container com cabeçalho colorido, título, ícone e tooltip       |
+| `Dialog`       | Modal baseado no MUI com título, conteúdo e ações opcionais     |
+| `DataTable`    | Tabela de dados com MUI DataGrid, filtros e textos em português |
+| `Tab`/`Tabs`   | Abas estilizadas com indicador e tipografia customizáveis       |
+| `Input`        | Campo de texto com máscaras e estilização MUI                   |
+| `InputSelect`  | Select com grid de opções                                       |
+| `Filter`       | Drawer de filtros com campos configuráveis                        |
 
-| Componente   | Descrição                                                       |
-| ------------ | --------------------------------------------------------------- |
-| `Card`       | Container com cabeçalho colorido, título, ícone e tooltip       |
-| `Dialog`     | Modal baseado no MUI com título, conteúdo e ações opcionais     |
-| `DataTable`  | Tabela de dados com MUI DataGrid, filtros e textos em português |
-| `Tab`/`Tabs` | Abas estilizadas com indicador e tipografia customizáveis       |
+## Acessibilidade
 
+| Export    | Descrição                              |
+| --------- | -------------------------------------- |
+| `Say`     | Componente de leitura de tela (toast)  |
+| `useSay`  | Hook para disparar feedback por voz    |
 
 ## Funções utilitárias
 
-
-| Função          | Descrição                                        |
-| --------------- | ------------------------------------------------ |
-| `cn`            | Mescla classes CSS com `clsx` e `tailwind-merge` |
-| `nvl`           | Retorna valor padrão quando `null`/`undefined`   |
-| `formatCpfCnpj` | Formata CPF ou CNPJ                              |
-| `formatPhoneBr` | Formata telefone brasileiro                      |
-
+| Função           | Descrição                                        |
+| ---------------- | ------------------------------------------------ |
+| `cn`             | Mescla classes CSS com `clsx` e `tailwind-merge` |
+| `nvl`            | Retorna valor padrão quando `null`/`undefined`   |
+| `formatCpfCnpj`  | Formata CPF ou CNPJ                              |
+| `formatPhoneBr`  | Formata telefone brasileiro                      |
+| `formatPriceBrl` | Formata valor monetário em BRL                   |
+| `formatItem170`  | Formata item 170                                 |
+| `formatItem150`  | Formata item 150                                 |
 
 ## Uso
 
 ```tsx
 import {
   Card,
-  Dialog,
   DataTable,
-  Tab,
-  Tabs,
   cn,
   formatCpfCnpj,
 } from "@grazziotin/react-components-next";
@@ -107,14 +109,14 @@ export function Example() {
 
 A biblioteca expõe múltiplos pontos de entrada:
 
-
-| Import                                        | Conteúdo                                 |
-| --------------------------------------------- | ---------------------------------------- |
-| `@grazziotin/react-components-next`           | Componentes e funções (export principal) |
-| `@grazziotin/react-components-next/ui`        | Apenas componentes de UI                 |
-| `@grazziotin/react-components-next/functions` | Apenas funções utilitárias               |
-| `@grazziotin/react-components-next/styles`    | CSS compilado da biblioteca              |
-
+| Import                                          | Conteúdo                                      |
+| ----------------------------------------------- | --------------------------------------------- |
+| `@grazziotin/react-components-next`             | Componentes, funções, acessibilidade e providers |
+| `@grazziotin/react-components-next/ui`          | Apenas componentes de UI                      |
+| `@grazziotin/react-components-next/functions`   | Apenas funções utilitárias                    |
+| `@grazziotin/react-components-next/accessibility` | Componentes de acessibilidade (`Say`, `useSay`) |
+| `@grazziotin/react-components-next/providers`  | `GrazziotinProviders` e `MantineAppProvider`  |
+| `@grazziotin/react-components-next/styles`      | CSS compilado da biblioteca (opcional — já incluído ao importar `/ui` ou `.`) |
 
 ## Componentes
 
@@ -244,24 +246,17 @@ npm publish
 
 ```
 src/
-├── app/                        # Next.js App Router (página inicial mínima)
-│   ├── globals.css             # Variáveis CSS e tema
-│   ├── layout.tsx              # Providers MUI + Mantine
+├── app/                        # Next.js App Router (demo local, não publicado)
+│   ├── globals.css
+│   ├── layout.tsx
 │   └── page.tsx
 ├── components/
+│   ├── accessibility/          # Say, useSay
 │   ├── index.ts
-│   └── ui/
-│       ├── card/
-│       ├── dialog/
-│       ├── data-table/
-│       └── tab/
-├── core/                       # Utilitários internos
-├── functions/
-│   ├── cn/
-│   ├── nvl/
-│   ├── format-cpf-cnpj/
-│   └── format-phone-br/
-├── providers/
+│   └── ui/                     # Card, Dialog, DataTable, Tab, Input, Filter...
+├── core/                       # Utilitários internos (não exportados)
+├── functions/                  # cn, nvl, formatters
+├── providers/                  # GrazziotinProviders, MantineAppProvider
 ├── styles/
 │   └── index.css               # Entrada do Tailwind para o build CSS
 └── index.ts                    # Entrypoint principal da biblioteca

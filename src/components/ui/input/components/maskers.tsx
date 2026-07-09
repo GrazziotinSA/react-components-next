@@ -7,7 +7,7 @@ import {
 } from "@/functions";
 import { useCallback } from "react";
 import { removeDigits } from "@/core";
-import { InputMaskerArgs, InputType } from "./utils/interface";
+import { InputMaskerArgs, InputType } from "../utils/interface";
 import { removeNonDigits, removeTextOnly } from "@/core/remove-digits";
 
 export function useInputMasker({ type, onChange }: InputMaskerArgs) {

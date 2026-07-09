@@ -25,6 +25,7 @@
   "editor.formatOnSave": true,
   "editor.tabSize": 2,
   "files.eol": "\r\n",
+  "css.customData": [".vscode/css-custom-data.json"],
   "workbench.colorCustomizations": {
     "activityBar.background": "#6A0DAD",
     "titleBar.activeBackground": "#6A0DAD",

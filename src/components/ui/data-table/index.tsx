@@ -2,6 +2,7 @@ import {
   localeText,
   tableSx,
   filterSx,
+  filterTheme,
   columnMenuSx,
   paginationSx,
   columnPanelSx,
@@ -18,7 +19,7 @@ import {
   GRID_NUMERIC_COL_DEF,
   GridColumnsPanelProps,
 } from "@mui/x-data-grid";
-import { Box } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 import type { ComponentProps } from "react";
 import type { DataTableProps } from "./utils/interface";
 import { getNumberOps, getTextOps } from "./utils/between-filter";
@@ -49,7 +50,11 @@ function CustomColumnMenu(props: Readonly<GridColumnMenuProps>) {
 function CustomFilterPanel(
   props: Readonly<ComponentProps<typeof GridFilterPanel>>,
 ) {
-  return <GridFilterPanel {...props} sx={filterSx} />;
+  return (
+    <ThemeProvider theme={filterTheme}>
+      <GridFilterPanel {...props} sx={filterSx} />
+    </ThemeProvider>
+  );
 }
 
 function CustomNoRowsOverlay() {

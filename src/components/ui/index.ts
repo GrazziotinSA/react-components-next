@@ -1,3 +1,5 @@
+import "../../styles/tailwind-output.css";
+
 export { default as Card } from "./card";
 export type { CardProps, CardClassName } from "./card/utils/interface";
 export { default as Dialog } from "./dialog";

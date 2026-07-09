@@ -1,2 +1,14 @@
 @import "tailwindcss";
+@layer theme, base, mui, mantine, components, utilities;
 @source "../components/**/*.tsx";
+
+@layer theme {
+  :root {
+    --primary-color: #00b2a6;
+    --font-poppins: "Poppins", sans-serif;
+    --font-family: var(--font-poppins);
+    --default-font-family: var(--font-poppins);
+    --mui-font-family: var(--font-poppins);
+    --mantine-font-family: var(--font-poppins);
+  }
+}

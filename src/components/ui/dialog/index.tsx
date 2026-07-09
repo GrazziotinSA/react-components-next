@@ -73,7 +73,7 @@ function Dialog({
     >
       {title && (
         <DialogTitle>
-          <p className="text-sm font-semibold text-black-de">{title}</p>
+          <p className="text-sm font-semibold text-black">{title}</p>
         </DialogTitle>
       )}
       <DialogContent className="text-black">{children}</DialogContent>

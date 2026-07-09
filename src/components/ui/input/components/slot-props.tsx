@@ -1,7 +1,7 @@
-import { DEFAULT_ACCENT } from "./utils/css";
+import { DEFAULT_ACCENT } from "../utils/css";
 import { IconButton, InputAdornment } from "@mui/material";
 import { MdVisibility, MdVisibilityOff } from "react-icons/md";
-import type { InputProps, PasswordToggleArgs } from "./utils/interface";
+import type { InputProps, PasswordToggleArgs } from "../utils/interface";
 
 function withPasswordToggle({
   showPwd,

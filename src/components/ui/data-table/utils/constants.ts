@@ -1,6 +1,9 @@
-import { SxProps, Theme } from "@mui/material";
 import { ptBR } from "@mui/x-data-grid/locales";
 import { GridLocaleText } from "@mui/x-data-grid";
+import { createTheme, SxProps, Theme } from "@mui/material";
+
+const tableFont =
+  "var(--font-family, var(--font-poppins, Poppins, sans-serif))";
 
 export const localeText: Partial<GridLocaleText> = {
   ...ptBR.components.MuiDataGrid.defaultProps.localeText,
@@ -129,9 +132,11 @@ export const columnPanelSx: SxProps<Theme> = {
   padding: 2,
   width: "350px",
   color: "#000000DE",
+  "*": { fontFamily: `${tableFont} !important` },
 };
 
 export const columnMenuSx: SxProps<Theme> = {
+  "*": { fontFamily: `${tableFont} !important` },
   "& .MuiListItemText-primary": {
     fontSize: "14px !important",
   },
@@ -139,16 +144,47 @@ export const columnMenuSx: SxProps<Theme> = {
 
 export const filterSx: SxProps<Theme> = {
   width: "750px",
-  "*": { fontSize: "14px !important" },
+  "*": {
+    fontSize: "14px !important",
+    fontFamily: `${tableFont} !important`,
+  },
   "& .MuiDataGrid-filterFormColumnInput": { width: "230px" },
   "& .MuiDataGrid-filterFormOperatorInput": { width: "230px" },
 };
 
+export const filterTheme = createTheme({
+  typography: { fontFamily: tableFont },
+  components: {
+    MuiList: {
+      styleOverrides: {
+        root: { fontFamily: tableFont },
+      },
+    },
+    MuiMenuItem: {
+      styleOverrides: {
+        root: { fontFamily: tableFont },
+      },
+    },
+  },
+});
+
 export const paginationSx: SxProps<Theme> = {
-  "& .MuiTablePagination-root": { fontSize: "12px !important" },
-  "& .MuiTablePagination-selectLabel": { fontSize: "12px !important" },
-  "& .MuiTablePagination-displayedRows": { fontSize: "12px !important" },
-  "& .MuiTablePagination-select": { fontSize: "12px !important" },
+  "& .MuiTablePagination-root": {
+    fontSize: "12px !important",
+    fontFamily: `${tableFont} !important`,
+  },
+  "& .MuiTablePagination-selectLabel": {
+    fontSize: "12px !important",
+    fontFamily: `${tableFont} !important`,
+  },
+  "& .MuiTablePagination-displayedRows": {
+    fontSize: "12px !important",
+    fontFamily: `${tableFont} !important`,
+  },
+  "& .MuiTablePagination-select": {
+    fontSize: "12px !important",
+    fontFamily: `${tableFont} !important`,
+  },
   "& .MuiTablePagination-toolbar": {
     minHeight: "40px !important",
     padding: "0 8px !important",
@@ -157,6 +193,10 @@ export const paginationSx: SxProps<Theme> = {
 
 export const tableSx: SxProps<Theme> = {
   fontSize: "13px",
+  fontFamily: `${tableFont} !important`,
+  "& *": {
+    fontFamily: `${tableFont} !important`,
+  },
   "& .MuiDataGrid-row:nth-of-type(even)": {
     backgroundColor: "#F9FAFB",
   },

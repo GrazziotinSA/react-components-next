@@ -8,9 +8,12 @@
     "rootDir": "./src"
   },
   "include": [
+    "src/index.ts",
     "src/components/**/*.ts",
     "src/components/**/*.tsx",
-    "src/functions/**/*.ts"
+    "src/functions/**/*.ts",
+    "src/providers/**/*.ts",
+    "src/providers/**/*.tsx"
   ],
   "exclude": ["node_modules", "src/app", "dist"]
 }
