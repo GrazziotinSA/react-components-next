@@ -15,7 +15,7 @@ export default defineConfig({
     },
   },
   clean: true,
-  external: ["react", "react-dom"],
+  external: ["react", "react-dom", "use-immer"],
   sourcemap: true,
   minify: false,
   treeshake: true,

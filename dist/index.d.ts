@@ -1,5 +1,5 @@
 export { Card, CardClassName, CardProps, DataTable, DataTableProps, Dialog, DialogProps, Filter, FilterCardProps, FilterDrawerField, FilterDrawerProps, FilterInputProps, FilterInputSelectField, FilterInputSelectItem, FilterInputSelectProps, FilterProps, Input, InputProps, InputSelect, InputSelectGridProps, InputSelectProps, InputType, Tab, TabColorProps, TabProps, Tabs, TabsProps, filterInputSelect } from './ui/index.js';
-export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl } from './functions/index.js';
+export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, setDataGeneric } from './functions/index.js';
 export { ClassValue } from 'clsx';
 export { Say, SayCallOptions, SayFeedbackType, SayProps, UseSayOptions, UseSayReturn, useSay } from './accessibility/index.js';
 export { GrazziotinProviders } from './providers/index.js';
@@ -10,3 +10,4 @@ import '@mui/x-data-grid';
 import '@emotion/styled';
 import '@mui/system';
 import '@mui/material/OverridableComponent';
+import 'use-immer';

@@ -6,3 +6,8 @@ export { formatPhoneBr } from "./format-phone-br";
 export { formatPriceBrl } from "./format-price-brl";
 export { formatItem170 } from "./format-item-170";
 export { formatItem150 } from "./format-item-150";
+export { setImmerField } from "./set-immer-field";
+export type {
+  SetImmerFieldParams,
+  SetImmerFieldExampleState,
+} from "./set-immer-field";

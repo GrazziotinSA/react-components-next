@@ -83,6 +83,13 @@ function formatItem150(item) {
   return digits.replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})(\d)/, "$1.$2").replace(/(\d{2})\.(\d)(\d{1,3})$/, "$1.$2.$3");
 }
 
-export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly };
-//# sourceMappingURL=chunk-DM64WOVD.mjs.map
-//# sourceMappingURL=chunk-DM64WOVD.mjs.map
+// src/functions/set-data-generic/set-data-generic.ts
+function setDataGeneric(setData, key, value) {
+  setData((draft) => {
+    draft[key] = value;
+  });
+}
+
+export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setDataGeneric };
+//# sourceMappingURL=chunk-FECYNHJH.mjs.map
+//# sourceMappingURL=chunk-FECYNHJH.mjs.map

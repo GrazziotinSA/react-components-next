@@ -1,5 +1,6 @@
 import { ClassValue } from 'clsx';
 export { ClassValue } from 'clsx';
+import { Updater } from 'use-immer';
 
 declare function cn(...values: ClassValue[]): string;
 
@@ -70,4 +71,19 @@ declare function formatItem170(item?: string): string;
  */
 declare function formatItem150(item?: string): string;
 
-export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl };
+/**
+ * Atualiza uma chave específica de um estado gerenciado com `useImmer`.
+ *
+ * @param setData - Função setter retornada por `useImmer`
+ * @param key - Chave do objeto a ser atualizada
+ * @param value - Novo valor para a chave
+ *
+ * @example
+ * ```tsx
+ * const [data, setData] = useImmer({ name: "", age: 0 });
+ * setDataGeneric(setData, "name", "João");
+ * ```
+ */
+declare function setDataGeneric<T, K extends keyof T>(setData: Updater<T>, key: K, value: T[K]): void;
+
+export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, setDataGeneric };
