@@ -8,6 +8,13 @@ import type { ComponentPropsWithoutRef } from "react";
 export type CardClassName = ComponentPropsWithoutRef<"div">["className"];
 
 /**
+ * Tipo do atributo nativo `className` de um elemento `span` no React.
+ */
+export type CardTitleClassName = NonNullable<
+  ComponentPropsWithoutRef<"span">["className"]
+>;
+
+/**
  * Propriedades do componente {@link Card}.
  * O Card é um container com cabeçalho opcional (título, ícone) e área de conteúdo.
  * Estilos dinâmicos são aplicados via MUI `Box`; classes utilitárias podem ser
@@ -67,6 +74,13 @@ export interface CardProps {
   titleColor?: string;
 
   /**
+   * Classes CSS aplicadas diretamente ao título.
+   * Permite personalizar tamanho, peso, cor e outros estilos do texto.
+   * @see {@link CardTitleClassName}
+   */
+  titleClassName?: CardTitleClassName;
+
+  /**
    * Raio da borda apenas do cabeçalho (ex.: `"8px 8px 0 0"`).
    * Útil para arredondar só o topo quando o conteúdo não tem o mesmo radius.
    */
@@ -98,5 +112,5 @@ export interface CardProps {
    * Mesmos valores de `justify-content` do CSS (ex.: `"space-between"`, `"flex-end"`).
    * @default "space-between"
    */
-  justifyContent?: CSSProperties["justifyContent"];
+  justifyContent?: NonNullable<CSSProperties["justifyContent"]>;
 }

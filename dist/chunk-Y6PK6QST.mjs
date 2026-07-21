@@ -50,6 +50,7 @@ function Card({
   width = "100%",
   height = "auto",
   titleWidth = "100%",
+  titleClassName,
   justifyContent = "space-between",
   titleColor = "var(--primary-color)",
   icon
@@ -99,7 +100,7 @@ function Card({
                   classNames: { tooltip: "text-xs!" },
                   offset: { mainAxis: 11, crossAxis: -21 },
                   transitionProps: { transition: "fade", duration: 100 },
-                  children: /* @__PURE__ */ jsx("span", { className: "block! truncate!", children: title })
+                  children: /* @__PURE__ */ jsx("span", { className: cn("block! truncate!", titleClassName), children: title })
                 }
               ) }),
               /* @__PURE__ */ jsx("div", { children: icon })
@@ -956,5 +957,5 @@ var Filter = ({
 var filter_default2 = Filter;
 
 export { Tab, Tabs, card_default, data_table_default, dialog_default, filterInputSelect, filter_default2 as filter_default, input_default, input_select_default };
-//# sourceMappingURL=chunk-KBUOICGE.mjs.map
-//# sourceMappingURL=chunk-KBUOICGE.mjs.map
+//# sourceMappingURL=chunk-Y6PK6QST.mjs.map
+//# sourceMappingURL=chunk-Y6PK6QST.mjs.map

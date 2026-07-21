@@ -14,6 +14,10 @@ import * as _mui_material_OverridableComponent from '@mui/material/OverridableCo
  */
 type CardClassName = ComponentPropsWithoutRef<"div">["className"];
 /**
+ * Tipo do atributo nativo `className` de um elemento `span` no React.
+ */
+type CardTitleClassName = NonNullable<ComponentPropsWithoutRef<"span">["className"]>;
+/**
  * Propriedades do componente {@link Card}.
  * O Card é um container com cabeçalho opcional (título, ícone) e área de conteúdo.
  * Estilos dinâmicos são aplicados via MUI `Box`; classes utilitárias podem ser
@@ -66,6 +70,12 @@ interface CardProps {
      */
     titleColor?: string;
     /**
+     * Classes CSS aplicadas diretamente ao título.
+     * Permite personalizar tamanho, peso, cor e outros estilos do texto.
+     * @see {@link CardTitleClassName}
+     */
+    titleClassName?: CardTitleClassName;
+    /**
      * Raio da borda apenas do cabeçalho (ex.: `"8px 8px 0 0"`).
      * Útil para arredondar só o topo quando o conteúdo não tem o mesmo radius.
      */
@@ -92,7 +102,7 @@ interface CardProps {
      * Mesmos valores de `justify-content` do CSS (ex.: `"space-between"`, `"flex-end"`).
      * @default "space-between"
      */
-    justifyContent?: CSSProperties["justifyContent"];
+    justifyContent?: NonNullable<CSSProperties["justifyContent"]>;
 }
 
 /**
@@ -112,6 +122,7 @@ interface CardProps {
  * @param props.className - `className` nativo do React no container.
  * @param props.titleWidth - Largura da barra do cabeçalho. Padrão: `"100%"`.
  * @param props.titleColor - Cor de fundo do cabeçalho. Padrão: `var(--primary-color)`.
+ * @param props.titleClassName - Classes CSS aplicadas diretamente ao título.
  * @param props.borderTitle - `border-radius` só do cabeçalho.
  * @param props.onClick - Clique no card; adiciona `cursor: pointer !important`.
  * @param props.borderRadius - `border-radius` do container.
@@ -139,7 +150,7 @@ interface CardProps {
  * </Card>
  * ```
  */
-declare function Card({ margin, onClick, title, toolTip, className, borderTitle, children, borderRadius, width, height, titleWidth, justifyContent, titleColor, icon, }: Readonly<CardProps>): React.ReactElement;
+declare function Card({ margin, onClick, title, toolTip, className, borderTitle, children, borderRadius, width, height, titleWidth, titleClassName, justifyContent, titleColor, icon, }: Readonly<CardProps>): React.ReactElement;
 
 /**
  * Propriedades do componente {@link Dialog}.

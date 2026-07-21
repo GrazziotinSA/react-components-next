@@ -20,6 +20,7 @@ import type { CardProps } from "./utils/interface";
  * @param props.className - `className` nativo do React no container.
  * @param props.titleWidth - Largura da barra do cabeçalho. Padrão: `"100%"`.
  * @param props.titleColor - Cor de fundo do cabeçalho. Padrão: `var(--primary-color)`.
+ * @param props.titleClassName - Classes CSS aplicadas diretamente ao título.
  * @param props.borderTitle - `border-radius` só do cabeçalho.
  * @param props.onClick - Clique no card; adiciona `cursor: pointer !important`.
  * @param props.borderRadius - `border-radius` do container.
@@ -59,6 +60,7 @@ function Card({
   width = "100%",
   height = "auto",
   titleWidth = "100%",
+  titleClassName,
   justifyContent = "space-between",
   titleColor = "var(--primary-color)",
   icon,
@@ -106,7 +108,9 @@ function Card({
             offset={{ mainAxis: 11, crossAxis: -21 }}
             transitionProps={{ transition: "fade", duration: 100 }}
           >
-            <span className="block! truncate!">{title}</span>
+            <span className={cn("block! truncate!", titleClassName)}>
+              {title}
+            </span>
           </Tooltip>
         </span>
         <div>{icon}</div>

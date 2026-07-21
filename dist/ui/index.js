@@ -167,6 +167,7 @@ function Card({
   width = "100%",
   height = "auto",
   titleWidth = "100%",
+  titleClassName,
   justifyContent = "space-between",
   titleColor = "var(--primary-color)",
   icon
@@ -216,7 +217,7 @@ function Card({
                   classNames: { tooltip: "text-xs!" },
                   offset: { mainAxis: 11, crossAxis: -21 },
                   transitionProps: { transition: "fade", duration: 100 },
-                  children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: "block! truncate!", children: title })
+                  children: /* @__PURE__ */ jsxRuntime.jsx("span", { className: cn("block! truncate!", titleClassName), children: title })
                 }
               ) }),
               /* @__PURE__ */ jsxRuntime.jsx("div", { children: icon })
