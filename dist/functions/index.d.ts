@@ -97,4 +97,15 @@ interface SetImmerFieldExampleState {
  */
 declare function setImmerField<T, K extends keyof T>({ setData, key, value, }: SetImmerFieldParams<T, K>): void;
 
-export { type SetImmerFieldExampleState, type SetImmerFieldParams, cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, setImmerField };
+/**
+ * Extrai o primeiro e o último nome de um nome completo.
+ * @param name - Nome completo
+ * @returns Primeiro e último nome separados por espaço, ou string vazia se ausente
+ * @example
+ * shortName("flavia roseane alves de souza") // "flavia souza"
+ * shortName("João Silva") // "João Silva"
+ * shortName("Maria") // "Maria"
+ */
+declare function shortName(name?: string): string;
+
+export { type SetImmerFieldExampleState, type SetImmerFieldParams, cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, setImmerField, shortName };

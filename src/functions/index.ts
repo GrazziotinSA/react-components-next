@@ -11,3 +11,4 @@ export type {
   SetImmerFieldParams,
   SetImmerFieldExampleState,
 } from "./set-immer-field";
+export { shortName } from "./short-name";

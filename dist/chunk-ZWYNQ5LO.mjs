@@ -94,6 +94,15 @@ function setImmerField({
   });
 }
 
-export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField };
-//# sourceMappingURL=chunk-EQFYVCIZ.mjs.map
-//# sourceMappingURL=chunk-EQFYVCIZ.mjs.map
+// src/functions/short-name/short-name.ts
+function shortName(name) {
+  if (!name) return "";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "";
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts.at(-1)}`;
+}
+
+export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName };
+//# sourceMappingURL=chunk-ZWYNQ5LO.mjs.map
+//# sourceMappingURL=chunk-ZWYNQ5LO.mjs.map

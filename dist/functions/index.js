@@ -90,6 +90,15 @@ function setImmerField({
   });
 }
 
+// src/functions/short-name/short-name.ts
+function shortName(name) {
+  if (!name) return "";
+  const parts = name.trim().split(/\s+/).filter(Boolean);
+  if (parts.length === 0) return "";
+  if (parts.length === 1) return parts[0];
+  return `${parts[0]} ${parts.at(-1)}`;
+}
+
 exports.cn = cn;
 exports.formatCpfCnpj = formatCpfCnpj;
 exports.formatItem150 = formatItem150;
@@ -98,5 +107,6 @@ exports.formatPhoneBr = formatPhoneBr;
 exports.formatPriceBrl = formatPriceBrl;
 exports.nvl = nvl;
 exports.setImmerField = setImmerField;
+exports.shortName = shortName;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

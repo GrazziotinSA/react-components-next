@@ -59,22 +59,22 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
 ## Componentes disponíveis
 
-| Componente     | Descrição                                                       |
-| -------------- | --------------------------------------------------------------- |
-| `Card`         | Container com cabeçalho colorido, título, ícone e tooltip       |
-| `Dialog`       | Modal baseado no MUI com título, conteúdo e ações opcionais     |
-| `DataTable`    | Tabela de dados com MUI DataGrid, filtros e textos em português |
-| `Tab`/`Tabs`   | Abas estilizadas com indicador e tipografia customizáveis       |
-| `Input`        | Campo de texto com máscaras e estilização MUI                   |
-| `InputSelect`  | Select com grid de opções                                       |
-| `Filter`       | Drawer de filtros com campos configuráveis                        |
+| Componente    | Descrição                                                       |
+| ------------- | --------------------------------------------------------------- |
+| `Card`        | Container com cabeçalho colorido, título, ícone e tooltip       |
+| `Dialog`      | Modal baseado no MUI com título, conteúdo e ações opcionais     |
+| `DataTable`   | Tabela de dados com MUI DataGrid, filtros e textos em português |
+| `Tab`/`Tabs`  | Abas estilizadas com indicador e tipografia customizáveis       |
+| `Input`       | Campo de texto com máscaras e estilização MUI                   |
+| `InputSelect` | Select com grid de opções                                       |
+| `Filter`      | Drawer de filtros com campos configuráveis                      |
 
 ## Acessibilidade
 
-| Export    | Descrição                              |
-| --------- | -------------------------------------- |
-| `Say`     | Componente de leitura de tela (toast)  |
-| `useSay`  | Hook para disparar feedback por voz    |
+| Export   | Descrição                             |
+| -------- | ------------------------------------- |
+| `Say`    | Componente de leitura de tela (toast) |
+| `useSay` | Hook para disparar feedback por voz   |
 
 ## Funções utilitárias
 
@@ -87,6 +87,7 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 | `formatPriceBrl` | Formata valor monetário em BRL                   |
 | `formatItem170`  | Formata item 170                                 |
 | `formatItem150`  | Formata item 150                                 |
+| `shortName`      | Extrai o primeiro e o último nome                |
 
 ## Uso
 
@@ -122,14 +123,14 @@ export function Example() {
 
 A biblioteca expõe múltiplos pontos de entrada:
 
-| Import                                          | Conteúdo                                      |
-| ----------------------------------------------- | --------------------------------------------- |
-| `@grazziotin/react-components-next`             | Componentes, funções, acessibilidade e providers |
-| `@grazziotin/react-components-next/ui`          | Apenas componentes de UI                      |
-| `@grazziotin/react-components-next/functions`   | Apenas funções utilitárias                    |
-| `@grazziotin/react-components-next/accessibility` | Componentes de acessibilidade (`Say`, `useSay`) |
-| `@grazziotin/react-components-next/providers`  | `GrazziotinProviders` |
-| `@grazziotin/react-components-next/styles`      | CSS compilado da biblioteca (opcional — já incluído ao importar `/ui` ou `.`) |
+| Import                                            | Conteúdo                                                                      |
+| ------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `@grazziotin/react-components-next`               | Componentes, funções, acessibilidade e providers                              |
+| `@grazziotin/react-components-next/ui`            | Apenas componentes de UI                                                      |
+| `@grazziotin/react-components-next/functions`     | Apenas funções utilitárias                                                    |
+| `@grazziotin/react-components-next/accessibility` | Componentes de acessibilidade (`Say`, `useSay`)                               |
+| `@grazziotin/react-components-next/providers`     | `GrazziotinProviders`                                                         |
+| `@grazziotin/react-components-next/styles`        | CSS compilado da biblioteca (opcional — já incluído ao importar `/ui` ou `.`) |
 
 ## Componentes
 
@@ -221,6 +222,14 @@ formatCpfCnpj("12345678000199"); // "12.345.678/0001-99"
 ```tsx
 formatPhoneBr("11987654321"); // "(11) 98765-4321"
 formatPhoneBr("1133334444"); // "(11) 3333-4444"
+```
+
+### shortName
+
+```tsx
+shortName("flavia roseane alves de souza"); // "flavia souza"
+shortName("João Silva"); // "João Silva"
+shortName("Maria"); // "Maria"
 ```
 
 ## Licença

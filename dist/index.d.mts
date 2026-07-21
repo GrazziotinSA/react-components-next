@@ -1,5 +1,5 @@
 export { Card, CardClassName, CardProps, DataTable, DataTableProps, Dialog, DialogProps, Filter, FilterCardProps, FilterDrawerField, FilterDrawerProps, FilterInputProps, FilterInputSelectField, FilterInputSelectItem, FilterInputSelectProps, FilterProps, Input, InputProps, InputSelect, InputSelectGridProps, InputSelectProps, InputType, Tab, TabColorProps, TabProps, Tabs, TabsProps, filterInputSelect } from './ui/index.mjs';
-export { SetImmerFieldExampleState, SetImmerFieldParams, cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, setImmerField } from './functions/index.mjs';
+export { SetImmerFieldExampleState, SetImmerFieldParams, cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, setImmerField, shortName } from './functions/index.mjs';
 export { ClassValue } from 'clsx';
 export { Say, SayCallOptions, SayFeedbackType, SayProps, UseSayOptions, UseSayReturn, useSay } from './accessibility/index.mjs';
 export { GrazziotinProviders } from './providers/index.mjs';
