@@ -12,3 +12,4 @@ export type {
   SetImmerFieldExampleState,
 } from "./set-immer-field";
 export { shortName } from "./short-name";
+export { removeDigits, removeNonDigits, removeTextOnly } from "./remove";

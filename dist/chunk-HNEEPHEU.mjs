@@ -11,14 +11,17 @@ function nvl(value, defaultValue) {
   return value != null ? value : defaultValue;
 }
 
-// src/core/remove-digits.ts
+// src/functions/remove/remove.ts
 function removeDigits(value) {
+  if (!value) return "";
   return value.replace(/\D/g, "");
 }
 function removeNonDigits(value) {
+  if (!value) return "";
   return value.replaceAll(/\d/g, "");
 }
 function removeTextOnly(value) {
+  if (!value) return "";
   return value.replaceAll(/[^\p{L}]/gu, "");
 }
 
@@ -104,5 +107,5 @@ function shortName(name) {
 }
 
 export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName };
-//# sourceMappingURL=chunk-ZWYNQ5LO.mjs.map
-//# sourceMappingURL=chunk-ZWYNQ5LO.mjs.map
+//# sourceMappingURL=chunk-HNEEPHEU.mjs.map
+//# sourceMappingURL=chunk-HNEEPHEU.mjs.map

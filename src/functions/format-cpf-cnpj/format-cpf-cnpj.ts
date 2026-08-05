@@ -1,4 +1,4 @@
-import { removeDigits } from "../../core/remove-digits";
+import { removeDigits } from "../remove";
 
 /**
  * Formata CPF (até 11 dígitos) ou CNPJ (12–14 dígitos) conforme o tamanho.

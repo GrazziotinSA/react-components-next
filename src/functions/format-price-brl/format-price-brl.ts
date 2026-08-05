@@ -1,4 +1,4 @@
-import { removeDigits } from "../../core/remove-digits";
+import { removeDigits } from "../remove";
 
 /**
  * Formata um valor como moeda brasileira (BRL).

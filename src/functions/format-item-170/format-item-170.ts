@@ -1,4 +1,4 @@
-import { removeDigits } from "../../core/remove-digits";
+import { removeDigits } from "../remove";
 
 /**
  * Formata máscara de item 170 (até 12 dígitos) no padrão `00.00.00.00.0.000`.

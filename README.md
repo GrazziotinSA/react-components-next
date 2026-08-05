@@ -78,16 +78,19 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
 ## Funções utilitárias
 
-| Função           | Descrição                                        |
-| ---------------- | ------------------------------------------------ |
-| `cn`             | Mescla classes CSS com `clsx` e `tailwind-merge` |
-| `nvl`            | Retorna valor padrão quando `null`/`undefined`   |
-| `formatCpfCnpj`  | Formata CPF ou CNPJ                              |
-| `formatPhoneBr`  | Formata telefone brasileiro                      |
-| `formatPriceBrl` | Formata valor monetário em BRL                   |
-| `formatItem170`  | Formata item 170                                 |
-| `formatItem150`  | Formata item 150                                 |
-| `shortName`      | Extrai o primeiro e o último nome                |
+| Função            | Descrição                                        |
+| ----------------- | ------------------------------------------------ |
+| `cn`              | Mescla classes CSS com `clsx` e `tailwind-merge` |
+| `nvl`             | Retorna valor padrão quando `null`/`undefined`   |
+| `formatCpfCnpj`   | Formata CPF ou CNPJ                              |
+| `formatPhoneBr`   | Formata telefone brasileiro                      |
+| `formatPriceBrl`  | Formata valor monetário em BRL                   |
+| `formatItem170`   | Formata item 170                                 |
+| `formatItem150`   | Formata item 150                                 |
+| `shortName`       | Extrai o primeiro e o último nome                |
+| `removeDigits`    | Mantém apenas dígitos                            |
+| `removeNonDigits` | Remove todos os dígitos                          |
+| `removeTextOnly`  | Mantém apenas letras                             |
 
 ## Uso
 
@@ -230,6 +233,14 @@ formatPhoneBr("1133334444"); // "(11) 3333-4444"
 shortName("flavia roseane alves de souza"); // "flavia souza"
 shortName("João Silva"); // "João Silva"
 shortName("Maria"); // "Maria"
+```
+
+### removeDigits / removeNonDigits / removeTextOnly
+
+```tsx
+removeDigits("(11) 98765-4321"); // "11987654321"
+removeNonDigits("ABC-12.34"); // "ABC-."
+removeTextOnly("João 123!"); // "João"
 ```
 
 ## Licença

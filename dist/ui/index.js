@@ -84,14 +84,17 @@ function cn(...values) {
   return tailwindMerge.twMerge(clsx.clsx(values));
 }
 
-// src/core/remove-digits.ts
+// src/functions/remove/remove.ts
 function removeDigits(value) {
+  if (!value) return "";
   return value.replace(/\D/g, "");
 }
 function removeNonDigits(value) {
+  if (!value) return "";
   return value.replaceAll(/\d/g, "");
 }
 function removeTextOnly(value) {
+  if (!value) return "";
   return value.replaceAll(/[^\p{L}]/gu, "");
 }
 

@@ -1,4 +1,4 @@
-import { removeDigits } from "../../core/remove-digits";
+import { removeDigits } from "../remove";
 
 /**
  * Formata telefone brasileiro (até 11 dígitos): fixo `(00) 0000-0000` ou celular `(00) 00000-0000`.

@@ -93,14 +93,17 @@ function nvl(value, defaultValue) {
   return value != null ? value : defaultValue;
 }
 
-// src/core/remove-digits.ts
+// src/functions/remove/remove.ts
 function removeDigits(value) {
+  if (!value) return "";
   return value.replace(/\D/g, "");
 }
 function removeNonDigits(value) {
+  if (!value) return "";
   return value.replaceAll(/\d/g, "");
 }
 function removeTextOnly(value) {
+  if (!value) return "";
   return value.replaceAll(/[^\p{L}]/gu, "");
 }
 
@@ -1260,6 +1263,9 @@ exports.formatItem170 = formatItem170;
 exports.formatPhoneBr = formatPhoneBr;
 exports.formatPriceBrl = formatPriceBrl;
 exports.nvl = nvl;
+exports.removeDigits = removeDigits;
+exports.removeNonDigits = removeNonDigits;
+exports.removeTextOnly = removeTextOnly;
 exports.setImmerField = setImmerField;
 exports.shortName = shortName;
 exports.useSay = useSay;
