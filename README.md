@@ -11,7 +11,13 @@ npm install @grazziotin/react-components-next
 Instale também as peer dependencies necessárias:
 
 ```bash
-npm install @mui/material @mui/x-data-grid @emotion/react @emotion/styled @mantine/core @mantine/hooks
+npm install @mui/material @mui/x-data-grid @emotion/react @emotion/styled @mantine/core @mantine/hooks use-immer
+```
+
+Para usar `useQueryAuth`, instale também:
+
+```bash
+npm install @tanstack/react-query
 ```
 
 ### Requisitos
@@ -95,9 +101,11 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
 ## Hooks
 
-| Hook     | Descrição                                             |
-| -------- | ----------------------------------------------------- |
-| `useNow` | Retorna o timestamp atual atualizado a cada intervalo |
+| Hook           | Descrição                                             |
+| -------------- | ----------------------------------------------------- |
+| `useNow`       | Retorna o timestamp atual atualizado a cada intervalo |
+| `useDebounce`  | Retorna o valor com debounce                          |
+| `useQueryAuth` | `useQuery` que só roda quando autenticado             |
 
 ## Uso
 
@@ -138,9 +146,9 @@ A biblioteca expõe múltiplos pontos de entrada:
 | `@grazziotin/react-components-next`               | Componentes, funções, hooks, acessibilidade e providers                       |
 | `@grazziotin/react-components-next/ui`            | Apenas componentes de UI                                                      |
 | `@grazziotin/react-components-next/functions`     | Apenas funções utilitárias                                                    |
-| `@grazziotin/react-components-next/hooks`         | Hooks (`useNow`)                                                              |
+| `@grazziotin/react-components-next/hooks`         | Hooks (`useNow`, `useDebounce`, `useQueryAuth`)                               |
 | `@grazziotin/react-components-next/accessibility` | Componentes de acessibilidade (`Say`, `useSay`)                               |
-| `@grazziotin/react-components-next/providers`     | `GrazziotinProviders`                                                         |
+| `@grazziotin/react-components-next/providers`     | `GrazziotinProviders`, `AuthProvider`, `NavigationProvider`                   |
 | `@grazziotin/react-components-next/styles`        | CSS compilado da biblioteca (opcional — já incluído ao importar `/ui` ou `.`) |
 
 ## Componentes
@@ -269,6 +277,30 @@ import { formatElapsedSince } from "@grazziotin/react-components-next/functions"
 
 const now = useNow();
 formatElapsedSince(order.createdAt, now);
+```
+
+### useDebounce
+
+```tsx
+import { useDebounce } from "@grazziotin/react-components-next/hooks";
+
+const debouncedSearch = useDebounce(search, 300);
+```
+
+### useQueryAuth
+
+```tsx
+import { useQueryAuth } from "@grazziotin/react-components-next/hooks";
+import { AuthProvider } from "@grazziotin/react-components-next/providers";
+
+<AuthProvider token={sessionToken}>
+  <App />
+</AuthProvider>;
+
+const { data } = useQueryAuth({
+  queryKey: ["orders"],
+  queryFn: fetchOrders,
+});
 ```
 
 ## Licença

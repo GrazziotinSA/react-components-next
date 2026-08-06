@@ -16,7 +16,7 @@ export default defineConfig({
     },
   },
   clean: true,
-  external: ["react", "react-dom", "use-immer"],
+  external: ["react", "react-dom", "use-immer", "@tanstack/react-query"],
   sourcemap: true,
   minify: false,
   treeshake: true,

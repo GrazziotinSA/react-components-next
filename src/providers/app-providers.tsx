@@ -1,10 +1,10 @@
 "use client";
 
 import {
-  CssBaseline,
-  ThemeProvider,
-  createTheme,
   type Theme,
+  CssBaseline,
+  createTheme,
+  ThemeProvider,
 } from "@mui/material";
 import { MantineProvider } from "@mantine/core";
 

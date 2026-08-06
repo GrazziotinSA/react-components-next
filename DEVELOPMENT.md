@@ -55,7 +55,7 @@ src/
 │   └── ui/                       # card, dialog, data-table, tab, input, filter...
 ├── core/                         # Utilitários internos (não exportados)
 ├── functions/                    # cn, nvl, formatters
-├── hooks/                        # useNow
+├── hooks/                        # useNow, useDebounce, useQueryAuth
 ├── providers/                    # GrazziotinProviders
 ├── styles/
 │   ├── index.css                 # Entrada Tailwind para build npm (dist/index.css)

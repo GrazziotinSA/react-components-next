@@ -2,8 +2,8 @@ export { Card, CardClassName, CardProps, DataTable, DataTableProps, Dialog, Dial
 export { SetImmerFieldExampleState, SetImmerFieldParams, cn, formatCpfCnpj, formatElapsedSince, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName } from './functions/index.js';
 export { ClassValue } from 'clsx';
 export { Say, SayCallOptions, SayFeedbackType, SayProps, UseSayOptions, UseSayReturn, useSay } from './accessibility/index.js';
-export { GrazziotinProviders } from './providers/index.js';
-export { useNow } from './hooks/index.js';
+export { AuthContextValue, AuthProvider, AuthProviderProps, GrazziotinProviders, NavigationContextValue, NavigationProvider, NavigationProviderProps, useAuth, useNavigation } from './providers/index.js';
+export { QueryAuthOptions, useDebounce, useNow, useQueryAuth } from './hooks/index.js';
 import '@mui/material';
 import 'react';
 import 'react/jsx-runtime';
@@ -12,3 +12,4 @@ import '@emotion/styled';
 import '@mui/system';
 import '@mui/material/OverridableComponent';
 import 'use-immer';
+import '@tanstack/react-query';
