@@ -106,6 +106,21 @@ function shortName(name) {
   return `${parts[0]} ${parts.at(-1)}`;
 }
 
-export { cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName };
-//# sourceMappingURL=chunk-HNEEPHEU.mjs.map
-//# sourceMappingURL=chunk-HNEEPHEU.mjs.map
+// src/functions/format-elapsed-since/format-elapsed-since.ts
+function padTime(value) {
+  return String(value).padStart(2, "0");
+}
+function formatElapsedSince(isoDate, now = Date.now()) {
+  const start = Date.parse(isoDate);
+  if (Number.isNaN(start)) return "0 00:00:00";
+  const totalSeconds = Math.max(0, Math.floor((now - start) / 1e3));
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor(totalSeconds % 86400 / 3600);
+  const minutes = Math.floor(totalSeconds % 3600 / 60);
+  const seconds = totalSeconds % 60;
+  return `${days} ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`;
+}
+
+export { cn, formatCpfCnpj, formatElapsedSince, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName };
+//# sourceMappingURL=chunk-N2ZRDZYM.mjs.map
+//# sourceMappingURL=chunk-N2ZRDZYM.mjs.map

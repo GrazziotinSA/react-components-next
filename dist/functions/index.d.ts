@@ -136,4 +136,15 @@ declare function removeNonDigits(value?: string): string;
  */
 declare function removeTextOnly(value?: string): string;
 
-export { type SetImmerFieldExampleState, type SetImmerFieldParams, cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName };
+/**
+ * Formata o tempo decorrido desde uma data ISO como `d HH:MM:SS`.
+ * @param isoDate - Data de início em ISO
+ * @param now - Timestamp atual em ms (padrão `Date.now()`)
+ * @returns Tempo decorrido formatado, ou `"0 00:00:00"` se a data for inválida
+ * @example
+ * formatElapsedSince("2026-08-06T10:00:00.000Z", Date.parse("2026-08-06T11:01:05.000Z"))
+ * // "0 01:01:05"
+ */
+declare function formatElapsedSince(isoDate: string, now?: number): string;
+
+export { type SetImmerFieldExampleState, type SetImmerFieldParams, cn, formatCpfCnpj, formatElapsedSince, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName };

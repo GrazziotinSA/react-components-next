@@ -13,3 +13,4 @@ export type {
 } from "./set-immer-field";
 export { shortName } from "./short-name";
 export { removeDigits, removeNonDigits, removeTextOnly } from "./remove";
+export { formatElapsedSince } from "./format-elapsed-since";

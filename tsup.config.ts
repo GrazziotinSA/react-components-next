@@ -7,6 +7,7 @@ export default defineConfig({
     "accessibility/index": "src/components/accessibility/index.ts",
     "functions/index": "src/functions/index.ts",
     "providers/index": "src/providers/index.ts",
+    "hooks/index": "src/hooks/index.ts",
   },
   format: ["cjs", "esm"],
   dts: {

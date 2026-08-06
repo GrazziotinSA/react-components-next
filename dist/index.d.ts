@@ -1,8 +1,9 @@
 export { Card, CardClassName, CardProps, DataTable, DataTableProps, Dialog, DialogProps, Filter, FilterCardProps, FilterDrawerField, FilterDrawerProps, FilterInputProps, FilterInputSelectField, FilterInputSelectItem, FilterInputSelectProps, FilterProps, Input, InputProps, InputSelect, InputSelectGridProps, InputSelectProps, InputType, Tab, TabColorProps, TabProps, Tabs, TabsProps, filterInputSelect } from './ui/index.js';
-export { SetImmerFieldExampleState, SetImmerFieldParams, cn, formatCpfCnpj, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName } from './functions/index.js';
+export { SetImmerFieldExampleState, SetImmerFieldParams, cn, formatCpfCnpj, formatElapsedSince, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName } from './functions/index.js';
 export { ClassValue } from 'clsx';
 export { Say, SayCallOptions, SayFeedbackType, SayProps, UseSayOptions, UseSayReturn, useSay } from './accessibility/index.js';
 export { GrazziotinProviders } from './providers/index.js';
+export { useNow } from './hooks/index.js';
 import '@mui/material';
 import 'react';
 import 'react/jsx-runtime';

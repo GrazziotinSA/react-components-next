@@ -1,5 +1,4 @@
-export { say_default as Say, useSay } from '../chunk-V7YF32K5.mjs';
-import '../chunk-N2ZRDZYM.mjs';
+export { useNow } from '../chunk-MTVX7QEW.mjs';
 import '../chunk-YOSPWY5K.mjs';
 //# sourceMappingURL=index.mjs.map
 //# sourceMappingURL=index.mjs.map

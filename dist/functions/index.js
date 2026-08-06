@@ -108,8 +108,24 @@ function shortName(name) {
   return `${parts[0]} ${parts.at(-1)}`;
 }
 
+// src/functions/format-elapsed-since/format-elapsed-since.ts
+function padTime(value) {
+  return String(value).padStart(2, "0");
+}
+function formatElapsedSince(isoDate, now = Date.now()) {
+  const start = Date.parse(isoDate);
+  if (Number.isNaN(start)) return "0 00:00:00";
+  const totalSeconds = Math.max(0, Math.floor((now - start) / 1e3));
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor(totalSeconds % 86400 / 3600);
+  const minutes = Math.floor(totalSeconds % 3600 / 60);
+  const seconds = totalSeconds % 60;
+  return `${days} ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`;
+}
+
 exports.cn = cn;
 exports.formatCpfCnpj = formatCpfCnpj;
+exports.formatElapsedSince = formatElapsedSince;
 exports.formatItem150 = formatItem150;
 exports.formatItem170 = formatItem170;
 exports.formatPhoneBr = formatPhoneBr;

@@ -187,6 +187,21 @@ function shortName(name) {
   if (parts.length === 1) return parts[0];
   return `${parts[0]} ${parts.at(-1)}`;
 }
+
+// src/functions/format-elapsed-since/format-elapsed-since.ts
+function padTime(value) {
+  return String(value).padStart(2, "0");
+}
+function formatElapsedSince(isoDate, now = Date.now()) {
+  const start = Date.parse(isoDate);
+  if (Number.isNaN(start)) return "0 00:00:00";
+  const totalSeconds = Math.max(0, Math.floor((now - start) / 1e3));
+  const days = Math.floor(totalSeconds / 86400);
+  const hours = Math.floor(totalSeconds % 86400 / 3600);
+  const minutes = Math.floor(totalSeconds % 3600 / 60);
+  const seconds = totalSeconds % 60;
+  return `${days} ${padTime(hours)}:${padTime(minutes)}:${padTime(seconds)}`;
+}
 function Card({
   margin,
   onClick,
@@ -1244,6 +1259,14 @@ function GrazziotinProviders({
     /* @__PURE__ */ jsxRuntime.jsx(core.MantineProvider, { children })
   ] });
 }
+function useNow(ms = 1e3) {
+  const [now, setNow] = react.useState(() => Date.now());
+  react.useEffect(() => {
+    const id = setInterval(() => setNow(Date.now()), ms);
+    return () => clearInterval(id);
+  }, [ms]);
+  return now;
+}
 
 exports.Card = card_default;
 exports.DataTable = data_table_default;
@@ -1258,6 +1281,7 @@ exports.Tabs = Tabs;
 exports.cn = cn;
 exports.filterInputSelect = filterInputSelect;
 exports.formatCpfCnpj = formatCpfCnpj;
+exports.formatElapsedSince = formatElapsedSince;
 exports.formatItem150 = formatItem150;
 exports.formatItem170 = formatItem170;
 exports.formatPhoneBr = formatPhoneBr;
@@ -1268,6 +1292,7 @@ exports.removeNonDigits = removeNonDigits;
 exports.removeTextOnly = removeTextOnly;
 exports.setImmerField = setImmerField;
 exports.shortName = shortName;
+exports.useNow = useNow;
 exports.useSay = useSay;
 //# sourceMappingURL=index.js.map
 //# sourceMappingURL=index.js.map

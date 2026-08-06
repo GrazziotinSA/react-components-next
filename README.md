@@ -78,19 +78,26 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
 ## Funções utilitárias
 
-| Função            | Descrição                                        |
-| ----------------- | ------------------------------------------------ |
-| `cn`              | Mescla classes CSS com `clsx` e `tailwind-merge` |
-| `nvl`             | Retorna valor padrão quando `null`/`undefined`   |
-| `formatCpfCnpj`   | Formata CPF ou CNPJ                              |
-| `formatPhoneBr`   | Formata telefone brasileiro                      |
-| `formatPriceBrl`  | Formata valor monetário em BRL                   |
-| `formatItem170`   | Formata item 170                                 |
-| `formatItem150`   | Formata item 150                                 |
-| `shortName`       | Extrai o primeiro e o último nome                |
-| `removeDigits`    | Mantém apenas dígitos                            |
-| `removeNonDigits` | Remove todos os dígitos                          |
-| `removeTextOnly`  | Mantém apenas letras                             |
+| Função               | Descrição                                        |
+| -------------------- | ------------------------------------------------ |
+| `cn`                 | Mescla classes CSS com `clsx` e `tailwind-merge` |
+| `nvl`                | Retorna valor padrão quando `null`/`undefined`   |
+| `formatCpfCnpj`      | Formata CPF ou CNPJ                              |
+| `formatPhoneBr`      | Formata telefone brasileiro                      |
+| `formatPriceBrl`     | Formata valor monetário em BRL                   |
+| `formatItem170`      | Formata item 170                                 |
+| `formatItem150`      | Formata item 150                                 |
+| `shortName`          | Extrai o primeiro e o último nome                |
+| `removeDigits`       | Mantém apenas dígitos                            |
+| `removeNonDigits`    | Remove todos os dígitos                          |
+| `removeTextOnly`     | Mantém apenas letras                             |
+| `formatElapsedSince` | Formata tempo decorrido como `d HH:MM:SS`        |
+
+## Hooks
+
+| Hook     | Descrição                                             |
+| -------- | ----------------------------------------------------- |
+| `useNow` | Retorna o timestamp atual atualizado a cada intervalo |
 
 ## Uso
 
@@ -128,9 +135,10 @@ A biblioteca expõe múltiplos pontos de entrada:
 
 | Import                                            | Conteúdo                                                                      |
 | ------------------------------------------------- | ----------------------------------------------------------------------------- |
-| `@grazziotin/react-components-next`               | Componentes, funções, acessibilidade e providers                              |
+| `@grazziotin/react-components-next`               | Componentes, funções, hooks, acessibilidade e providers                       |
 | `@grazziotin/react-components-next/ui`            | Apenas componentes de UI                                                      |
 | `@grazziotin/react-components-next/functions`     | Apenas funções utilitárias                                                    |
+| `@grazziotin/react-components-next/hooks`         | Hooks (`useNow`)                                                              |
 | `@grazziotin/react-components-next/accessibility` | Componentes de acessibilidade (`Say`, `useSay`)                               |
 | `@grazziotin/react-components-next/providers`     | `GrazziotinProviders`                                                         |
 | `@grazziotin/react-components-next/styles`        | CSS compilado da biblioteca (opcional — já incluído ao importar `/ui` ou `.`) |
@@ -241,6 +249,26 @@ shortName("Maria"); // "Maria"
 removeDigits("(11) 98765-4321"); // "11987654321"
 removeNonDigits("ABC-12.34"); // "ABC-."
 removeTextOnly("João 123!"); // "João"
+```
+
+### formatElapsedSince
+
+```tsx
+formatElapsedSince(
+  "2026-08-06T10:00:00.000Z",
+  Date.parse("2026-08-06T11:01:05.000Z"),
+);
+// "0 01:01:05"
+```
+
+### useNow
+
+```tsx
+import { useNow } from "@grazziotin/react-components-next/hooks";
+import { formatElapsedSince } from "@grazziotin/react-components-next/functions";
+
+const now = useNow();
+formatElapsedSince(order.createdAt, now);
 ```
 
 ## Licença
