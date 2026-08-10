@@ -1168,14 +1168,11 @@ var GROUP_SECTION_STYLE = {
   border: 0,
   boxShadow: "none"
 };
-var ACTION_BUTTON_STYLE = { border: 0 };
-var ACTION_BUTTON_STYLES = {
-  root: {
-    border: 0,
-    "&:hover:not([data-disabled])": { backgroundColor: "var(--button-bg)" },
-    "&:active:not([data-disabled])": { backgroundColor: "var(--button-bg)" }
-  }
-};
+var ACTION_BUTTON_STYLE = withCssVar(
+  { border: 0 },
+  "--button-hover",
+  "var(--button-bg)"
+);
 var ACTION_BUTTON_DISABLED_STYLE = {
   border: 0,
   cursor: "not-allowed",
@@ -1334,7 +1331,6 @@ function ButtonQuantity({
             style: disabledStyle,
             onClick: handleDecrease,
             "aria-label": decreaseLabel,
-            styles: ACTION_BUTTON_STYLES,
             children: decreaseIcon != null ? decreaseIcon : /* @__PURE__ */ jsxRuntime.jsx(fa6.FaMinus, { size: sizeTokens.iconSize, className: "text-red-600" })
           }
         ),
@@ -1380,7 +1376,6 @@ function ButtonQuantity({
             style: disabledStyle,
             onClick: handleIncrease,
             "aria-label": increaseLabel,
-            styles: ACTION_BUTTON_STYLES,
             children: increaseIcon != null ? increaseIcon : /* @__PURE__ */ jsxRuntime.jsx(fa6.FaPlus, { size: sizeTokens.iconSize, className: "text-green-600" })
           }
         )

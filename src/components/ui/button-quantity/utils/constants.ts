@@ -1,4 +1,5 @@
 import type { CSSProperties, InputStylesNames } from "@mantine/core";
+import { withCssVar } from "@/core";
 
 /**
  * Variante visual do grupo de botões.
@@ -72,16 +73,12 @@ export const GROUP_SECTION_STYLE: CSSProperties = {
   boxShadow: "none",
 };
 
-export const ACTION_BUTTON_STYLE: CSSProperties = { border: 0 };
-
-/** Mantém o fundo igual no hover/active (sem escurecer). */
-export const ACTION_BUTTON_STYLES = {
-  root: {
-    border: 0,
-    "&:hover:not([data-disabled])": { backgroundColor: "var(--button-bg)" },
-    "&:active:not([data-disabled])": { backgroundColor: "var(--button-bg)" },
-  },
-};
+/** Mantém o fundo igual no hover/active via CSS var do Mantine (sem seletores aninhados). */
+export const ACTION_BUTTON_STYLE = withCssVar(
+  { border: 0 },
+  "--button-hover",
+  "var(--button-bg)",
+);
 
 export const ACTION_BUTTON_DISABLED_STYLE: CSSProperties = {
   border: 0,

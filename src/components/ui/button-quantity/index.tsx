@@ -9,7 +9,6 @@ import {
   ALLOWED_CONTROL_KEYS,
   ACTION_BUTTON_DISABLED_STYLE,
   ACTION_BUTTON_STYLE,
-  ACTION_BUTTON_STYLES,
   GROUP_DISABLED_STYLE,
   GROUP_SECTION_STYLE,
   GROUP_STYLES,
@@ -185,7 +184,6 @@ function ButtonQuantity({
         style={disabledStyle}
         onClick={handleDecrease}
         aria-label={decreaseLabel}
-        styles={ACTION_BUTTON_STYLES}
       >
         {decreaseIcon ?? (
           <FaMinus size={sizeTokens.iconSize} className="text-red-600" />
@@ -226,7 +224,6 @@ function ButtonQuantity({
         style={disabledStyle}
         onClick={handleIncrease}
         aria-label={increaseLabel}
-        styles={ACTION_BUTTON_STYLES}
       >
         {increaseIcon ?? (
           <FaPlus size={sizeTokens.iconSize} className="text-green-600" />

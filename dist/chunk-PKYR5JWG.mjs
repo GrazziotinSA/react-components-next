@@ -1003,14 +1003,11 @@ var GROUP_SECTION_STYLE = {
   border: 0,
   boxShadow: "none"
 };
-var ACTION_BUTTON_STYLE = { border: 0 };
-var ACTION_BUTTON_STYLES = {
-  root: {
-    border: 0,
-    "&:hover:not([data-disabled])": { backgroundColor: "var(--button-bg)" },
-    "&:active:not([data-disabled])": { backgroundColor: "var(--button-bg)" }
-  }
-};
+var ACTION_BUTTON_STYLE = withCssVar(
+  { border: 0 },
+  "--button-hover",
+  "var(--button-bg)"
+);
 var ACTION_BUTTON_DISABLED_STYLE = {
   border: 0,
   cursor: "not-allowed",
@@ -1169,7 +1166,6 @@ function ButtonQuantity({
             style: disabledStyle,
             onClick: handleDecrease,
             "aria-label": decreaseLabel,
-            styles: ACTION_BUTTON_STYLES,
             children: decreaseIcon != null ? decreaseIcon : /* @__PURE__ */ jsx(FaMinus, { size: sizeTokens.iconSize, className: "text-red-600" })
           }
         ),
@@ -1215,7 +1211,6 @@ function ButtonQuantity({
             style: disabledStyle,
             onClick: handleIncrease,
             "aria-label": increaseLabel,
-            styles: ACTION_BUTTON_STYLES,
             children: increaseIcon != null ? increaseIcon : /* @__PURE__ */ jsx(FaPlus, { size: sizeTokens.iconSize, className: "text-green-600" })
           }
         )
@@ -1226,5 +1221,5 @@ function ButtonQuantity({
 var button_quantity_default = ButtonQuantity;
 
 export { Tab, Tabs, button_quantity_default, card_default, data_table_default, dialog_default, filterInputSelect, filter_default2 as filter_default, input_default, input_select_default };
-//# sourceMappingURL=chunk-AVGZMUGO.mjs.map
-//# sourceMappingURL=chunk-AVGZMUGO.mjs.map
+//# sourceMappingURL=chunk-PKYR5JWG.mjs.map
+//# sourceMappingURL=chunk-PKYR5JWG.mjs.map
