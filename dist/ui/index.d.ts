@@ -530,4 +530,151 @@ declare const Filter: ({ title, inputs, onClear, onSubmit, inputSelect, }: Filte
  */
 declare function filterInputSelect<T extends object, M extends boolean = false>(props: InputSelectProps<T, M> & InputSelectGridProps): M extends true ? FilterInputSelectField<true> : FilterInputSelectField<false>;
 
-export { Card, type CardClassName, type CardProps, DataTable, type DataTableProps, Dialog, type DialogProps, Filter, type FilterCardProps, type FilterDrawerField, type FilterDrawerProps, type FilterInputProps, type FilterInputSelectField, type FilterInputSelectItem, type FilterInputSelectProps, type FilterProps, Input, type InputProps, InputSelect, type InputSelectGridProps, type InputSelectProps, type InputType, Tab, type TabColorProps, type TabProps, Tabs, type TabsProps, filterInputSelect };
+/**
+ * Variante visual do grupo de botões.
+ * - `outline`: fundo branco
+ * - `soft`: fundo cinza claro
+ */
+type ButtonQuantityModel = "outline" | "soft";
+/**
+ * Tamanho pré-definido do controle.
+ * - `sm`: compacto
+ * - `md`: padrão
+ * - `lg`: maior
+ */
+type ButtonQuantitySize = "sm" | "md" | "lg";
+
+/**
+ * Propriedades do componente {@link ButtonQuantity}.
+ * Controle de quantidade com diminuir, input e aumentar.
+ */
+interface ButtonQuantityProps {
+    /** Valor atual da quantidade (controlado). */
+    readonly quantity: number;
+    /**
+     * Valor mínimo permitido.
+     * @default 0
+     */
+    readonly minValue?: number;
+    /** Valor máximo permitido. Sem limite quando omitido. */
+    readonly maxValue?: number;
+    /**
+     * Incremento/decremento dos botões.
+     * @default 1
+     */
+    readonly step?: number;
+    /** Desabilita botões e input. */
+    readonly disabled?: boolean;
+    /**
+     * Variante visual do grupo.
+     * @default "outline"
+     */
+    readonly model?: ButtonQuantityModel;
+    /**
+     * Tamanho pré-definido do controle.
+     * Sobrescrito por `height`, `buttonWidth` e `inputWidth` quando informados.
+     * @default "md"
+     */
+    readonly size?: ButtonQuantitySize;
+    /**
+     * Raio da borda do grupo (px ou string CSS).
+     * @default 80
+     */
+    readonly radius?: number | string;
+    /**
+     * Altura do grupo (px).
+     * Quando omitido, usa o valor de `size`.
+     */
+    readonly height?: number;
+    /**
+     * Largura dos botões de ação (px).
+     * Quando omitido, usa o valor de `size`.
+     */
+    readonly buttonWidth?: number;
+    /**
+     * Largura da área do input (px).
+     * Quando omitido, usa o valor de `size`.
+     */
+    readonly inputWidth?: number;
+    /** Classes CSS extras no container do grupo. */
+    readonly className?: string;
+    /** Ícone do botão diminuir. Padrão: `FaMinus`. */
+    readonly decreaseIcon?: React.ReactNode;
+    /** Ícone do botão aumentar. Padrão: `FaPlus`. */
+    readonly increaseIcon?: React.ReactNode;
+    /**
+     * Cor Mantine dos botões de ação.
+     * @default "gray.0"
+     */
+    readonly color?: string;
+    /**
+     * Cor/fundo Mantine da área do input.
+     * Quando omitido, usa o mesmo valor de `color`.
+     * @default color
+     */
+    readonly sectionBg?: string;
+    /**
+     * `aria-label` do botão diminuir.
+     * @default "Diminuir quantidade"
+     */
+    readonly decreaseLabel?: string;
+    /**
+     * `aria-label` do botão aumentar.
+     * @default "Aumentar quantidade"
+     */
+    readonly increaseLabel?: string;
+    /**
+     * Impede que cliques no controle propaguem para o pai
+     * (útil dentro de cards clicáveis).
+     * @default true
+     */
+    readonly stopPropagation?: boolean;
+    /** `name` do input interno. */
+    readonly name?: string;
+    /** `id` do input interno. Gerado automaticamente quando omitido. */
+    readonly id?: string;
+    /**
+     * Callback ao diminuir.
+     * Se omitido e `onChangeQuantity` existir, aplica `quantity - step`.
+     */
+    readonly onDecrease?: () => void;
+    /**
+     * Callback ao aumentar.
+     * Se omitido e `onChangeQuantity` existir, aplica `quantity + step`.
+     */
+    readonly onIncrease?: () => void;
+    /**
+     * Callback ao confirmar valor digitado (blur/Enter)
+     * ou ao usar os botões quando `onDecrease`/`onIncrease` não forem passados.
+     */
+    readonly onChangeQuantity?: (value: number) => void;
+}
+
+/**
+ * Controle de quantidade com botões de diminuir/aumentar e input numérico.
+ *
+ * @param props - Propriedades do componente. Detalhes em {@link ButtonQuantityProps}.
+ *
+ * @example
+ * ```tsx
+ * <ButtonQuantity
+ *   quantity={qty}
+ *   maxValue={10}
+ *   onChangeQuantity={setQty}
+ * />
+ * ```
+ *
+ * @example
+ * ```tsx
+ * <ButtonQuantity
+ *   model="soft"
+ *   radius={10}
+ *   quantity={qty}
+ *   onDecrease={() => setQty((v) => v - 1)}
+ *   onIncrease={() => setQty((v) => v + 1)}
+ * />
+ * ```
+ */
+declare function ButtonQuantity({ quantity, minValue, maxValue, step, disabled, model, size, radius, height, buttonWidth, inputWidth, className, decreaseIcon, increaseIcon, color, sectionBg, decreaseLabel, increaseLabel, stopPropagation, name, id, onDecrease, onIncrease, onChangeQuantity, }: Readonly<ButtonQuantityProps>): react_jsx_runtime.JSX.Element;
+
+export { ButtonQuantity, type ButtonQuantityModel, type ButtonQuantityProps, type ButtonQuantitySize, Card, type CardClassName, type CardProps, DataTable, type DataTableProps, Dialog, type DialogProps, Filter, type FilterCardProps, type FilterDrawerField, type FilterDrawerProps, type FilterInputProps, type FilterInputSelectField, type FilterInputSelectItem, type FilterInputSelectProps, type FilterProps, Input, type InputProps, InputSelect, type InputSelectGridProps, type InputSelectProps, type InputType, Tab, type TabColorProps, type TabProps, Tabs, type TabsProps, filterInputSelect };

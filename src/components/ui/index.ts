@@ -27,3 +27,9 @@ export type {
   FilterInputSelectProps,
   FilterProps,
 } from "./filter/utils/interface";
+export { default as ButtonQuantity } from "./button-quantity";
+export type { ButtonQuantityProps } from "./button-quantity/utils/interface";
+export type {
+  ButtonQuantityModel,
+  ButtonQuantitySize,
+} from "./button-quantity/utils/constants";

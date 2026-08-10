@@ -65,15 +65,16 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 
 ## Componentes disponíveis
 
-| Componente    | Descrição                                                       |
-| ------------- | --------------------------------------------------------------- |
-| `Card`        | Container com cabeçalho colorido, título, ícone e tooltip       |
-| `Dialog`      | Modal baseado no MUI com título, conteúdo e ações opcionais     |
-| `DataTable`   | Tabela de dados com MUI DataGrid, filtros e textos em português |
-| `Tab`/`Tabs`  | Abas estilizadas com indicador e tipografia customizáveis       |
-| `Input`       | Campo de texto com máscaras e estilização MUI                   |
-| `InputSelect` | Select com grid de opções                                       |
-| `Filter`      | Drawer de filtros com campos configuráveis                      |
+| Componente       | Descrição                                                       |
+| ---------------- | --------------------------------------------------------------- |
+| `Card`           | Container com cabeçalho colorido, título, ícone e tooltip       |
+| `Dialog`         | Modal baseado no MUI com título, conteúdo e ações opcionais     |
+| `DataTable`      | Tabela de dados com MUI DataGrid, filtros e textos em português |
+| `Tab`/`Tabs`     | Abas estilizadas com indicador e tipografia customizáveis       |
+| `Input`          | Campo de texto com máscaras e estilização MUI                   |
+| `InputSelect`    | Select com grid de opções                                       |
+| `Filter`         | Drawer de filtros com campos configuráveis                      |
+| `ButtonQuantity` | Controle de quantidade (− / input / +)                          |
 
 ## Acessibilidade
 
@@ -213,6 +214,24 @@ const [value, setValue] = useState(0);
   <Tab label="Geral" />
   <Tab label="Detalhes" />
 </Tabs>;
+```
+
+### ButtonQuantity
+
+```tsx
+import { ButtonQuantity } from "@grazziotin/react-components-next/ui";
+
+const [qty, setQty] = useState(1);
+
+<ButtonQuantity
+  quantity={qty}
+  minValue={0}
+  maxValue={99}
+  size="lg"
+  model="soft"
+  radius={10}
+  onChangeQuantity={setQty}
+/>;
 ```
 
 ## Funções
