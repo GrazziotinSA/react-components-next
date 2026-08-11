@@ -11,45 +11,68 @@ export const DRAWER_OVERLAY_CLASSNAME =
   "fixed inset-0 z-50 min-h-dvh bg-black/40 opacity-[max(var(--drawer-overlay-min-opacity,0),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-snap-points:[--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-backdrop-filter:backdrop-blur-md supports-[-webkit-touch-callout:none]:absolute";
 
 /**
- * Visual do painel flutuante (raio, borda, sombra, sem bleed).
- * A margem vem de {@link getDrawerFloatingStyle} (inline), para vencer `bottom-0` / `inset-*` do Base UI.
+ * Visual do painel flutuante (raio, sombra, sem bleed).
+ * Margem e borda vêm do CSS injetado {@link DRAWER_FLOATING_CSS} (`!important`),
+ * para vencer `bottom-0` / `inset-*` / `border-t` do Base UI + Tailwind.
  */
 export const DRAWER_FLOATING_CLASSNAME = [
-  "[--drawer-bleed-background:transparent] [--bleed:0px] [--drawer-radius:1.5rem]",
-  "overflow-hidden rounded-(--drawer-radius) border border-gray-200 bg-white shadow-xl after:hidden",
-  "data-[swipe-direction=down]:rounded-(--drawer-radius) data-[swipe-direction=down]:border",
-  "data-[swipe-direction=left]:rounded-(--drawer-radius) data-[swipe-direction=right]:rounded-(--drawer-radius) data-[swipe-direction=up]:rounded-(--drawer-radius)",
+  "[--drawer-bleed-background:transparent] [--bleed:0px] [--drawer-radius:1.5rem] [--drawer-border-width:1px] [--drawer-border-color:#e5e7eb]",
+  "overflow-hidden bg-white shadow-xl after:hidden",
 ].join(" ");
 
-type DrawerSwipeDirection = "up" | "down" | "left" | "right";
-
 /**
- * Estilos inline do modo flutuante — margem real em todos os lados relevantes.
- * Inline style tem prioridade sobre as classes `bottom-0` / `inset-*` do popup.
- * Não usar com `snapPoints` (o root ignora `floating` nesse caso).
+ * CSS com `!important` para o modo flutuante.
+ * Injetado uma vez no documento; posicionamento e borda não dependem do cascade Tailwind.
  */
-export function getDrawerFloatingStyle(
-  swipeDirection: DrawerSwipeDirection,
-): CSSProperties {
-  const inset = `var(--drawer-inset, ${DRAWER_FLOATING_INSET})`;
-  const style: CSSProperties = {
-    ["--drawer-inset" as string]: DRAWER_FLOATING_INSET,
-    margin: 0,
-  };
+export const DRAWER_FLOATING_CSS = `
+[data-slot="drawer-popup"][data-floating] {
+  --drawer-inset: ${DRAWER_FLOATING_INSET};
+  margin: 0 !important;
+  overflow: hidden !important;
+  background-color: #fff !important;
+  border-style: solid !important;
+  border-width: var(--drawer-border-width, 1px) !important;
+  border-color: var(--drawer-border-color, #e5e7eb) !important;
+  border-radius: var(--drawer-radius, 1.5rem) !important;
+  box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1) !important;
+}
+[data-slot="drawer-popup"][data-floating][data-swipe-direction="down"] {
+  top: auto !important;
+  left: var(--drawer-inset) !important;
+  right: var(--drawer-inset) !important;
+  bottom: var(--drawer-inset) !important;
+}
+[data-slot="drawer-popup"][data-floating][data-swipe-direction="up"] {
+  bottom: auto !important;
+  left: var(--drawer-inset) !important;
+  right: var(--drawer-inset) !important;
+  top: var(--drawer-inset) !important;
+}
+[data-slot="drawer-popup"][data-floating][data-swipe-direction="right"] {
+  left: auto !important;
+  top: var(--drawer-inset) !important;
+  bottom: var(--drawer-inset) !important;
+  right: var(--drawer-inset) !important;
+}
+[data-slot="drawer-popup"][data-floating][data-swipe-direction="left"] {
+  right: auto !important;
+  top: var(--drawer-inset) !important;
+  bottom: var(--drawer-inset) !important;
+  left: var(--drawer-inset) !important;
+}
+`.trim();
 
-  if (swipeDirection === "down" || swipeDirection === "up") {
-    style.left = inset;
-    style.right = inset;
-    if (swipeDirection === "down") style.bottom = inset;
-    else style.top = inset;
-  } else {
-    style.top = inset;
-    style.bottom = inset;
-    if (swipeDirection === "right") style.right = inset;
-    else style.left = inset;
-  }
+const DRAWER_FLOATING_STYLE_ID = "grazziotin-drawer-floating-styles";
 
-  return style;
+/** Garante o CSS flutuante no `<head>` (idempotente). */
+export function ensureDrawerFloatingStyles(): void {
+  if (typeof document === "undefined") return;
+  if (document.getElementById(DRAWER_FLOATING_STYLE_ID)) return;
+
+  const style = document.createElement("style");
+  style.id = DRAWER_FLOATING_STYLE_ID;
+  style.textContent = DRAWER_FLOATING_CSS;
+  document.head.appendChild(style);
 }
 
 /** Tokens Tailwind → valor CSS de `--drawer-radius`. */
@@ -65,16 +88,29 @@ export const DRAWER_ROUNDED_TOKENS = {
 };
 
 /**
- * Resolve a prop `rounded` para a classe utilitária `[--drawer-radius:…]`.
+ * Resolve `rounded` para valor CSS de `--drawer-radius`.
  */
-export function drawerRoundedClassName(rounded: DrawerRounded = "3xl"): string {
-  if (typeof rounded === "number") return `[--drawer-radius:${rounded}px]`;
+export function resolveDrawerRadius(rounded: DrawerRounded = "3xl"): string {
+  if (typeof rounded === "number") return `${rounded}px`;
 
   if (rounded in DRAWER_ROUNDED_TOKENS) {
-    return `[--drawer-radius:${DRAWER_ROUNDED_TOKENS[rounded as keyof typeof DRAWER_ROUNDED_TOKENS]}]`;
+    return DRAWER_ROUNDED_TOKENS[rounded as keyof typeof DRAWER_ROUNDED_TOKENS];
   }
 
-  return `[--drawer-radius:${rounded}]`;
+  return String(rounded);
+}
+
+/**
+ * Variáveis CSS do modo flutuante (inset + raio).
+ * Posição/borda ficam no stylesheet injetado.
+ */
+export function getDrawerFloatingStyle(
+  rounded: DrawerRounded = "3xl",
+): CSSProperties {
+  return {
+    ["--drawer-inset" as string]: DRAWER_FLOATING_INSET,
+    ["--drawer-radius" as string]: resolveDrawerRadius(rounded),
+  };
 }
 
 /**

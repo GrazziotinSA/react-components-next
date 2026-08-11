@@ -60,10 +60,15 @@ const meta = {
   },
   argTypes: {
     open: { control: "boolean" },
-    floating: { control: "boolean" },
+    floating: {
+      control: "boolean",
+      description:
+        "Painel flutuante com margem. Obrigatório para a prop `rounded` ter efeito.",
+    },
     rounded: {
       control: "select",
       options: ["none", "sm", "md", "lg", "xl", "2xl", "3xl", "full"],
+      description: "Raio dos cantos (só com floating=true). Tokens, px ou CSS.",
     },
     showSwipeHandle: { control: "boolean" },
     swipeDirection: {
@@ -78,15 +83,33 @@ const meta = {
     snapPoints: { control: false },
     onOpenChange: { action: "onOpenChange" },
   },
+  args: {
+    floating: true,
+    rounded: "3xl",
+    showSwipeHandle: false,
+    swipeDirection: "down",
+    modal: true,
+  },
 } satisfies Meta<typeof Drawer>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Padrao: Story = {
-  render: () => (
+  args: {
+    floating: true,
+    rounded: "3xl",
+    showSwipeHandle: false,
+    swipeDirection: "down",
+  },
+  render: (args) => (
     <Drawer
-      floating
+      floating={args.floating}
+      rounded={args.rounded}
+      showSwipeHandle={args.showSwipeHandle}
+      swipeDirection={args.swipeDirection}
+      modal={args.modal}
+      disablePointerDismissal={args.disablePointerDismissal}
       onOpenChange={(open) => {
         action("onOpenChange")(open);
       }}
@@ -251,10 +274,18 @@ export const SnapPoints: Story = {
 };
 
 export const Lateral: Story = {
-  render: () => (
+  args: {
+    floating: true,
+    rounded: "3xl",
+    swipeDirection: "right",
+    showSwipeHandle: false,
+  },
+  render: (args) => (
     <Drawer
-      floating
-      swipeDirection="right"
+      floating={args.floating}
+      rounded={args.rounded}
+      swipeDirection={args.swipeDirection ?? "right"}
+      showSwipeHandle={args.showSwipeHandle}
       onOpenChange={(open) => {
         action("onOpenChange")(open);
       }}

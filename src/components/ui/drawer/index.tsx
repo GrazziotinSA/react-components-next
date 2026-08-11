@@ -26,7 +26,7 @@ import {
   DRAWER_POPUP_CLASSNAME,
   DRAWER_SWIPE_HANDLE_CLASSNAME,
   DRAWER_TITLE_CLASSNAME,
-  drawerRoundedClassName,
+  ensureDrawerFloatingStyles,
   getDrawerFloatingStyle,
 } from "./utils/constants";
 
@@ -207,9 +207,11 @@ function DrawerContent({
   const rounded = roundedProp ?? roundedFromRoot;
   const swipeAxis =
     swipeDirection === "down" || swipeDirection === "up" ? "y" : "x";
-  const floatingStyle = floating
-    ? getDrawerFloatingStyle(swipeDirection)
-    : undefined;
+  const floatingStyle = floating ? getDrawerFloatingStyle(rounded) : undefined;
+
+  React.useLayoutEffect(() => {
+    if (floating) ensureDrawerFloatingStyles();
+  }, [floating]);
 
   return (
     <DrawerPortal data-slot="drawer-portal">
@@ -223,12 +225,12 @@ function DrawerContent({
       >
         <DrawerPrimitive.Popup
           data-slot="drawer-popup"
+          data-floating={floating ? "" : undefined}
           data-swipe-axis={swipeAxis}
           data-snap-points={hasSnapPoints ? "" : undefined}
           className={cn(
             DRAWER_POPUP_CLASSNAME,
             floating && DRAWER_FLOATING_CLASSNAME,
-            floating && drawerRoundedClassName(rounded),
             className,
           )}
           {...props}
