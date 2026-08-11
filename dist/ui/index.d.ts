@@ -680,9 +680,9 @@ declare function ButtonQuantity({ quantity, minValue, maxValue, step, disabled, 
 
 /**
  * Raio dos cantos do drawer flutuante.
- * Tokens Tailwind (`sm` … `3xl`, `full`) ou valor CSS (`16`, `"16px"`, `"1.5rem"`).
+ * Tokens Tailwind (`sm` … `5xl`, `full`) ou valor CSS (`16`, `"16px"`, `"1.5rem"`).
  */
-type DrawerRounded = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "full" | number | (string & {});
+type DrawerRounded = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full" | number | (string & {});
 /**
  * Props do root composto {@link Drawer}.
  * Estende as props do `Drawer.Root` do Base UI e adiciona helpers de UI
@@ -704,7 +704,7 @@ type DrawerProps = Drawer$1.Root.Props & {
     floating?: boolean;
     /**
      * Raio dos cantos quando `floating` está ativo.
-     * Tokens: `none` | `sm` | `md` | `lg` | `xl` | `2xl` | `3xl` | `full`.
+     * Tokens: `none` | `sm` | `md` | `lg` | `xl` | `2xl` | `3xl` | `4xl` | `5xl` | `full`.
      * Ou número em px (`24`) / string CSS (`"1.5rem"`).
      * @default "3xl"
      */
@@ -825,6 +825,7 @@ declare function DrawerPortal(props: Readonly<DrawerPortalProps>): react_jsx_run
 declare function DrawerClose(props: Readonly<DrawerCloseProps>): react_jsx_runtime.JSX.Element;
 /**
  * Overlay/backdrop do drawer (uso avançado; já incluso em {@link DrawerContent} quando `modal`).
+ * O desfoque é o mesmo em floating e telas maiores (`DRAWER_OVERLAY_BLUR`).
  */
 declare function DrawerOverlay({ className, ...props }: Readonly<DrawerOverlayProps>): react_jsx_runtime.JSX.Element;
 /**

@@ -3,7 +3,7 @@ import type { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
 
 /**
  * Raio dos cantos do drawer flutuante.
- * Tokens Tailwind (`sm` … `3xl`, `full`) ou valor CSS (`16`, `"16px"`, `"1.5rem"`).
+ * Tokens Tailwind (`sm` … `5xl`, `full`) ou valor CSS (`16`, `"16px"`, `"1.5rem"`).
  */
 export type DrawerRounded =
   | "none"
@@ -13,6 +13,8 @@ export type DrawerRounded =
   | "xl"
   | "2xl"
   | "3xl"
+  | "4xl"
+  | "5xl"
   | "full"
   | number
   | (string & {});
@@ -40,7 +42,7 @@ export type DrawerProps = DrawerPrimitive.Root.Props & {
 
   /**
    * Raio dos cantos quando `floating` está ativo.
-   * Tokens: `none` | `sm` | `md` | `lg` | `xl` | `2xl` | `3xl` | `full`.
+   * Tokens: `none` | `sm` | `md` | `lg` | `xl` | `2xl` | `3xl` | `4xl` | `5xl` | `full`.
    * Ou número em px (`24`) / string CSS (`"1.5rem"`).
    * @default "3xl"
    */

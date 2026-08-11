@@ -4,11 +4,15 @@ import type { DrawerRounded } from "./interface";
 /** Inset padrão do modo flutuante (margem em relação à borda da tela). */
 export const DRAWER_FLOATING_INSET = "1rem";
 
+/** Desfoque do overlay — mesmo valor em floating e telas maiores. */
+export const DRAWER_OVERLAY_BLUR = "12px";
+
 /**
  * Classes Tailwind padrão do overlay (backdrop) do Drawer.
+ * O blur real vem do CSS injetado {@link DRAWER_BASE_CSS} (igual em todos os modos).
  */
 export const DRAWER_OVERLAY_CLASSNAME =
-  "fixed inset-0 z-50 min-h-dvh bg-black/40 opacity-[max(var(--drawer-overlay-min-opacity,0),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-snap-points:[--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-backdrop-filter:backdrop-blur-md supports-[-webkit-touch-callout:none]:absolute";
+  "fixed inset-0 z-50 min-h-dvh bg-black/40 opacity-[max(var(--drawer-overlay-min-opacity,0),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-snap-points:[--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute";
 
 /**
  * Visual do painel flutuante (raio, sombra, sem bleed).
@@ -16,9 +20,19 @@ export const DRAWER_OVERLAY_CLASSNAME =
  * para vencer `bottom-0` / `inset-*` / `border-t` do Base UI + Tailwind.
  */
 export const DRAWER_FLOATING_CLASSNAME = [
-  "[--drawer-bleed-background:transparent] [--bleed:0px] [--drawer-radius:1.5rem] [--drawer-border-width:1px] [--drawer-border-color:#e5e7eb]",
+  "[--drawer-bleed-background:transparent] [--bleed:0px] [--drawer-border-width:1px] [--drawer-border-color:#e5e7eb]",
   "overflow-hidden bg-white shadow-xl after:hidden",
 ].join(" ");
+
+/**
+ * CSS do overlay — desfoque único para floating e telas maiores.
+ */
+export const DRAWER_OVERLAY_CSS = `
+[data-slot="drawer-overlay"] {
+  -webkit-backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
+  backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
+}
+`.trim();
 
 /**
  * CSS com `!important` para o modo flutuante.
@@ -62,18 +76,37 @@ export const DRAWER_FLOATING_CSS = `
 }
 `.trim();
 
-const DRAWER_FLOATING_STYLE_ID = "grazziotin-drawer-floating-styles";
+/** CSS base do Drawer (overlay + floating). */
+export const DRAWER_BASE_CSS = `${DRAWER_OVERLAY_CSS}\n${DRAWER_FLOATING_CSS}`;
 
-/** Garante o CSS flutuante no `<head>` (idempotente). */
-export function ensureDrawerFloatingStyles(): void {
+const DRAWER_STYLE_ID = "grazziotin-drawer-styles";
+const DRAWER_LEGACY_FLOATING_STYLE_ID = "grazziotin-drawer-floating-styles";
+
+/** Garante o CSS do Drawer no `<head>` (idempotente; migra id legado). */
+export function ensureDrawerStyles(): void {
   if (typeof document === "undefined") return;
-  if (document.getElementById(DRAWER_FLOATING_STYLE_ID)) return;
+
+  const existing = document.getElementById(DRAWER_STYLE_ID);
+  if (existing) {
+    existing.textContent = DRAWER_BASE_CSS;
+    return;
+  }
+
+  const legacy = document.getElementById(DRAWER_LEGACY_FLOATING_STYLE_ID);
+  if (legacy) {
+    legacy.id = DRAWER_STYLE_ID;
+    legacy.textContent = DRAWER_BASE_CSS;
+    return;
+  }
 
   const style = document.createElement("style");
-  style.id = DRAWER_FLOATING_STYLE_ID;
-  style.textContent = DRAWER_FLOATING_CSS;
+  style.id = DRAWER_STYLE_ID;
+  style.textContent = DRAWER_BASE_CSS;
   document.head.appendChild(style);
 }
+
+/** @deprecated Use {@link ensureDrawerStyles}. */
+export const ensureDrawerFloatingStyles = ensureDrawerStyles;
 
 /** Tokens Tailwind → valor CSS de `--drawer-radius`. */
 export const DRAWER_ROUNDED_TOKENS = {
@@ -84,6 +117,8 @@ export const DRAWER_ROUNDED_TOKENS = {
   xl: "0.75rem",
   "2xl": "1rem",
   "3xl": "1.5rem",
+  "4xl": "2rem",
+  "5xl": "2.5rem",
   full: "9999px",
 };
 
@@ -91,25 +126,36 @@ export const DRAWER_ROUNDED_TOKENS = {
  * Resolve `rounded` para valor CSS de `--drawer-radius`.
  */
 export function resolveDrawerRadius(rounded: DrawerRounded = "3xl"): string {
-  if (typeof rounded === "number") return `${rounded}px`;
-
-  if (rounded in DRAWER_ROUNDED_TOKENS) {
-    return DRAWER_ROUNDED_TOKENS[rounded as keyof typeof DRAWER_ROUNDED_TOKENS];
+  if (typeof rounded === "number" && Number.isFinite(rounded)) {
+    return `${rounded}px`;
   }
 
-  return String(rounded);
+  const value = String(rounded).trim();
+
+  if (value in DRAWER_ROUNDED_TOKENS) {
+    return DRAWER_ROUNDED_TOKENS[value as keyof typeof DRAWER_ROUNDED_TOKENS];
+  }
+
+  // "32" / "24.5" → px (Storybook/controles costumam mandar string)
+  if (/^\d+(\.\d+)?$/.test(value)) return `${value}px`;
+
+  return value;
 }
 
 /**
  * Variáveis CSS do modo flutuante (inset + raio).
+ * `--drawer-radius` e `borderRadius` juntos garantem que a prop `rounded` vença.
  * Posição/borda ficam no stylesheet injetado.
  */
 export function getDrawerFloatingStyle(
   rounded: DrawerRounded = "3xl",
 ): CSSProperties {
+  const radius = resolveDrawerRadius(rounded);
+
   return {
     ["--drawer-inset" as string]: DRAWER_FLOATING_INSET,
-    ["--drawer-radius" as string]: resolveDrawerRadius(rounded),
+    ["--drawer-radius" as string]: radius,
+    borderRadius: radius,
   };
 }
 
@@ -237,7 +283,7 @@ body {
 </Drawer>
 \`\`\`
 
-\`rounded\` aceita tokens (\`sm\`…\`3xl\`, \`full\`), px (\`24\`) ou CSS (\`"1.5rem"\`).
+\`rounded\` aceita tokens (\`sm\`…\`5xl\`, \`full\`), px (\`24\`) ou CSS (\`"1.5rem"\`).
 `;
 
 export default drawerConstants;

@@ -1407,11 +1407,18 @@ var button_quantity_default = ButtonQuantity;
 
 // src/components/ui/drawer/utils/constants.ts
 var DRAWER_FLOATING_INSET = "1rem";
-var DRAWER_OVERLAY_CLASSNAME = "fixed inset-0 z-50 min-h-dvh bg-black/40 opacity-[max(var(--drawer-overlay-min-opacity,0),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-snap-points:[--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-backdrop-filter:backdrop-blur-md supports-[-webkit-touch-callout:none]:absolute";
+var DRAWER_OVERLAY_BLUR = "12px";
+var DRAWER_OVERLAY_CLASSNAME = "fixed inset-0 z-50 min-h-dvh bg-black/40 opacity-[max(var(--drawer-overlay-min-opacity,0),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-snap-points:[--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute";
 var DRAWER_FLOATING_CLASSNAME = [
-  "[--drawer-bleed-background:transparent] [--bleed:0px] [--drawer-radius:1.5rem] [--drawer-border-width:1px] [--drawer-border-color:#e5e7eb]",
+  "[--drawer-bleed-background:transparent] [--bleed:0px] [--drawer-border-width:1px] [--drawer-border-color:#e5e7eb]",
   "overflow-hidden bg-white shadow-xl after:hidden"
 ].join(" ");
+var DRAWER_OVERLAY_CSS = `
+[data-slot="drawer-overlay"] {
+  -webkit-backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
+  backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
+}
+`.trim();
 var DRAWER_FLOATING_CSS = `
 [data-slot="drawer-popup"][data-floating] {
   --drawer-inset: ${DRAWER_FLOATING_INSET};
@@ -1449,13 +1456,26 @@ var DRAWER_FLOATING_CSS = `
   left: var(--drawer-inset) !important;
 }
 `.trim();
-var DRAWER_FLOATING_STYLE_ID = "grazziotin-drawer-floating-styles";
-function ensureDrawerFloatingStyles() {
+var DRAWER_BASE_CSS = `${DRAWER_OVERLAY_CSS}
+${DRAWER_FLOATING_CSS}`;
+var DRAWER_STYLE_ID = "grazziotin-drawer-styles";
+var DRAWER_LEGACY_FLOATING_STYLE_ID = "grazziotin-drawer-floating-styles";
+function ensureDrawerStyles() {
   if (typeof document === "undefined") return;
-  if (document.getElementById(DRAWER_FLOATING_STYLE_ID)) return;
+  const existing = document.getElementById(DRAWER_STYLE_ID);
+  if (existing) {
+    existing.textContent = DRAWER_BASE_CSS;
+    return;
+  }
+  const legacy = document.getElementById(DRAWER_LEGACY_FLOATING_STYLE_ID);
+  if (legacy) {
+    legacy.id = DRAWER_STYLE_ID;
+    legacy.textContent = DRAWER_BASE_CSS;
+    return;
+  }
   const style = document.createElement("style");
-  style.id = DRAWER_FLOATING_STYLE_ID;
-  style.textContent = DRAWER_FLOATING_CSS;
+  style.id = DRAWER_STYLE_ID;
+  style.textContent = DRAWER_BASE_CSS;
   document.head.appendChild(style);
 }
 var DRAWER_ROUNDED_TOKENS = {
@@ -1466,19 +1486,27 @@ var DRAWER_ROUNDED_TOKENS = {
   xl: "0.75rem",
   "2xl": "1rem",
   "3xl": "1.5rem",
+  "4xl": "2rem",
+  "5xl": "2.5rem",
   full: "9999px"
 };
 function resolveDrawerRadius(rounded = "3xl") {
-  if (typeof rounded === "number") return `${rounded}px`;
-  if (rounded in DRAWER_ROUNDED_TOKENS) {
-    return DRAWER_ROUNDED_TOKENS[rounded];
+  if (typeof rounded === "number" && Number.isFinite(rounded)) {
+    return `${rounded}px`;
   }
-  return String(rounded);
+  const value = String(rounded).trim();
+  if (value in DRAWER_ROUNDED_TOKENS) {
+    return DRAWER_ROUNDED_TOKENS[value];
+  }
+  if (/^\d+(\.\d+)?$/.test(value)) return `${value}px`;
+  return value;
 }
 function getDrawerFloatingStyle(rounded = "3xl") {
+  const radius = resolveDrawerRadius(rounded);
   return {
     ["--drawer-inset"]: DRAWER_FLOATING_INSET,
-    ["--drawer-radius"]: resolveDrawerRadius(rounded)
+    ["--drawer-radius"]: radius,
+    borderRadius: radius
   };
 }
 var DRAWER_SWIPE_HANDLE_CLASSNAME = "relative z-10 flex shrink-0 cursor-grab transition-opacity duration-200 group-data-nested-drawer-open/drawer-popup:opacity-0 group-data-nested-drawer-swiping/drawer-popup:opacity-100 group-data-[swipe-axis=x]/drawer-popup:h-full group-data-[swipe-axis=x]/drawer-popup:w-3 group-data-[swipe-axis=x]/drawer-popup:items-center group-data-[swipe-axis=y]/drawer-popup:h-3 group-data-[swipe-axis=y]/drawer-popup:w-full group-data-[swipe-axis=y]/drawer-popup:justify-center group-data-[swipe-direction=down]/drawer-popup:items-end group-data-[swipe-direction=left]/drawer-popup:order-last group-data-[swipe-direction=left]/drawer-popup:justify-start group-data-[swipe-direction=right]/drawer-popup:justify-end group-data-[swipe-direction=up]/drawer-popup:order-last group-data-[swipe-direction=up]/drawer-popup:items-start after:block after:shrink-0 after:rounded-full after:bg-gray-300 group-data-[swipe-axis=x]/drawer-popup:after:h-24 group-data-[swipe-axis=x]/drawer-popup:after:w-1 group-data-[swipe-axis=y]/drawer-popup:after:h-1 group-data-[swipe-axis=y]/drawer-popup:after:w-24 active:cursor-grabbing";
@@ -1558,6 +1586,9 @@ function DrawerClose(props) {
 }
 function DrawerOverlay(_a) {
   var _b = _a, { className } = _b, props = __objRest(_b, ["className"]);
+  React__namespace.useLayoutEffect(() => {
+    ensureDrawerStyles();
+  }, []);
   return /* @__PURE__ */ jsxRuntime.jsx(
     drawer.Drawer.Backdrop,
     __spreadValues({
@@ -1609,8 +1640,8 @@ function DrawerContent(_a) {
   const swipeAxis = swipeDirection === "down" || swipeDirection === "up" ? "y" : "x";
   const floatingStyle = floating ? getDrawerFloatingStyle(rounded) : void 0;
   React__namespace.useLayoutEffect(() => {
-    if (floating) ensureDrawerFloatingStyles();
-  }, [floating]);
+    ensureDrawerStyles();
+  }, []);
   return /* @__PURE__ */ jsxRuntime.jsxs(DrawerPortal, { "data-slot": "drawer-portal", children: [
     modal === true && /* @__PURE__ */ jsxRuntime.jsx(DrawerOverlay, { "data-snap-points": hasSnapPoints ? "" : void 0 }),
     /* @__PURE__ */ jsxRuntime.jsx(
@@ -1632,7 +1663,7 @@ function DrawerContent(_a) {
               className
             )
           }, props), {
-            style: __spreadValues(__spreadValues({}, floatingStyle), style),
+            style: __spreadValues(__spreadValues({}, style), floatingStyle),
             children: [
               showSwipeHandle && /* @__PURE__ */ jsxRuntime.jsx(DrawerSwipeHandle, {}),
               /* @__PURE__ */ jsxRuntime.jsx(

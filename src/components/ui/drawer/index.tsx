@@ -26,7 +26,7 @@ import {
   DRAWER_POPUP_CLASSNAME,
   DRAWER_SWIPE_HANDLE_CLASSNAME,
   DRAWER_TITLE_CLASSNAME,
-  ensureDrawerFloatingStyles,
+  ensureDrawerStyles,
   getDrawerFloatingStyle,
 } from "./utils/constants";
 
@@ -152,8 +152,13 @@ function DrawerClose(props: Readonly<DrawerCloseProps>) {
 
 /**
  * Overlay/backdrop do drawer (uso avançado; já incluso em {@link DrawerContent} quando `modal`).
+ * O desfoque é o mesmo em floating e telas maiores (`DRAWER_OVERLAY_BLUR`).
  */
 function DrawerOverlay({ className, ...props }: Readonly<DrawerOverlayProps>) {
+  React.useLayoutEffect(() => {
+    ensureDrawerStyles();
+  }, []);
+
   return (
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
@@ -210,8 +215,8 @@ function DrawerContent({
   const floatingStyle = floating ? getDrawerFloatingStyle(rounded) : undefined;
 
   React.useLayoutEffect(() => {
-    if (floating) ensureDrawerFloatingStyles();
-  }, [floating]);
+    ensureDrawerStyles();
+  }, []);
 
   return (
     <DrawerPortal data-slot="drawer-portal">
@@ -234,7 +239,7 @@ function DrawerContent({
             className,
           )}
           {...props}
-          style={{ ...floatingStyle, ...style }}
+          style={{ ...style, ...floatingStyle }}
         >
           {showSwipeHandle && <DrawerSwipeHandle />}
           <DrawerPrimitive.Content
