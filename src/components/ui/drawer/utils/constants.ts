@@ -4,15 +4,16 @@ import type { DrawerRounded } from "./interface";
 /** Inset padrão do modo flutuante (margem em relação à borda da tela). */
 export const DRAWER_FLOATING_INSET = "1rem";
 
-/** Desfoque do overlay — mesmo valor em floating e telas maiores. */
-export const DRAWER_OVERLAY_BLUR = "12px";
+/** Desfoque suave do overlay (referência: snap points / `backdrop-blur-xs`). */
+export const DRAWER_OVERLAY_BLUR = "2px";
 
 /**
  * Classes Tailwind padrão do overlay (backdrop) do Drawer.
- * O blur real vem do CSS injetado {@link DRAWER_BASE_CSS} (igual em todos os modos).
+ * Visual alinhado ao snap points do shadcn: `bg-black/10` + blur xs — igual em todos os modos.
+ * O blur também é forçado via {@link DRAWER_BASE_CSS} / style inline.
  */
 export const DRAWER_OVERLAY_CLASSNAME =
-  "fixed inset-0 z-50 min-h-dvh bg-black/40 opacity-[max(var(--drawer-overlay-min-opacity,0),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-snap-points:[--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute";
+  "fixed inset-0 z-50 min-h-dvh bg-black/10 opacity-[max(var(--drawer-overlay-min-opacity,0.5),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] [--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute";
 
 /**
  * Visual do painel flutuante (raio, sombra, sem bleed).
@@ -25,10 +26,10 @@ export const DRAWER_FLOATING_CLASSNAME = [
 ].join(" ");
 
 /**
- * CSS do overlay — desfoque único para floating e telas maiores.
+ * CSS do overlay — mesmo desfoque suave (snap points) em sheet, floating e lateral.
  */
 export const DRAWER_OVERLAY_CSS = `
-[data-slot="drawer-overlay"] {
+html body [data-slot="drawer-overlay"] {
   -webkit-backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
   backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
 }

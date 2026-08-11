@@ -825,9 +825,9 @@ declare function DrawerPortal(props: Readonly<DrawerPortalProps>): react_jsx_run
 declare function DrawerClose(props: Readonly<DrawerCloseProps>): react_jsx_runtime.JSX.Element;
 /**
  * Overlay/backdrop do drawer (uso avançado; já incluso em {@link DrawerContent} quando `modal`).
- * O desfoque é o mesmo em floating e telas maiores (`DRAWER_OVERLAY_BLUR`).
+ * O desfoque é o suave dos snap points (`bg-black/10` + blur xs) em todos os modos.
  */
-declare function DrawerOverlay({ className, ...props }: Readonly<DrawerOverlayProps>): react_jsx_runtime.JSX.Element;
+declare function DrawerOverlay({ className, style, ...props }: Readonly<DrawerOverlayProps>): react_jsx_runtime.JSX.Element;
 /**
  * Handle visual de swipe. Também pode ser renderizado via `showSwipeHandle` no root.
  */

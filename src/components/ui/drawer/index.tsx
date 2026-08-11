@@ -22,6 +22,7 @@ import {
   DRAWER_FLOATING_CLASSNAME,
   DRAWER_FOOTER_CLASSNAME,
   DRAWER_HEADER_CLASSNAME,
+  DRAWER_OVERLAY_BLUR,
   DRAWER_OVERLAY_CLASSNAME,
   DRAWER_POPUP_CLASSNAME,
   DRAWER_SWIPE_HANDLE_CLASSNAME,
@@ -152,9 +153,13 @@ function DrawerClose(props: Readonly<DrawerCloseProps>) {
 
 /**
  * Overlay/backdrop do drawer (uso avançado; já incluso em {@link DrawerContent} quando `modal`).
- * O desfoque é o mesmo em floating e telas maiores (`DRAWER_OVERLAY_BLUR`).
+ * O desfoque é o suave dos snap points (`bg-black/10` + blur xs) em todos os modos.
  */
-function DrawerOverlay({ className, ...props }: Readonly<DrawerOverlayProps>) {
+function DrawerOverlay({
+  className,
+  style,
+  ...props
+}: Readonly<DrawerOverlayProps>) {
   React.useLayoutEffect(() => {
     ensureDrawerStyles();
   }, []);
@@ -164,6 +169,13 @@ function DrawerOverlay({ className, ...props }: Readonly<DrawerOverlayProps>) {
       data-slot="drawer-overlay"
       className={cn(DRAWER_OVERLAY_CLASSNAME, className)}
       {...props}
+      style={{
+        ...style,
+        ["--drawer-overlay-blur" as string]: DRAWER_OVERLAY_BLUR,
+        ["--drawer-overlay-min-opacity" as string]: "0.5",
+        WebkitBackdropFilter: `blur(${DRAWER_OVERLAY_BLUR})`,
+        backdropFilter: `blur(${DRAWER_OVERLAY_BLUR})`,
+      }}
     />
   );
 }
