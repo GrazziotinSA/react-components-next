@@ -1,19 +1,54 @@
 import type { CSSProperties } from "react";
-import type { DrawerRounded } from "./interface";
+import type { DrawerOverlayBlur, DrawerRounded } from "./interface";
 
 /** Inset padrão do modo flutuante (margem em relação à borda da tela). */
 export const DRAWER_FLOATING_INSET = "1rem";
 
-/** Desfoque suave do overlay (referência: snap points / `backdrop-blur-xs`). */
-export const DRAWER_OVERLAY_BLUR = "2px";
+/** Desfoque padrão do overlay (`md` → 8px). */
+export const DRAWER_OVERLAY_BLUR = "8px";
+
+/** Tokens de desfoque do overlay → valor CSS. */
+export const DRAWER_OVERLAY_BLUR_TOKENS = {
+  none: "0px",
+  xs: "2px",
+  sm: "4px",
+  md: "8px",
+  lg: "12px",
+  xl: "16px",
+  "2xl": "24px",
+  "3xl": "40px",
+};
+
+/**
+ * Resolve `overlayBlur` para valor CSS de `--drawer-overlay-blur`.
+ */
+export function resolveDrawerOverlayBlur(
+  blur: DrawerOverlayBlur = "md",
+): string {
+  if (typeof blur === "number" && Number.isFinite(blur)) {
+    return `${blur}px`;
+  }
+
+  const value = String(blur).trim();
+
+  if (value in DRAWER_OVERLAY_BLUR_TOKENS) {
+    return DRAWER_OVERLAY_BLUR_TOKENS[
+      value as keyof typeof DRAWER_OVERLAY_BLUR_TOKENS
+    ];
+  }
+
+  if (/^\d+(\.\d+)?$/.test(value)) return `${value}px`;
+
+  return value || DRAWER_OVERLAY_BLUR;
+}
 
 /**
  * Classes Tailwind padrão do overlay (backdrop) do Drawer.
- * Visual alinhado ao snap points do shadcn: `bg-black/10` + blur xs — igual em todos os modos.
+ * Escurecimento + blur iguais em todos os modos (sheet, floating, snap points).
  * O blur também é forçado via {@link DRAWER_BASE_CSS} / style inline.
  */
 export const DRAWER_OVERLAY_CLASSNAME =
-  "fixed inset-0 z-50 min-h-dvh bg-black/10 opacity-[max(var(--drawer-overlay-min-opacity,0.5),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] [--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute";
+  "fixed inset-0 z-50 min-h-dvh bg-black/40 opacity-[max(var(--drawer-overlay-min-opacity,0.5),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] [--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute";
 
 /**
  * Visual do painel flutuante (raio, sombra, sem bleed).
@@ -26,12 +61,15 @@ export const DRAWER_FLOATING_CLASSNAME = [
 ].join(" ");
 
 /**
- * CSS do overlay — mesmo desfoque suave (snap points) em sheet, floating e lateral.
+ * CSS do overlay — mesmo escurecimento + desfoque em sheet, floating e snap points.
  */
 export const DRAWER_OVERLAY_CSS = `
 html body [data-slot="drawer-overlay"] {
   -webkit-backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
   backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
+}
+html body [data-slot="drawer-popup"]:not([data-floating]) {
+  box-shadow: 0 -10px 40px rgb(0 0 0 / 0.18), 0 -2px 10px rgb(0 0 0 / 0.08) !important;
 }
 `.trim();
 
@@ -171,7 +209,7 @@ export const DRAWER_SWIPE_HANDLE_CLASSNAME =
  * Cores locais: fundo branco, texto preto, borda cinza.
  */
 export const DRAWER_POPUP_CLASSNAME = [
-  "group/drawer-popup pointer-events-auto fixed z-50 m-(--drawer-inset,0px) flex h-(--drawer-content-height) max-h-(--drawer-content-max-height,none) min-h-0 w-(--drawer-content-width,auto) transform-[translate3d(var(--translate-x,0px),var(--translate-y,0px),0)_scale(var(--stack-scale))] flex-col bg-white text-sm text-black transition-[transform,height,opacity,filter] duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform outline-none select-none [interpolate-size:allow-keywords] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t data-[swipe-direction=down]:border-gray-200 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:border-gray-200 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:border-gray-200 data-[swipe-direction=up]:rounded-b-xl data-[swipe-direction=up]:border-b data-[swipe-direction=up]:border-gray-200",
+  "group/drawer-popup pointer-events-auto fixed z-50 m-(--drawer-inset,0px) flex h-(--drawer-content-height) max-h-(--drawer-content-max-height,none) min-h-0 w-(--drawer-content-width,auto) transform-[translate3d(var(--translate-x,0px),var(--translate-y,0px),0)_scale(var(--stack-scale))] flex-col bg-white text-sm text-black shadow-lg transition-[transform,height,opacity,filter] duration-450 ease-[cubic-bezier(0.22,1,0.36,1)] will-change-transform outline-none select-none [interpolate-size:allow-keywords] data-[swipe-direction=down]:rounded-t-xl data-[swipe-direction=down]:border-t data-[swipe-direction=down]:border-gray-200 data-[swipe-direction=left]:rounded-r-xl data-[swipe-direction=left]:border-r data-[swipe-direction=left]:border-gray-200 data-[swipe-direction=right]:rounded-l-xl data-[swipe-direction=right]:border-l data-[swipe-direction=right]:border-gray-200 data-[swipe-direction=up]:rounded-b-xl data-[swipe-direction=up]:border-b data-[swipe-direction=up]:border-gray-200",
   "data-nested-drawer-open:overflow-hidden data-nested-drawer-open:brightness-95",
   "after:pointer-events-none after:absolute after:bg-(--drawer-bleed-background,#fff) data-[swipe-axis=x]:after:inset-y-0 data-[swipe-axis=x]:after:w-(--bleed) data-[swipe-axis=y]:after:inset-x-0 data-[swipe-axis=y]:after:h-(--bleed) data-[swipe-direction=down]:after:top-full data-[swipe-direction=left]:after:right-full data-[swipe-direction=right]:after:left-full data-[swipe-direction=up]:after:bottom-full",
   "[--drawer-content-height:var(--drawer-height,auto)] data-[swipe-axis=x]:[--drawer-content-width:75%] data-[swipe-axis=y]:[--drawer-content-max-height:calc(100dvh-6rem)] data-[swipe-axis=y]:data-snap-points:[--drawer-content-height:100dvh] data-[swipe-axis=x]:sm:[--drawer-content-width:24rem]",
@@ -285,6 +323,8 @@ body {
 \`\`\`
 
 \`rounded\` aceita tokens (\`sm\`…\`5xl\`, \`full\`), px (\`24\`) ou CSS (\`"1.5rem"\`).
+
+\`overlayBlur\` aceita tokens (\`none\`…\`3xl\`), px (\`12\`) ou CSS (\`"8px"\`). Padrão: \`md\` (8px).
 `;
 
 export default drawerConstants;

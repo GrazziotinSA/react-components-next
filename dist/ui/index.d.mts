@@ -684,9 +684,14 @@ declare function ButtonQuantity({ quantity, minValue, maxValue, step, disabled, 
  */
 type DrawerRounded = "none" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | "4xl" | "5xl" | "full" | number | (string & {});
 /**
+ * Intensidade do desfoque do overlay.
+ * Tokens (`none` … `3xl`), número em px (`8`) ou CSS (`"8px"`, `"0.5rem"`).
+ */
+type DrawerOverlayBlur = "none" | "xs" | "sm" | "md" | "lg" | "xl" | "2xl" | "3xl" | number | (string & {});
+/**
  * Props do root composto {@link Drawer}.
  * Estende as props do `Drawer.Root` do Base UI e adiciona helpers de UI
- * (`showSwipeHandle`, `floating`, `rounded`).
+ * (`showSwipeHandle`, `floating`, `rounded`, `overlayBlur`).
  */
 type DrawerProps = Drawer$1.Root.Props & {
     /**
@@ -709,6 +714,13 @@ type DrawerProps = Drawer$1.Root.Props & {
      * @default "3xl"
      */
     rounded?: DrawerRounded;
+    /**
+     * Desfoque do overlay/backdrop.
+     * Tokens: `none` | `xs` | `sm` | `md` | `lg` | `xl` | `2xl` | `3xl`.
+     * Ou número em px (`12`) / string CSS (`"8px"`).
+     * @default "md" (8px)
+     */
+    overlayBlur?: DrawerOverlayBlur;
 };
 /**
  * Props do trigger que abre o drawer.
@@ -727,11 +739,16 @@ type DrawerCloseProps = Drawer$1.Close.Props;
 /**
  * Props do overlay (backdrop) do drawer.
  */
-type DrawerOverlayProps = Drawer$1.Backdrop.Props;
+type DrawerOverlayProps = Drawer$1.Backdrop.Props & {
+    /**
+     * Desfoque do overlay. Se omitido, usa o `overlayBlur` do {@link Drawer} root.
+     */
+    overlayBlur?: DrawerOverlayBlur;
+};
 /**
  * Props do popup/conteúdo principal do drawer.
  * Aceita `className` para sobrescrever altura (`h-*`, `max-h-*`) ou largura (`w-*`, `max-w-*`).
- * `floating` / `rounded` sobrescrevem o valor herdado do {@link Drawer} root quando informados.
+ * `floating` / `rounded` / `overlayBlur` sobrescrevem o valor herdado do {@link Drawer} root quando informados.
  */
 type DrawerContentProps = Drawer$1.Popup.Props & {
     /**
@@ -745,6 +762,10 @@ type DrawerContentProps = Drawer$1.Popup.Props & {
      * @default "3xl"
      */
     rounded?: DrawerRounded;
+    /**
+     * Desfoque do overlay. Se omitido, usa o `overlayBlur` do {@link Drawer} root.
+     */
+    overlayBlur?: DrawerOverlayBlur;
 };
 /**
  * Props do handle visual de swipe (barra de arraste).
@@ -778,12 +799,13 @@ type DrawerDescriptionProps = Drawer$1.Description.Props;
  * @param props.showSwipeHandle - Renderiza handle de arraste no conteúdo. Padrão: `false`.
  * @param props.floating - Painel flutuante com margem nas bordas. Padrão: `false`.
  * @param props.rounded - Raio dos cantos quando flutuante (`3xl`, `24`, `"1.5rem"`…). Padrão: `"3xl"`.
+ * @param props.overlayBlur - Desfoque do overlay (`md`, `12`, `"8px"`…). Padrão: `"md"` (8px).
  * @param props.modal - Modalidade (`true` | `false` | `"trap-focus"`). Padrão: `true`.
  * @param props.disablePointerDismissal - Impede fechar ao clicar fora.
  *
  * @example
  * ```tsx
- * <Drawer floating rounded="2xl">
+ * <Drawer floating rounded="2xl" overlayBlur="lg">
  *   <DrawerTrigger render={<button type="button" />}>Abrir</DrawerTrigger>
  *   <DrawerContent>
  *     <DrawerHeader>
@@ -810,7 +832,7 @@ type DrawerDescriptionProps = Drawer$1.Description.Props;
  * </Drawer>
  * ```
  */
-declare function Drawer({ modal, showSwipeHandle, floating, rounded, snapPoints, swipeDirection, ...props }: Readonly<DrawerProps>): react_jsx_runtime.JSX.Element;
+declare function Drawer({ modal, showSwipeHandle, floating, rounded, overlayBlur, snapPoints, swipeDirection, ...props }: Readonly<DrawerProps>): react_jsx_runtime.JSX.Element;
 /**
  * Elemento que abre o drawer. Prefira `render` para compor com botões customizados.
  */
@@ -825,9 +847,9 @@ declare function DrawerPortal(props: Readonly<DrawerPortalProps>): react_jsx_run
 declare function DrawerClose(props: Readonly<DrawerCloseProps>): react_jsx_runtime.JSX.Element;
 /**
  * Overlay/backdrop do drawer (uso avançado; já incluso em {@link DrawerContent} quando `modal`).
- * O desfoque é o suave dos snap points (`bg-black/10` + blur xs) em todos os modos.
+ * Padrão: `bg-black/40` + blur `md` (8px). Sobrescreva com `overlayBlur`.
  */
-declare function DrawerOverlay({ className, style, ...props }: Readonly<DrawerOverlayProps>): react_jsx_runtime.JSX.Element;
+declare function DrawerOverlay({ className, style, overlayBlur: overlayBlurProp, ...props }: Readonly<DrawerOverlayProps>): react_jsx_runtime.JSX.Element;
 /**
  * Handle visual de swipe. Também pode ser renderizado via `showSwipeHandle` no root.
  */
@@ -837,7 +859,7 @@ declare function DrawerSwipeHandle({ className, ...props }: Readonly<DrawerSwipe
  * Para área scrollável, use um filho `flex-1 overflow-y-auto` (evite `h-full`).
  * Com `floating` (ou `floating` no root), o painel fica com margem e cantos arredondados.
  */
-declare function DrawerContent({ className, children, floating: floatingProp, rounded: roundedProp, style, ...props }: Readonly<DrawerContentProps>): react_jsx_runtime.JSX.Element;
+declare function DrawerContent({ className, children, floating: floatingProp, rounded: roundedProp, overlayBlur: overlayBlurProp, style, ...props }: Readonly<DrawerContentProps>): react_jsx_runtime.JSX.Element;
 /**
  * Cabeçalho do drawer (título + descrição).
  */
@@ -855,4 +877,4 @@ declare function DrawerTitle({ className, ...props }: Readonly<DrawerTitleProps>
  */
 declare function DrawerDescription({ className, ...props }: Readonly<DrawerDescriptionProps>): react_jsx_runtime.JSX.Element;
 
-export { ButtonQuantity, type ButtonQuantityModel, type ButtonQuantityProps, type ButtonQuantitySize, Card, type CardClassName, type CardProps, DataTable, type DataTableProps, Dialog, type DialogProps, Drawer, DrawerClose, type DrawerCloseProps, DrawerContent, type DrawerContentProps, DrawerDescription, type DrawerDescriptionProps, DrawerFooter, type DrawerFooterProps, DrawerHeader, type DrawerHeaderProps, DrawerOverlay, type DrawerOverlayProps, DrawerPortal, type DrawerPortalProps, type DrawerProps, type DrawerRounded, DrawerSwipeHandle, type DrawerSwipeHandleProps, DrawerTitle, type DrawerTitleProps, DrawerTrigger, type DrawerTriggerProps, Filter, type FilterCardProps, type FilterDrawerField, type FilterDrawerProps, type FilterInputProps, type FilterInputSelectField, type FilterInputSelectItem, type FilterInputSelectProps, type FilterProps, Input, type InputProps, InputSelect, type InputSelectGridProps, type InputSelectProps, type InputType, Tab, type TabColorProps, type TabProps, Tabs, type TabsProps, filterInputSelect };
+export { ButtonQuantity, type ButtonQuantityModel, type ButtonQuantityProps, type ButtonQuantitySize, Card, type CardClassName, type CardProps, DataTable, type DataTableProps, Dialog, type DialogProps, Drawer, DrawerClose, type DrawerCloseProps, DrawerContent, type DrawerContentProps, DrawerDescription, type DrawerDescriptionProps, DrawerFooter, type DrawerFooterProps, DrawerHeader, type DrawerHeaderProps, DrawerOverlay, type DrawerOverlayBlur, type DrawerOverlayProps, DrawerPortal, type DrawerPortalProps, type DrawerProps, type DrawerRounded, DrawerSwipeHandle, type DrawerSwipeHandleProps, DrawerTitle, type DrawerTitleProps, DrawerTrigger, type DrawerTriggerProps, Filter, type FilterCardProps, type FilterDrawerField, type FilterDrawerProps, type FilterInputProps, type FilterInputSelectField, type FilterInputSelectItem, type FilterInputSelectProps, type FilterProps, Input, type InputProps, InputSelect, type InputSelectGridProps, type InputSelectProps, type InputType, Tab, type TabColorProps, type TabProps, Tabs, type TabsProps, filterInputSelect };

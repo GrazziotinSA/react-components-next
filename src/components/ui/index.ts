@@ -52,6 +52,7 @@ export type {
   DrawerDescriptionProps,
   DrawerFooterProps,
   DrawerHeaderProps,
+  DrawerOverlayBlur,
   DrawerOverlayProps,
   DrawerPortalProps,
   DrawerProps,

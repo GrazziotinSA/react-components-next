@@ -29,12 +29,14 @@ import {
   DRAWER_TITLE_CLASSNAME,
   ensureDrawerStyles,
   getDrawerFloatingStyle,
+  resolveDrawerOverlayBlur,
 } from "./utils/constants";
 
 type DrawerContextValue = {
   floating: boolean;
   hasSnapPoints: boolean;
   modal: DrawerProps["modal"];
+  overlayBlur: string;
   rounded: NonNullable<DrawerProps["rounded"]>;
   showSwipeHandle: boolean;
   swipeDirection: NonNullable<DrawerProps["swipeDirection"]>;
@@ -63,12 +65,13 @@ function useDrawerContext() {
  * @param props.showSwipeHandle - Renderiza handle de arraste no conteúdo. Padrão: `false`.
  * @param props.floating - Painel flutuante com margem nas bordas. Padrão: `false`.
  * @param props.rounded - Raio dos cantos quando flutuante (`3xl`, `24`, `"1.5rem"`…). Padrão: `"3xl"`.
+ * @param props.overlayBlur - Desfoque do overlay (`md`, `12`, `"8px"`…). Padrão: `"md"` (8px).
  * @param props.modal - Modalidade (`true` | `false` | `"trap-focus"`). Padrão: `true`.
  * @param props.disablePointerDismissal - Impede fechar ao clicar fora.
  *
  * @example
  * ```tsx
- * <Drawer floating rounded="2xl">
+ * <Drawer floating rounded="2xl" overlayBlur="lg">
  *   <DrawerTrigger render={<button type="button" />}>Abrir</DrawerTrigger>
  *   <DrawerContent>
  *     <DrawerHeader>
@@ -100,21 +103,32 @@ function Drawer({
   showSwipeHandle = false,
   floating = false,
   rounded = "3xl",
+  overlayBlur = "md",
   snapPoints,
   swipeDirection = "down",
   ...props
 }: Readonly<DrawerProps>) {
   const hasSnapPoints = snapPoints != null && snapPoints.length > 0;
+  const resolvedOverlayBlur = resolveDrawerOverlayBlur(overlayBlur);
   const contextValue = React.useMemo(
     () => ({
       floating,
       hasSnapPoints,
       modal,
+      overlayBlur: resolvedOverlayBlur,
       rounded,
       showSwipeHandle,
       swipeDirection,
     }),
-    [floating, hasSnapPoints, modal, rounded, showSwipeHandle, swipeDirection],
+    [
+      floating,
+      hasSnapPoints,
+      modal,
+      resolvedOverlayBlur,
+      rounded,
+      showSwipeHandle,
+      swipeDirection,
+    ],
   );
 
   return (
@@ -153,13 +167,20 @@ function DrawerClose(props: Readonly<DrawerCloseProps>) {
 
 /**
  * Overlay/backdrop do drawer (uso avançado; já incluso em {@link DrawerContent} quando `modal`).
- * O desfoque é o suave dos snap points (`bg-black/10` + blur xs) em todos os modos.
+ * Padrão: `bg-black/40` + blur `md` (8px). Sobrescreva com `overlayBlur`.
  */
 function DrawerOverlay({
   className,
   style,
+  overlayBlur: overlayBlurProp,
   ...props
 }: Readonly<DrawerOverlayProps>) {
+  const context = React.useContext(DrawerContext);
+  const blur =
+    overlayBlurProp != null
+      ? resolveDrawerOverlayBlur(overlayBlurProp)
+      : (context?.overlayBlur ?? DRAWER_OVERLAY_BLUR);
+
   React.useLayoutEffect(() => {
     ensureDrawerStyles();
   }, []);
@@ -167,14 +188,16 @@ function DrawerOverlay({
   return (
     <DrawerPrimitive.Backdrop
       data-slot="drawer-overlay"
+      data-overlay-blur={blur}
       className={cn(DRAWER_OVERLAY_CLASSNAME, className)}
       {...props}
       style={{
         ...style,
-        ["--drawer-overlay-blur" as string]: DRAWER_OVERLAY_BLUR,
+        // Regra injetada: backdrop-filter: blur(var(--drawer-overlay-blur)) !important
+        ["--drawer-overlay-blur" as string]: blur,
         ["--drawer-overlay-min-opacity" as string]: "0.5",
-        WebkitBackdropFilter: `blur(${DRAWER_OVERLAY_BLUR})`,
-        backdropFilter: `blur(${DRAWER_OVERLAY_BLUR})`,
+        WebkitBackdropFilter: `blur(${blur})`,
+        backdropFilter: `blur(${blur})`,
       }}
     />
   );
@@ -207,6 +230,7 @@ function DrawerContent({
   children,
   floating: floatingProp,
   rounded: roundedProp,
+  overlayBlur: overlayBlurProp,
   style,
   ...props
 }: Readonly<DrawerContentProps>) {
@@ -233,7 +257,10 @@ function DrawerContent({
   return (
     <DrawerPortal data-slot="drawer-portal">
       {modal === true && (
-        <DrawerOverlay data-snap-points={hasSnapPoints ? "" : undefined} />
+        <DrawerOverlay
+          data-snap-points={hasSnapPoints ? "" : undefined}
+          overlayBlur={overlayBlurProp}
+        />
       )}
       <DrawerPrimitive.Viewport
         data-slot="drawer-viewport"

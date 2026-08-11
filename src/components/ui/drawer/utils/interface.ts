@@ -20,9 +20,25 @@ export type DrawerRounded =
   | (string & {});
 
 /**
+ * Intensidade do desfoque do overlay.
+ * Tokens (`none` … `3xl`), número em px (`8`) ou CSS (`"8px"`, `"0.5rem"`).
+ */
+export type DrawerOverlayBlur =
+  | "none"
+  | "xs"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | number
+  | (string & {});
+
+/**
  * Props do root composto {@link Drawer}.
  * Estende as props do `Drawer.Root` do Base UI e adiciona helpers de UI
- * (`showSwipeHandle`, `floating`, `rounded`).
+ * (`showSwipeHandle`, `floating`, `rounded`, `overlayBlur`).
  */
 export type DrawerProps = DrawerPrimitive.Root.Props & {
   /**
@@ -47,6 +63,14 @@ export type DrawerProps = DrawerPrimitive.Root.Props & {
    * @default "3xl"
    */
   rounded?: DrawerRounded;
+
+  /**
+   * Desfoque do overlay/backdrop.
+   * Tokens: `none` | `xs` | `sm` | `md` | `lg` | `xl` | `2xl` | `3xl`.
+   * Ou número em px (`12`) / string CSS (`"8px"`).
+   * @default "md" (8px)
+   */
+  overlayBlur?: DrawerOverlayBlur;
 };
 
 /**
@@ -69,12 +93,17 @@ export type DrawerCloseProps = DrawerPrimitive.Close.Props;
 /**
  * Props do overlay (backdrop) do drawer.
  */
-export type DrawerOverlayProps = DrawerPrimitive.Backdrop.Props;
+export type DrawerOverlayProps = DrawerPrimitive.Backdrop.Props & {
+  /**
+   * Desfoque do overlay. Se omitido, usa o `overlayBlur` do {@link Drawer} root.
+   */
+  overlayBlur?: DrawerOverlayBlur;
+};
 
 /**
  * Props do popup/conteúdo principal do drawer.
  * Aceita `className` para sobrescrever altura (`h-*`, `max-h-*`) ou largura (`w-*`, `max-w-*`).
- * `floating` / `rounded` sobrescrevem o valor herdado do {@link Drawer} root quando informados.
+ * `floating` / `rounded` / `overlayBlur` sobrescrevem o valor herdado do {@link Drawer} root quando informados.
  */
 export type DrawerContentProps = DrawerPrimitive.Popup.Props & {
   /**
@@ -89,6 +118,11 @@ export type DrawerContentProps = DrawerPrimitive.Popup.Props & {
    * @default "3xl"
    */
   rounded?: DrawerRounded;
+
+  /**
+   * Desfoque do overlay. Se omitido, usa o `overlayBlur` do {@link Drawer} root.
+   */
+  overlayBlur?: DrawerOverlayBlur;
 };
 
 /**

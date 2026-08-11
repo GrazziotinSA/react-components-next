@@ -11,7 +11,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "./index";
-import drawerConstants from "./utils/constants";
+import drawerConstants, {
+  DRAWER_OVERLAY_BLUR_TOKENS,
+  resolveDrawerOverlayBlur,
+} from "./utils/constants";
 
 const triggerClassName =
   "rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white";
@@ -48,7 +51,7 @@ const deliveryOptions = [
     label: "5:45 PM – 6:00 PM",
     hint: "Prep starts at 5:30 PM",
   },
-] as const;
+];
 
 const meta = {
   title: "UI/Drawer",
@@ -81,6 +84,12 @@ const meta = {
       ],
       description: "Raio dos cantos (só com floating=true). Tokens, px ou CSS.",
     },
+    overlayBlur: {
+      control: "select",
+      options: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"],
+      description:
+        "Desfoque do overlay. Padrão md (8px). Também aceita px/CSS.",
+    },
     showSwipeHandle: { control: "boolean" },
     swipeDirection: {
       control: "select",
@@ -97,6 +106,7 @@ const meta = {
   args: {
     floating: true,
     rounded: "3xl",
+    overlayBlur: "md",
     showSwipeHandle: false,
     swipeDirection: "down",
     modal: true,
@@ -110,6 +120,7 @@ export const Padrao: Story = {
   args: {
     floating: true,
     rounded: "3xl",
+    overlayBlur: "md",
     showSwipeHandle: false,
     swipeDirection: "down",
   },
@@ -117,6 +128,7 @@ export const Padrao: Story = {
     <Drawer
       floating={args.floating}
       rounded={args.rounded}
+      overlayBlur={args.overlayBlur}
       showSwipeHandle={args.showSwipeHandle}
       swipeDirection={args.swipeDirection}
       modal={args.modal}
@@ -288,6 +300,7 @@ export const Lateral: Story = {
   args: {
     floating: true,
     rounded: "3xl",
+    overlayBlur: "md",
     swipeDirection: "right",
     showSwipeHandle: false,
   },
@@ -295,6 +308,7 @@ export const Lateral: Story = {
     <Drawer
       floating={args.floating}
       rounded={args.rounded}
+      overlayBlur={args.overlayBlur}
       swipeDirection={args.swipeDirection ?? "right"}
       showSwipeHandle={args.showSwipeHandle}
       onOpenChange={(open) => {
@@ -328,4 +342,147 @@ export const Lateral: Story = {
       </DrawerContent>
     </Drawer>
   ),
+};
+
+/**
+ * Teste visual do `overlayBlur`: fundo rico + drawer aberto.
+ * Troque o control `overlayBlur` e confira o atributo `data-overlay-blur` no overlay.
+ */
+export const OverlayBlur: Story = {
+  name: "Overlay blur",
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        story:
+          "Valida se `overlayBlur` altera o backdrop. O fundo precisa ter texto/cores para o desfoque aparecer. No DevTools, o overlay deve ter `data-overlay-blur` e `--drawer-overlay-blur` iguais ao valor resolvido.",
+      },
+    },
+  },
+  args: {
+    floating: true,
+    rounded: "3xl",
+    overlayBlur: "md",
+    swipeDirection: "down",
+    showSwipeHandle: true,
+    modal: true,
+  },
+  render: (args) => {
+    const resolved = resolveDrawerOverlayBlur(args.overlayBlur ?? "md");
+
+    return (
+      <div className="relative min-h-screen overflow-hidden bg-teal-700">
+        <div className="pointer-events-none absolute inset-0 opacity-40">
+          <div className="absolute -left-10 top-10 h-56 w-56 rounded-full bg-amber-300" />
+          <div className="absolute right-8 top-24 h-72 w-72 rounded-full bg-rose-400" />
+          <div className="absolute bottom-16 left-1/3 h-64 w-64 rounded-full bg-sky-300" />
+        </div>
+
+        <div className="relative mx-auto max-w-3xl space-y-4 p-6 text-white">
+          <p className="text-sm font-medium uppercase tracking-wide text-teal-100">
+            Fundo de teste — texto nítido vs desfocado
+          </p>
+          <h1 className="text-3xl font-semibold">Separação de itens</h1>
+          <p className="max-w-xl text-base text-teal-50">
+            Alterne o control <strong>overlayBlur</strong> com o drawer aberto.
+            Com <code className="rounded bg-black/30 px-1">none</code> o fundo
+            fica nítido; com{" "}
+            <code className="rounded bg-black/30 px-1">3xl</code> o desfoque
+            fica forte.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {["CLC SKINNY BRESSIA", "CHIN. MASC PLUSH", "CAMISETA BASIC"].map(
+              (title) => (
+                <div
+                  key={title}
+                  className="rounded-xl border border-white/30 bg-white/15 p-4 backdrop-blur-0"
+                >
+                  <div className="mb-2 rounded bg-orange-400 px-2 py-1 text-xs font-semibold text-white">
+                    {title}
+                  </div>
+                  <p className="text-sm text-teal-50">
+                    Situação: Incluído · Pedido 623010 · Qtd 2
+                  </p>
+                </div>
+              ),
+            )}
+          </div>
+        </div>
+
+        <Drawer
+          key={String(args.overlayBlur)}
+          defaultOpen
+          floating={args.floating}
+          rounded={args.rounded}
+          overlayBlur={args.overlayBlur}
+          showSwipeHandle={args.showSwipeHandle}
+          swipeDirection={args.swipeDirection}
+          modal={args.modal}
+          disablePointerDismissal={args.disablePointerDismissal}
+          onOpenChange={(open) => {
+            action("onOpenChange")(open);
+          }}
+        >
+          <DrawerTrigger
+            render={<button type="button" className={triggerClassName} />}
+          >
+            Reabrir drawer
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Teste overlayBlur</DrawerTitle>
+              <DrawerDescription>
+                Prop: <strong>{String(args.overlayBlur ?? "md")}</strong>
+                {" → "}
+                resolvido: <strong>{resolved}</strong>
+                {" · "}
+                tokens:{" "}
+                {Object.entries(DRAWER_OVERLAY_BLUR_TOKENS)
+                  .map(([token, px]) => `${token}=${px}`)
+                  .join(", ")}
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="flex-1 space-y-2 overflow-y-auto p-4 text-sm text-gray-700">
+              <p>
+                Inspecione o elemento{" "}
+                <code className="rounded bg-gray-100 px-1">
+                  [data-slot=&quot;drawer-overlay&quot;]
+                </code>{" "}
+                e confira:
+              </p>
+              <ul className="list-disc space-y-1 pl-5">
+                <li>
+                  atributo{" "}
+                  <code className="rounded bg-gray-100 px-1">
+                    data-overlay-blur=&quot;{resolved}&quot;
+                  </code>
+                </li>
+                <li>
+                  style{" "}
+                  <code className="rounded bg-gray-100 px-1">
+                    --drawer-overlay-blur: {resolved}
+                  </code>
+                </li>
+                <li>
+                  computed{" "}
+                  <code className="rounded bg-gray-100 px-1">
+                    backdrop-filter: blur({resolved})
+                  </code>
+                </li>
+              </ul>
+            </div>
+            <DrawerFooter>
+              <DrawerClose
+                render={
+                  <button type="button" className={secondaryButtonClassName} />
+                }
+              >
+                Fechar
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </div>
+    );
+  },
 };
