@@ -1,4 +1,4 @@
-export { ButtonQuantity, ButtonQuantityModel, ButtonQuantityProps, ButtonQuantitySize, Card, CardClassName, CardProps, DataTable, DataTableProps, Dialog, DialogProps, Filter, FilterCardProps, FilterDrawerField, FilterDrawerProps, FilterInputProps, FilterInputSelectField, FilterInputSelectItem, FilterInputSelectProps, FilterProps, Input, InputProps, InputSelect, InputSelectGridProps, InputSelectProps, InputType, Tab, TabColorProps, TabProps, Tabs, TabsProps, filterInputSelect } from './ui/index.js';
+export { ButtonQuantity, ButtonQuantityModel, ButtonQuantityProps, ButtonQuantitySize, Card, CardClassName, CardProps, DataTable, DataTableProps, Dialog, DialogProps, Drawer, DrawerClose, DrawerCloseProps, DrawerContent, DrawerContentProps, DrawerDescription, DrawerDescriptionProps, DrawerFooter, DrawerFooterProps, DrawerHeader, DrawerHeaderProps, DrawerOverlay, DrawerOverlayProps, DrawerPortal, DrawerPortalProps, DrawerProps, DrawerRounded, DrawerSwipeHandle, DrawerSwipeHandleProps, DrawerTitle, DrawerTitleProps, DrawerTrigger, DrawerTriggerProps, Filter, FilterCardProps, FilterDrawerField, FilterDrawerProps, FilterInputProps, FilterInputSelectField, FilterInputSelectItem, FilterInputSelectProps, FilterProps, Input, InputProps, InputSelect, InputSelectGridProps, InputSelectProps, InputType, Tab, TabColorProps, TabProps, Tabs, TabsProps, filterInputSelect } from './ui/index.js';
 export { SetImmerFieldExampleState, SetImmerFieldParams, cn, formatCpfCnpj, formatElapsedSince, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName } from './functions/index.js';
 export { ClassValue } from 'clsx';
 export { Say, SayCallOptions, SayFeedbackType, SayProps, UseSayOptions, UseSayReturn, useSay } from './accessibility/index.js';
@@ -11,5 +11,6 @@ import '@mui/x-data-grid';
 import '@emotion/styled';
 import '@mui/system';
 import '@mui/material/OverridableComponent';
+import '@base-ui/react/drawer';
 import 'use-immer';
 import '@tanstack/react-query';

@@ -1,0 +1,115 @@
+import type { ComponentProps } from "react";
+import type { Drawer as DrawerPrimitive } from "@base-ui/react/drawer";
+
+/**
+ * Raio dos cantos do drawer flutuante.
+ * Tokens Tailwind (`sm` … `3xl`, `full`) ou valor CSS (`16`, `"16px"`, `"1.5rem"`).
+ */
+export type DrawerRounded =
+  | "none"
+  | "sm"
+  | "md"
+  | "lg"
+  | "xl"
+  | "2xl"
+  | "3xl"
+  | "full"
+  | number
+  | (string & {});
+
+/**
+ * Props do root composto {@link Drawer}.
+ * Estende as props do `Drawer.Root` do Base UI e adiciona helpers de UI
+ * (`showSwipeHandle`, `floating`, `rounded`).
+ */
+export type DrawerProps = DrawerPrimitive.Root.Props & {
+  /**
+   * Quando `true`, o {@link DrawerContent} renderiza um {@link DrawerSwipeHandle}
+   * no topo (ou na lateral, conforme `swipeDirection`).
+   * @default false
+   */
+  showSwipeHandle?: boolean;
+
+  /**
+   * Quando `true`, o painel flutua com margem nas bordas (não encosta na tela),
+   * cantos arredondados e sem o bleed branco do swipe.
+   * Mutuamente exclusivo com `snapPoints` — se houver snap, `floating` é ignorado.
+   * @default false
+   */
+  floating?: boolean;
+
+  /**
+   * Raio dos cantos quando `floating` está ativo.
+   * Tokens: `none` | `sm` | `md` | `lg` | `xl` | `2xl` | `3xl` | `full`.
+   * Ou número em px (`24`) / string CSS (`"1.5rem"`).
+   * @default "3xl"
+   */
+  rounded?: DrawerRounded;
+};
+
+/**
+ * Props do trigger que abre o drawer.
+ * Use `render` para compor com um botão customizado (API Base UI).
+ */
+export type DrawerTriggerProps = DrawerPrimitive.Trigger.Props;
+
+/**
+ * Props do portal do drawer.
+ */
+export type DrawerPortalProps = DrawerPrimitive.Portal.Props;
+
+/**
+ * Props do botão/ação que fecha o drawer.
+ * Use `render` para compor com um botão customizado (API Base UI).
+ */
+export type DrawerCloseProps = DrawerPrimitive.Close.Props;
+
+/**
+ * Props do overlay (backdrop) do drawer.
+ */
+export type DrawerOverlayProps = DrawerPrimitive.Backdrop.Props;
+
+/**
+ * Props do popup/conteúdo principal do drawer.
+ * Aceita `className` para sobrescrever altura (`h-*`, `max-h-*`) ou largura (`w-*`, `max-w-*`).
+ * `floating` / `rounded` sobrescrevem o valor herdado do {@link Drawer} root quando informados.
+ */
+export type DrawerContentProps = DrawerPrimitive.Popup.Props & {
+  /**
+   * Quando `true`, aplica o visual flutuante neste content.
+   * Se omitido, usa o `floating` do {@link Drawer} root.
+   */
+  floating?: boolean;
+
+  /**
+   * Raio dos cantos quando flutuante.
+   * Se omitido, usa o `rounded` do {@link Drawer} root.
+   * @default "3xl"
+   */
+  rounded?: DrawerRounded;
+};
+
+/**
+ * Props do handle visual de swipe (barra de arraste).
+ */
+export type DrawerSwipeHandleProps = ComponentProps<"div">;
+
+/**
+ * Props do cabeçalho do drawer (título + descrição).
+ */
+export type DrawerHeaderProps = ComponentProps<"div">;
+
+/**
+ * Props do rodapé do drawer (ações / botões).
+ */
+export type DrawerFooterProps = ComponentProps<"div">;
+
+/**
+ * Props do título acessível do drawer.
+ */
+export type DrawerTitleProps = DrawerPrimitive.Title.Props;
+
+/**
+ * Props da descrição acessível do drawer.
+ */
+export type DrawerDescriptionProps = DrawerPrimitive.Description.Props;

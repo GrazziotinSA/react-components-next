@@ -14,6 +14,12 @@ Instale também as peer dependencies necessárias:
 npm install @mui/material @mui/x-data-grid @emotion/react @emotion/styled @mantine/core @mantine/hooks use-immer
 ```
 
+Para usar o `Drawer` (shadcn/Base UI), instale também:
+
+```bash
+npm install @base-ui/react
+```
+
 Para usar `useQueryAuth`, instale também:
 
 ```bash
@@ -75,6 +81,17 @@ export function AppProviders({ children }: { children: React.ReactNode }) {
 | `InputSelect`    | Select com grid de opções                                       |
 | `Filter`         | Drawer de filtros com campos configuráveis                      |
 | `ButtonQuantity` | Controle de quantidade (− / input / +)                          |
+| `Drawer`         | Bottom/side sheet composto (Base UI), com `floating` ou snap    |
+
+No iOS Safari, o overlay do `Drawer` exige no CSS global do app:
+
+```css
+body {
+  position: relative;
+}
+```
+
+Os estilos Tailwind do Drawer vêm injetados com o bundle `/ui` — não precisa configurar Tailwind nem CSS extra no consumidor (além do `body` acima, se for iOS).
 
 ## Acessibilidade
 
