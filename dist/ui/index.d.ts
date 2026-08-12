@@ -721,6 +721,20 @@ type DrawerProps = Drawer$1.Root.Props & {
      * @default "md" (8px)
      */
     overlayBlur?: DrawerOverlayBlur;
+    /**
+     * Ativa snap points estilo iOS (bottom sheet em 30% e 90% da altura).
+     * Atalho para `snapPoints={[0.3, 0.9]}`; ignorado se `snapPoints` for informado.
+     * Mutuamente exclusivo com `floating`. Com snap, o handle de swipe vem ligado por padrão.
+     * @default false
+     */
+    points?: boolean;
+    /**
+     * Quando `true`, o overlay fica sempre com escurecimento/blur completos (estilo modal),
+     * mesmo com `snapPoints`. Sem isso, snap points seguem o comportamento iOS: o fundo
+     * fica mais claro conforme o drawer sobe.
+     * @default false
+     */
+    overlayModal?: boolean;
 };
 /**
  * Props do trigger que abre o drawer.
@@ -744,6 +758,10 @@ type DrawerOverlayProps = Drawer$1.Backdrop.Props & {
      * Desfoque do overlay. Se omitido, usa o `overlayBlur` do {@link Drawer} root.
      */
     overlayBlur?: DrawerOverlayBlur;
+    /**
+     * Overlay modal completo. Se omitido, usa o `overlayModal` do {@link Drawer} root.
+     */
+    overlayModal?: boolean;
 };
 /**
  * Props do popup/conteúdo principal do drawer.
@@ -766,6 +784,10 @@ type DrawerContentProps = Drawer$1.Popup.Props & {
      * Desfoque do overlay. Se omitido, usa o `overlayBlur` do {@link Drawer} root.
      */
     overlayBlur?: DrawerOverlayBlur;
+    /**
+     * Overlay modal completo. Se omitido, usa o `overlayModal` do {@link Drawer} root.
+     */
+    overlayModal?: boolean;
 };
 /**
  * Props do handle visual de swipe (barra de arraste).
@@ -796,10 +818,12 @@ type DrawerDescriptionProps = Drawer$1.Description.Props;
  * @param props.onOpenChange - Callback ao abrir/fechar.
  * @param props.swipeDirection - Direção do swipe. Padrão: `"down"` (bottom sheet).
  * @param props.snapPoints - Alturas de snap (frações 0–1, px ou rem).
- * @param props.showSwipeHandle - Renderiza handle de arraste no conteúdo. Padrão: `false`.
+ * @param props.points - Ativa snap points iOS (`[0.3, 0.9]`). Atalho de `snapPoints`.
+ * @param props.showSwipeHandle - Renderiza handle de arraste no conteúdo. Padrão: `false` (ou `true` com snap).
  * @param props.floating - Painel flutuante com margem nas bordas. Padrão: `false`.
  * @param props.rounded - Raio dos cantos quando flutuante (`3xl`, `24`, `"1.5rem"`…). Padrão: `"3xl"`.
  * @param props.overlayBlur - Desfoque do overlay (`md`, `12`, `"8px"`…). Padrão: `"md"` (8px).
+ * @param props.overlayModal - Overlay sempre escurecido (estilo modal), mesmo com snap points. Padrão: `false`.
  * @param props.modal - Modalidade (`true` | `false` | `"trap-focus"`). Padrão: `true`.
  * @param props.disablePointerDismissal - Impede fechar ao clicar fora.
  *
@@ -822,7 +846,7 @@ type DrawerDescriptionProps = Drawer$1.Description.Props;
  *
  * @example
  * ```tsx
- * <Drawer showSwipeHandle snapPoints={[0.3, 0.9]}>
+ * <Drawer points overlayModal>
  *   <DrawerTrigger render={<button type="button" />}>Snap</DrawerTrigger>
  *   <DrawerContent>
  *     <DrawerHeader>
@@ -832,7 +856,7 @@ type DrawerDescriptionProps = Drawer$1.Description.Props;
  * </Drawer>
  * ```
  */
-declare function Drawer({ modal, showSwipeHandle, floating, rounded, overlayBlur, snapPoints, swipeDirection, ...props }: Readonly<DrawerProps>): react_jsx_runtime.JSX.Element;
+declare function Drawer({ modal, showSwipeHandle, floating, rounded, overlayBlur, overlayModal, points, snapPoints, swipeDirection, ...props }: Readonly<DrawerProps>): react_jsx_runtime.JSX.Element;
 /**
  * Elemento que abre o drawer. Prefira `render` para compor com botões customizados.
  */
@@ -849,7 +873,7 @@ declare function DrawerClose(props: Readonly<DrawerCloseProps>): react_jsx_runti
  * Overlay/backdrop do drawer (uso avançado; já incluso em {@link DrawerContent} quando `modal`).
  * Padrão: `bg-black/40` + blur `md` (8px). Sobrescreva com `overlayBlur`.
  */
-declare function DrawerOverlay({ className, style, overlayBlur: overlayBlurProp, ...props }: Readonly<DrawerOverlayProps>): react_jsx_runtime.JSX.Element;
+declare function DrawerOverlay({ className, style, overlayBlur: overlayBlurProp, overlayModal: overlayModalProp, ...props }: Readonly<DrawerOverlayProps>): react_jsx_runtime.JSX.Element;
 /**
  * Handle visual de swipe. Também pode ser renderizado via `showSwipeHandle` no root.
  */
@@ -859,7 +883,7 @@ declare function DrawerSwipeHandle({ className, ...props }: Readonly<DrawerSwipe
  * Para área scrollável, use um filho `flex-1 overflow-y-auto` (evite `h-full`).
  * Com `floating` (ou `floating` no root), o painel fica com margem e cantos arredondados.
  */
-declare function DrawerContent({ className, children, floating: floatingProp, rounded: roundedProp, overlayBlur: overlayBlurProp, style, ...props }: Readonly<DrawerContentProps>): react_jsx_runtime.JSX.Element;
+declare function DrawerContent({ className, children, floating: floatingProp, rounded: roundedProp, overlayBlur: overlayBlurProp, overlayModal: overlayModalProp, style, ...props }: Readonly<DrawerContentProps>): react_jsx_runtime.JSX.Element;
 /**
  * Cabeçalho do drawer (título + descrição).
  */

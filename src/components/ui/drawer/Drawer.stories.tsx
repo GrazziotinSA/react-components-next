@@ -11,10 +11,9 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "./index";
-import drawerConstants, {
-  DRAWER_OVERLAY_BLUR_TOKENS,
-  resolveDrawerOverlayBlur,
-} from "./utils/constants";
+import { DRAWER_OVERLAY_BLUR_TOKENS } from "./utils/constants";
+import { resolveDrawerOverlayBlur } from "./utils/functions";
+import drawerStorybookDescription from "./utils/storybook";
 
 const triggerClassName =
   "rounded bg-gray-900 px-4 py-2 text-sm font-medium text-white";
@@ -26,31 +25,11 @@ const primaryButtonClassName =
   "w-full rounded-full bg-gray-900 px-4 py-3 text-sm font-medium text-white";
 
 const deliveryOptions = [
-  {
-    id: "standard",
-    label: "Standard delivery",
-    hint: "Fastest",
-  },
-  {
-    id: "1700",
-    label: "5:00 PM – 5:15 PM",
-    hint: "Prep starts at 4:45 PM",
-  },
-  {
-    id: "1715",
-    label: "5:15 PM – 5:30 PM",
-    hint: "Prep starts at 5:00 PM",
-  },
-  {
-    id: "1730",
-    label: "5:30 PM – 5:45 PM",
-    hint: "Prep starts at 5:15 PM",
-  },
-  {
-    id: "1745",
-    label: "5:45 PM – 6:00 PM",
-    hint: "Prep starts at 5:30 PM",
-  },
+  { id: "standard", label: "Standard delivery", hint: "Fastest" },
+  { id: "1700", label: "5:00 PM – 5:15 PM", hint: "Prep starts at 4:45 PM" },
+  { id: "1715", label: "5:15 PM – 5:30 PM", hint: "Prep starts at 5:00 PM" },
+  { id: "1730", label: "5:30 PM – 5:45 PM", hint: "Prep starts at 5:15 PM" },
+  { id: "1745", label: "5:45 PM – 6:00 PM", hint: "Prep starts at 5:30 PM" },
 ];
 
 const meta = {
@@ -59,7 +38,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: {
     layout: "centered",
-    docs: { description: { component: drawerConstants } },
+    docs: { description: { component: drawerStorybookDescription } },
   },
   argTypes: {
     open: { control: "boolean" },
@@ -90,7 +69,28 @@ const meta = {
       description:
         "Desfoque do overlay. Padrão md (8px). Também aceita px/CSS.",
     },
-    showSwipeHandle: { control: "boolean" },
+    points: {
+      control: "boolean",
+      description:
+        "Snap points iOS (30% / 90%). Mutuamente exclusivo com floating.",
+    },
+    overlayModal: {
+      control: "boolean",
+      description:
+        "Fundo modal completo (escuro + blur). Relevante com points/snapPoints.",
+    },
+    defaultSnapPoint: {
+      control: "select",
+      options: [0.3, 0.9],
+      description:
+        "Snap point inicial ao abrir (30% ou 90%). Só com points=true.",
+      if: { arg: "points", eq: true },
+    },
+    showSwipeHandle: {
+      control: "boolean",
+      description:
+        "Barra de arraste. Com points=true, liga automaticamente (omitido).",
+    },
     swipeDirection: {
       control: "select",
       options: ["down", "up", "left", "right"],
@@ -107,6 +107,8 @@ const meta = {
     floating: true,
     rounded: "3xl",
     overlayBlur: "md",
+    points: false,
+    overlayModal: false,
     showSwipeHandle: false,
     swipeDirection: "down",
     modal: true,
@@ -117,57 +119,118 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Padrao: Story = {
+  parameters: {
+    layout: "fullscreen",
+  },
   args: {
     floating: true,
     rounded: "3xl",
     overlayBlur: "md",
+    points: false,
+    overlayModal: false,
+    defaultSnapPoint: 0.3,
     showSwipeHandle: false,
     swipeDirection: "down",
   },
   render: (args) => (
-    <Drawer
-      floating={args.floating}
-      rounded={args.rounded}
-      overlayBlur={args.overlayBlur}
-      showSwipeHandle={args.showSwipeHandle}
-      swipeDirection={args.swipeDirection}
-      modal={args.modal}
-      disablePointerDismissal={args.disablePointerDismissal}
-      onOpenChange={(open) => {
-        action("onOpenChange")(open);
-      }}
+    <div
+      className={
+        args.points
+          ? "relative flex min-h-screen flex-col bg-gray-100"
+          : "flex min-h-[50vh] items-center justify-center"
+      }
     >
-      <DrawerTrigger
-        render={<button type="button" className={triggerClassName} />}
+      <Drawer
+        key={`${args.points}-${args.floating}-${args.overlayModal}-${args.defaultSnapPoint}`}
+        points={args.points}
+        floating={args.points ? false : args.floating}
+        rounded={args.rounded}
+        overlayBlur={args.overlayBlur}
+        overlayModal={args.overlayModal}
+        defaultSnapPoint={args.points ? args.defaultSnapPoint : undefined}
+        showSwipeHandle={args.points ? undefined : args.showSwipeHandle}
+        swipeDirection={args.swipeDirection}
+        modal={args.modal}
+        disablePointerDismissal={args.disablePointerDismissal}
+        onOpenChange={(open) => {
+          action("onOpenChange")(open);
+        }}
+        onSnapPointChange={(snapPoint) => {
+          action("onSnapPointChange")(snapPoint);
+        }}
       >
-        Abrir drawer
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>Tem certeza?</DrawerTitle>
-          <DrawerDescription>
-            Esta ação não pode ser desfeita.
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="p-4 text-sm text-gray-700">
-          Conteúdo principal do drawer. Use o rodapé para confirmar ou cancelar.
+        <div className={args.points ? "p-6" : undefined}>
+          <DrawerTrigger
+            render={<button type="button" className={triggerClassName} />}
+          >
+            Abrir drawer
+          </DrawerTrigger>
         </div>
-        <DrawerFooter>
-          <DrawerClose
-            render={<button type="button" className={primaryButtonClassName} />}
+        <DrawerContent overlayModal={args.overlayModal}>
+          <DrawerHeader>
+            <DrawerTitle>
+              {args.points ? "Snap points" : "Tem certeza?"}
+            </DrawerTitle>
+            <DrawerDescription>
+              {args.points
+                ? "Arraste o handle para subir até 90%. Use defaultSnapPoint nos controls."
+                : "Esta ação não pode ser desfeita."}
+            </DrawerDescription>
+          </DrawerHeader>
+          <div
+            className={`text-sm text-gray-700 ${args.points ? "flex-1 overflow-y-auto p-4" : "p-4"}`}
           >
-            Confirmar
-          </DrawerClose>
-          <DrawerClose
-            render={
-              <button type="button" className={secondaryButtonClassName} />
-            }
-          >
-            Cancelar
-          </DrawerClose>
-        </DrawerFooter>
-      </DrawerContent>
-    </Drawer>
+            {args.points ? (
+              <>
+                <p className="mb-3">
+                  Snap inicial:{" "}
+                  <strong>
+                    {Math.round(Number(args.defaultSnapPoint ?? 0.3) * 100)}%
+                  </strong>
+                  {". "}Arraste a barra no topo do painel para alternar entre
+                  30% e 90%.
+                </p>
+                {Array.from({ length: 8 }, (_, i) => (
+                  <p key={i} className="mb-2 text-gray-600">
+                    Linha {i + 1} — conteúdo scrollável no snap alto.
+                  </p>
+                ))}
+              </>
+            ) : (
+              "Conteúdo principal do drawer. Use o rodapé para confirmar ou cancelar."
+            )}
+          </div>
+          {!args.points ? (
+            <DrawerFooter>
+              <DrawerClose
+                render={
+                  <button type="button" className={primaryButtonClassName} />
+                }
+              >
+                Confirmar
+              </DrawerClose>
+              <DrawerClose
+                render={
+                  <button type="button" className={secondaryButtonClassName} />
+                }
+              >
+                Cancelar
+              </DrawerClose>
+            </DrawerFooter>
+          ) : (
+            <DrawerFooter>
+              <DrawerClose
+                render={
+                  <button type="button" className={secondaryButtonClassName} />
+                }
+              >
+                Fechar
+              </DrawerClose>
+            </DrawerFooter>
+          )}
+        </DrawerContent>
+      </Drawer>
+    </div>
   ),
 };
 
@@ -263,36 +326,229 @@ export const HorarioDeEntrega: Story = {
 
 export const SnapPoints: Story = {
   name: "Snap points",
-  render: () => (
-    <Drawer
-      showSwipeHandle
-      snapPoints={[0.3, 0.9]}
-      onOpenChange={(open) => {
-        action("onOpenChange")(open);
-      }}
-      onSnapPointChange={(snapPoint) => {
-        action("onSnapPointChange")(snapPoint);
-      }}
-    >
-      <DrawerTrigger
-        render={<button type="button" className={triggerClassName} />}
-      >
-        Abrir com snap
-      </DrawerTrigger>
-      <DrawerContent>
-        <DrawerHeader>
-          <DrawerTitle>Snap points</DrawerTitle>
-          <DrawerDescription>
-            Arraste o handle ou o painel entre 30% e 90% da altura.
-          </DrawerDescription>
-        </DrawerHeader>
-        <div className="flex-1 overflow-y-auto p-4">
-          <div className="rounded-lg border border-dashed border-gray-300 bg-gray-50 p-6 text-center text-sm text-gray-600">
-            Área de conteúdo. Use o swipe handle no topo para ajustar a altura.
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        story:
+          "Drawer estilo iOS com snap points. Ative **overlayModal** nos controls para o fundo ficar escuro/blur igual ao drawer modal/flutuante (print desktop).",
+      },
+    },
+  },
+  args: {
+    overlayModal: true,
+    overlayBlur: "md",
+    showSwipeHandle: true,
+    modal: true,
+  },
+  argTypes: {
+    floating: { control: false },
+    rounded: { control: false },
+    overlayModal: { control: "boolean" },
+    overlayBlur: {
+      control: "select",
+      options: ["none", "xs", "sm", "md", "lg", "xl", "2xl", "3xl"],
+    },
+    showSwipeHandle: { control: "boolean" },
+    swipeDirection: { control: false },
+  },
+  render: (args, { viewMode }) => {
+    const resolved = resolveDrawerOverlayBlur(args.overlayBlur ?? "md");
+
+    return (
+      <div className="relative min-h-screen overflow-hidden bg-teal-700">
+        <div className="pointer-events-none absolute inset-0 opacity-40">
+          <div className="absolute -left-10 top-10 h-56 w-56 rounded-full bg-amber-300" />
+          <div className="absolute right-8 top-24 h-72 w-72 rounded-full bg-rose-400" />
+          <div className="absolute bottom-16 left-1/3 h-64 w-64 rounded-full bg-sky-300" />
+        </div>
+
+        <div className="relative mx-auto max-w-3xl space-y-4 p-6 text-white">
+          <p className="text-sm font-medium uppercase tracking-wide text-teal-100">
+            Teste snap points — fundo visível atrás do overlay
+          </p>
+          <h1 className="text-3xl font-semibold">Separação</h1>
+          <p className="max-w-xl text-base text-teal-50">
+            Abra o drawer e arraste entre 30% e 90%. Com{" "}
+            <strong>overlayModal=true</strong> (padrão aqui) o fundo fica igual
+            ao drawer modal. Desligue para ver o comportamento iOS.
+          </p>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {["CLC SKINNY BRESSIA", "CHIN. MASC PLUSH", "TENIS GLITER"].map(
+              (title) => (
+                <div
+                  key={title}
+                  className="rounded-xl border border-white/30 bg-white/15 p-4"
+                >
+                  <div className="mb-2 rounded bg-orange-400 px-2 py-1 text-xs font-semibold text-white">
+                    {title}
+                  </div>
+                  <p className="text-sm text-teal-50">
+                    Situação: Incluído · Pedido 623010 · Qtd 2
+                  </p>
+                </div>
+              ),
+            )}
           </div>
         </div>
-      </DrawerContent>
-    </Drawer>
+
+        <Drawer
+          key={`${args.overlayModal}-${args.overlayBlur}`}
+          defaultOpen={viewMode === "story"}
+          points
+          showSwipeHandle={args.showSwipeHandle}
+          overlayModal={args.overlayModal}
+          overlayBlur={args.overlayBlur}
+          modal={args.modal}
+          onOpenChange={(open) => {
+            action("onOpenChange")(open);
+          }}
+          onSnapPointChange={(snapPoint) => {
+            action("onSnapPointChange")(snapPoint);
+          }}
+        >
+          <DrawerTrigger
+            render={<button type="button" className={triggerClassName} />}
+          >
+            Reabrir snap
+          </DrawerTrigger>
+          <DrawerContent>
+            <DrawerHeader>
+              <DrawerTitle>Snap points</DrawerTitle>
+              <DrawerDescription>
+                overlayModal:{" "}
+                <strong>{args.overlayModal ? "true" : "false"}</strong>
+                {" · "}
+                blur: <strong>{String(args.overlayBlur ?? "md")}</strong>
+                {" → "}
+                <strong>{resolved}</strong>
+              </DrawerDescription>
+            </DrawerHeader>
+            <div className="flex-1 space-y-3 overflow-y-auto p-4 text-sm text-gray-700">
+              <p>
+                Arraste o handle ou o painel. Com{" "}
+                <code className="rounded bg-gray-100 px-1">
+                  overlayModal=false
+                </code>{" "}
+                o fundo clareia no snap alto (iOS). Com{" "}
+                <code className="rounded bg-gray-100 px-1">
+                  overlayModal=true
+                </code>{" "}
+                fica escuro/blur fixo.
+              </p>
+              <ul className="list-disc space-y-1 pl-5">
+                <li>
+                  overlay:{" "}
+                  <code className="rounded bg-gray-100 px-1">
+                    data-overlay-modal=
+                    {args.overlayModal ? '""' : "undefined"}
+                  </code>
+                </li>
+                <li>
+                  blur:{" "}
+                  <code className="rounded bg-gray-100 px-1">
+                    data-overlay-blur=&quot;{resolved}&quot;
+                  </code>
+                </li>
+              </ul>
+            </div>
+            <DrawerFooter>
+              <DrawerClose
+                render={
+                  <button type="button" className={secondaryButtonClassName} />
+                }
+              >
+                Fechar
+              </DrawerClose>
+            </DrawerFooter>
+          </DrawerContent>
+        </Drawer>
+      </div>
+    );
+  },
+};
+
+export const SnapPointsComparacao: Story = {
+  name: "Snap points — iOS vs modal",
+  parameters: {
+    layout: "fullscreen",
+    docs: {
+      description: {
+        story:
+          "Dois drawers lado a lado: esquerda iOS (`overlayModal=false`), direita modal (`overlayModal=true`).",
+      },
+    },
+  },
+  render: () => (
+    <div className="relative min-h-screen overflow-hidden bg-gray-200">
+      <div className="pointer-events-none absolute inset-0">
+        <div className="absolute inset-0 bg-[linear-gradient(135deg,#0d9488_0%,#1e3a5f_50%,#be185d_100%)] opacity-90" />
+        <div className="absolute left-1/4 top-1/4 h-32 w-32 rounded-full bg-yellow-300/60 blur-2xl" />
+        <div className="absolute bottom-1/4 right-1/4 h-40 w-40 rounded-full bg-cyan-300/60 blur-2xl" />
+      </div>
+      <div className="relative grid min-h-screen grid-cols-1 gap-4 p-4 md:grid-cols-2">
+        <div className="flex flex-col items-center justify-center gap-3 text-center text-white">
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/80">
+            iOS (padrão)
+          </p>
+          <p className="max-w-xs text-sm text-white/90">
+            overlayModal=false — fundo varia com a altura do snap
+          </p>
+          <Drawer
+            showSwipeHandle
+            snapPoints={[0.35, 0.85]}
+            overlayModal={false}
+            overlayBlur="md"
+            onOpenChange={(open) => action("ios-onOpenChange")(open)}
+          >
+            <DrawerTrigger
+              render={<button type="button" className={triggerClassName} />}
+            >
+              Abrir iOS
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Modo iOS</DrawerTitle>
+                <DrawerDescription>overlayModal=false</DrawerDescription>
+              </DrawerHeader>
+              <div className="p-4 text-sm text-gray-600">
+                Arraste e observe o fundo clareando.
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
+        <div className="flex flex-col items-center justify-center gap-3 text-center text-white">
+          <p className="text-xs font-semibold uppercase tracking-wider text-white/80">
+            Modal (desktop)
+          </p>
+          <p className="max-w-xs text-sm text-white/90">
+            overlayModal=true — fundo escuro/blur fixo
+          </p>
+          <Drawer
+            showSwipeHandle
+            snapPoints={[0.35, 0.85]}
+            overlayModal
+            overlayBlur="md"
+            onOpenChange={(open) => action("modal-onOpenChange")(open)}
+          >
+            <DrawerTrigger
+              render={<button type="button" className={triggerClassName} />}
+            >
+              Abrir modal
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader>
+                <DrawerTitle>Modo modal</DrawerTitle>
+                <DrawerDescription>overlayModal=true</DrawerDescription>
+              </DrawerHeader>
+              <div className="p-4 text-sm text-gray-600">
+                Arraste — o fundo permanece escurecido.
+              </div>
+            </DrawerContent>
+          </Drawer>
+        </div>
+      </div>
+    </div>
   ),
 };
 
@@ -367,7 +623,7 @@ export const OverlayBlur: Story = {
     showSwipeHandle: true,
     modal: true,
   },
-  render: (args) => {
+  render: (args, { viewMode }) => {
     const resolved = resolveDrawerOverlayBlur(args.overlayBlur ?? "md");
 
     return (
@@ -411,7 +667,7 @@ export const OverlayBlur: Story = {
 
         <Drawer
           key={String(args.overlayBlur)}
-          defaultOpen
+          defaultOpen={viewMode === "story"}
           floating={args.floating}
           rounded={args.rounded}
           overlayBlur={args.overlayBlur}

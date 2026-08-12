@@ -71,6 +71,22 @@ export type DrawerProps = DrawerPrimitive.Root.Props & {
    * @default "md" (8px)
    */
   overlayBlur?: DrawerOverlayBlur;
+
+  /**
+   * Ativa snap points estilo iOS (bottom sheet em 30% e 90% da altura).
+   * Atalho para `snapPoints={[0.3, 0.9]}`; ignorado se `snapPoints` for informado.
+   * Mutuamente exclusivo com `floating`. Com snap, o handle de swipe vem ligado por padrão.
+   * @default false
+   */
+  points?: boolean;
+
+  /**
+   * Quando `true`, o overlay fica sempre com escurecimento/blur completos (estilo modal),
+   * mesmo com `snapPoints`. Sem isso, snap points seguem o comportamento iOS: o fundo
+   * fica mais claro conforme o drawer sobe.
+   * @default false
+   */
+  overlayModal?: boolean;
 };
 
 /**
@@ -98,6 +114,11 @@ export type DrawerOverlayProps = DrawerPrimitive.Backdrop.Props & {
    * Desfoque do overlay. Se omitido, usa o `overlayBlur` do {@link Drawer} root.
    */
   overlayBlur?: DrawerOverlayBlur;
+
+  /**
+   * Overlay modal completo. Se omitido, usa o `overlayModal` do {@link Drawer} root.
+   */
+  overlayModal?: boolean;
 };
 
 /**
@@ -123,6 +144,11 @@ export type DrawerContentProps = DrawerPrimitive.Popup.Props & {
    * Desfoque do overlay. Se omitido, usa o `overlayBlur` do {@link Drawer} root.
    */
   overlayBlur?: DrawerOverlayBlur;
+
+  /**
+   * Overlay modal completo. Se omitido, usa o `overlayModal` do {@link Drawer} root.
+   */
+  overlayModal?: boolean;
 };
 
 /**

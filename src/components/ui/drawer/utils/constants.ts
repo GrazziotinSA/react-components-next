@@ -1,8 +1,8 @@
-import type { CSSProperties } from "react";
-import type { DrawerOverlayBlur, DrawerRounded } from "./interface";
-
 /** Inset padrão do modo flutuante (margem em relação à borda da tela). */
 export const DRAWER_FLOATING_INSET = "1rem";
+
+/** Snap points padrão do modo `points` (30% e 90% da altura). */
+export const DRAWER_DEFAULT_SNAP_POINTS = [0.3, 0.9];
 
 /** Desfoque padrão do overlay (`md` → 8px). */
 export const DRAWER_OVERLAY_BLUR = "8px";
@@ -20,35 +20,19 @@ export const DRAWER_OVERLAY_BLUR_TOKENS = {
 };
 
 /**
- * Resolve `overlayBlur` para valor CSS de `--drawer-overlay-blur`.
- */
-export function resolveDrawerOverlayBlur(
-  blur: DrawerOverlayBlur = "md",
-): string {
-  if (typeof blur === "number" && Number.isFinite(blur)) {
-    return `${blur}px`;
-  }
-
-  const value = String(blur).trim();
-
-  if (value in DRAWER_OVERLAY_BLUR_TOKENS) {
-    return DRAWER_OVERLAY_BLUR_TOKENS[
-      value as keyof typeof DRAWER_OVERLAY_BLUR_TOKENS
-    ];
-  }
-
-  if (/^\d+(\.\d+)?$/.test(value)) return `${value}px`;
-
-  return value || DRAWER_OVERLAY_BLUR;
-}
-
-/**
  * Classes Tailwind padrão do overlay (backdrop) do Drawer.
  * Escurecimento + blur iguais em todos os modos (sheet, floating, snap points).
  * O blur também é forçado via {@link DRAWER_BASE_CSS} / style inline.
  */
 export const DRAWER_OVERLAY_CLASSNAME =
-  "fixed inset-0 z-50 min-h-dvh bg-black/40 opacity-[max(var(--drawer-overlay-min-opacity,0.5),calc(1-var(--drawer-swipe-progress)))] transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] [--drawer-overlay-min-opacity:0.5] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute";
+  "fixed inset-0 z-50 min-h-dvh bg-black/40 transition-opacity duration-450 ease-[cubic-bezier(0.32,0.72,0,1)] select-none data-ending-style:pointer-events-none data-ending-style:opacity-0 data-ending-style:duration-[calc(var(--drawer-swipe-strength)*400ms)] data-starting-style:opacity-0 data-swiping:duration-0 supports-[-webkit-touch-callout:none]:absolute";
+
+/** Opacidade do overlay em snap points (comportamento iOS — varia com a altura). */
+export const DRAWER_OVERLAY_SNAP_OPACITY_CLASSNAME =
+  "opacity-[max(var(--drawer-overlay-min-opacity,0.5),calc(1-var(--drawer-swipe-progress)))] [--drawer-overlay-min-opacity:0.5]";
+
+/** Opacidade do overlay modal (sempre escurecido, igual floating/sheet). */
+export const DRAWER_OVERLAY_MODAL_OPACITY_CLASSNAME = "opacity-100";
 
 /**
  * Visual do painel flutuante (raio, sombra, sem bleed).
@@ -67,6 +51,15 @@ export const DRAWER_OVERLAY_CSS = `
 html body [data-slot="drawer-overlay"] {
   -webkit-backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
   backdrop-filter: blur(var(--drawer-overlay-blur, ${DRAWER_OVERLAY_BLUR})) !important;
+}
+html body [data-slot="drawer-overlay"][data-overlay-modal] {
+  inset: 0 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 100dvh !important;
+  opacity: 1 !important;
+  --drawer-swipe-progress: 0 !important;
+  --drawer-overlay-min-opacity: 1 !important;
 }
 html body [data-slot="drawer-popup"]:not([data-floating]) {
   box-shadow: 0 -10px 40px rgb(0 0 0 / 0.18), 0 -2px 10px rgb(0 0 0 / 0.08) !important;
@@ -118,34 +111,9 @@ export const DRAWER_FLOATING_CSS = `
 /** CSS base do Drawer (overlay + floating). */
 export const DRAWER_BASE_CSS = `${DRAWER_OVERLAY_CSS}\n${DRAWER_FLOATING_CSS}`;
 
-const DRAWER_STYLE_ID = "grazziotin-drawer-styles";
-const DRAWER_LEGACY_FLOATING_STYLE_ID = "grazziotin-drawer-floating-styles";
-
-/** Garante o CSS do Drawer no `<head>` (idempotente; migra id legado). */
-export function ensureDrawerStyles(): void {
-  if (typeof document === "undefined") return;
-
-  const existing = document.getElementById(DRAWER_STYLE_ID);
-  if (existing) {
-    existing.textContent = DRAWER_BASE_CSS;
-    return;
-  }
-
-  const legacy = document.getElementById(DRAWER_LEGACY_FLOATING_STYLE_ID);
-  if (legacy) {
-    legacy.id = DRAWER_STYLE_ID;
-    legacy.textContent = DRAWER_BASE_CSS;
-    return;
-  }
-
-  const style = document.createElement("style");
-  style.id = DRAWER_STYLE_ID;
-  style.textContent = DRAWER_BASE_CSS;
-  document.head.appendChild(style);
-}
-
-/** @deprecated Use {@link ensureDrawerStyles}. */
-export const ensureDrawerFloatingStyles = ensureDrawerStyles;
+export const DRAWER_STYLE_ID = "grazziotin-drawer-styles";
+export const DRAWER_LEGACY_FLOATING_STYLE_ID =
+  "grazziotin-drawer-floating-styles";
 
 /** Tokens Tailwind → valor CSS de `--drawer-radius`. */
 export const DRAWER_ROUNDED_TOKENS = {
@@ -160,43 +128,6 @@ export const DRAWER_ROUNDED_TOKENS = {
   "5xl": "2.5rem",
   full: "9999px",
 };
-
-/**
- * Resolve `rounded` para valor CSS de `--drawer-radius`.
- */
-export function resolveDrawerRadius(rounded: DrawerRounded = "3xl"): string {
-  if (typeof rounded === "number" && Number.isFinite(rounded)) {
-    return `${rounded}px`;
-  }
-
-  const value = String(rounded).trim();
-
-  if (value in DRAWER_ROUNDED_TOKENS) {
-    return DRAWER_ROUNDED_TOKENS[value as keyof typeof DRAWER_ROUNDED_TOKENS];
-  }
-
-  // "32" / "24.5" → px (Storybook/controles costumam mandar string)
-  if (/^\d+(\.\d+)?$/.test(value)) return `${value}px`;
-
-  return value;
-}
-
-/**
- * Variáveis CSS do modo flutuante (inset + raio).
- * `--drawer-radius` e `borderRadius` juntos garantem que a prop `rounded` vença.
- * Posição/borda ficam no stylesheet injetado.
- */
-export function getDrawerFloatingStyle(
-  rounded: DrawerRounded = "3xl",
-): CSSProperties {
-  const radius = resolveDrawerRadius(rounded);
-
-  return {
-    ["--drawer-inset" as string]: DRAWER_FLOATING_INSET,
-    ["--drawer-radius" as string]: radius,
-    borderRadius: radius,
-  };
-}
 
 /**
  * Classes Tailwind do handle de swipe (barra de arraste).
@@ -251,80 +182,3 @@ export const DRAWER_TITLE_CLASSNAME = "text-base font-medium text-black";
  */
 export const DRAWER_DESCRIPTION_CLASSNAME =
   "text-sm text-balance text-gray-500";
-
-const drawerConstants = `
-Drawer composto no estilo shadcn/Base UI (\`@base-ui/react/drawer\`).
-Bottom sheet com header, área scroll, footer, snap points e swipe handle.
-
-**Peer dependency:** \`@base-ui/react\` (^1.7.0)
-
-**Importação:**
-\`\`\`tsx
-import {
-  Drawer,
-  DrawerClose,
-  DrawerContent,
-  DrawerDescription,
-  DrawerFooter,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@grazziotin/react-components-next/ui";
-\`\`\`
-
-**Requisito iOS (Safari):** o overlay é \`position: absolute\` e precisa de um
-\`body\` posicionado para cobrir o viewport após scroll. Adicione no CSS global
-do app consumidor:
-\`\`\`css
-body {
-  position: relative;
-}
-\`\`\`
-
-**Uso básico (sheet com header / lista / footer):**
-\`\`\`tsx
-<Drawer>
-  <DrawerTrigger render={<button type="button" />}>Abrir</DrawerTrigger>
-  <DrawerContent>
-    <DrawerHeader>
-      <DrawerTitle>Escolha um horário</DrawerTitle>
-      <DrawerDescription>Selecione a entrega desejada.</DrawerDescription>
-    </DrawerHeader>
-    <div className="flex-1 overflow-y-auto p-4">{/* lista */}</div>
-    <DrawerFooter>
-      <button type="button">Confirmar</button>
-      <DrawerClose render={<button type="button" />}>Cancelar</DrawerClose>
-    </DrawerFooter>
-  </DrawerContent>
-</Drawer>
-\`\`\`
-
-**Snap points com handle (sem \`floating\` — modos exclusivos):**
-\`\`\`tsx
-<Drawer showSwipeHandle snapPoints={[0.3, 0.9]}>
-  <DrawerTrigger render={<button type="button" />}>Abrir</DrawerTrigger>
-  <DrawerContent>
-    <DrawerHeader>
-      <DrawerTitle>Detalhes</DrawerTitle>
-    </DrawerHeader>
-    <div className="flex-1 overflow-y-auto p-4">{/* conteúdo */}</div>
-  </DrawerContent>
-</Drawer>
-\`\`\`
-
-**Visual flutuante (não encosta nas bordas):**
-\`\`\`tsx
-<Drawer floating rounded="2xl">
-  <DrawerTrigger render={<button type="button" />}>Abrir</DrawerTrigger>
-  <DrawerContent>
-    ...
-  </DrawerContent>
-</Drawer>
-\`\`\`
-
-\`rounded\` aceita tokens (\`sm\`…\`5xl\`, \`full\`), px (\`24\`) ou CSS (\`"1.5rem"\`).
-
-\`overlayBlur\` aceita tokens (\`none\`…\`3xl\`), px (\`12\`) ou CSS (\`"8px"\`). Padrão: \`md\` (8px).
-`;
-
-export default drawerConstants;
