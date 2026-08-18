@@ -374,7 +374,12 @@ interface InputSelectGridProps {
  * @template T - Tipo dos itens de opções no seletor.
  * @template M - Valor booleano que define se a seleção pode ser múltipla.
  */
-interface InputSelectProps<T, M extends boolean = false> extends Omit<AutocompleteProps<T, M, boolean | undefined, boolean | undefined>, "renderInput" | "onChange"> {
+interface InputSelectProps<T, M extends boolean = false> extends Omit<AutocompleteProps<T, M, boolean | undefined, boolean | undefined>, "renderInput" | "onChange" | "color"> {
+    /**
+     * Cor de destaque do campo (borda e label), igual ao {@link Input}.
+     * Também pode ser passada em `input.color`; se ambos existirem, `input.color` prevalece.
+     */
+    color?: string;
     /**
      * Propriedades repassadas ao {@link Input} interno.
      * Aceita label, color, type, máscaras e demais props do TextField do projeto.
@@ -418,6 +423,7 @@ interface InputSelectProps<T, M extends boolean = false> extends Omit<Autocomple
  * @param props.multiple - Se `true`, permite selecionar várias opções. Padrão: `false`.
  * @param props.optionLabel - Função que recebe uma opção e retorna o rótulo exibido.
  * @param props.onChange - Callback ao alterar o valor (evento, valor, motivo e detalhes).
+ * @param props.color - Cor de destaque (borda e label), igual ao {@link Input}.
  * @param props.input - Props repassadas ao {@link Input} interno (label, color, type, etc.).
  * @param props.options - Lista de opções disponíveis no seletor.
  * @param props.rest - Demais props do Autocomplete do MUI (exceto `renderInput` e `onChange`).
@@ -440,7 +446,7 @@ interface InputSelectProps<T, M extends boolean = false> extends Omit<Autocomple
  * />
  * ```
  */
-declare function InputSelect<T, M extends boolean = false>({ input, multiple, onChange, optionLabel, noOptionsText, ...rest }: Readonly<InputSelectProps<T, M>>): react_jsx_runtime.JSX.Element;
+declare function InputSelect<T, M extends boolean = false>({ input, color, style, slotProps, multiple, onChange, optionLabel, noOptionsText, ...rest }: Readonly<InputSelectProps<T, M>>): react_jsx_runtime.JSX.Element;
 
 /**
  * Propriedades do componente {@link FilterCard}.

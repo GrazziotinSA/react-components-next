@@ -553,6 +553,15 @@ var input = {
   fontSize: "13px !important",
   fontFamily: "var(--font-poppins) !important"
 };
+var outlinedRoot = {
+  "& fieldset": borderAccent,
+  "&:hover fieldset": borderAccent,
+  "&.Mui-disabled fieldset": disabledBorder,
+  "&.Mui-focused fieldset": borderAccent,
+  "&.Mui-error fieldset": borderError,
+  "&.Mui-error:hover fieldset": borderError,
+  "&.Mui-error.Mui-focused fieldset": borderError
+};
 var InputTextField = styled(TextField)({
   fontFamily: "var(--font-poppins) !important",
   "& input": input,
@@ -561,15 +570,10 @@ var InputTextField = styled(TextField)({
   "& label.Mui-error": errorLabel,
   "& .MuiInput-underline:after": underlineAccent,
   "& .MuiInput-underline.Mui-error:after": underlineError,
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": borderAccent,
-    "&:hover fieldset": borderAccent,
-    "&.Mui-disabled fieldset": disabledBorder,
-    "&.Mui-focused fieldset": borderAccent,
-    "&.Mui-error fieldset": borderError,
-    "&.Mui-error:hover fieldset": borderError,
-    "&.Mui-error.Mui-focused fieldset": borderError
-  },
+  "& .MuiOutlinedInput-root": outlinedRoot,
+  ".MuiAutocomplete-root & .MuiOutlinedInput-root": outlinedRoot,
+  ".MuiAutocomplete-root & label.Mui-focused": focusLabel,
+  ".MuiAutocomplete-root & label.Mui-error": errorLabel,
   "& .MuiFilledInput-root": {
     backgroundColor: "#F9FAFB",
     "&:after": underlineAccent,
@@ -737,17 +741,29 @@ var locale = {
 function InputSelect(_a) {
   var _b = _a, {
     input: input2,
+    color,
+    style,
+    slotProps,
     multiple,
     onChange,
     optionLabel,
     noOptionsText = locale.noOptionsText
   } = _b, rest = __objRest(_b, [
     "input",
+    "color",
+    "style",
+    "slotProps",
     "multiple",
     "onChange",
     "optionLabel",
     "noOptionsText"
   ]);
+  var _a2;
+  const accentColor = (_a2 = input2 == null ? void 0 : input2.color) != null ? _a2 : color;
+  const autocompleteStyle = useMemo(
+    () => withCssVar(style, "--primary-color", accentColor),
+    [accentColor, style]
+  );
   const handleChange = (event, value, reason, details) => {
     onChange == null ? void 0 : onChange(event, value, reason, details);
   };
@@ -757,13 +773,20 @@ function InputSelect(_a) {
       size: "small",
       multiple,
       onChange: handleChange,
+      style: autocompleteStyle,
       noOptionsText,
-      slotProps: { paper: { sx: selectMui } },
+      slotProps: __spreadProps(__spreadValues({}, slotProps), { paper: { sx: selectMui } }),
       getOptionLabel: (option) => typeof option === "string" ? "" : optionLabel(option),
       isOptionEqualToValue: (option, value) => JSON.stringify(option) === JSON.stringify(value),
       renderInput: (params) => {
-        var _a2;
-        return /* @__PURE__ */ jsx(input_default, __spreadProps(__spreadValues(__spreadValues({}, params), input2), { size: (_a2 = input2 == null ? void 0 : input2.size) != null ? _a2 : "small" }));
+        var _a3;
+        return /* @__PURE__ */ jsx(
+          input_default,
+          __spreadProps(__spreadValues(__spreadValues({}, params), input2), {
+            color: accentColor,
+            size: (_a3 = input2 == null ? void 0 : input2.size) != null ? _a3 : "small"
+          })
+        );
       }
     })
   );
@@ -1670,5 +1693,5 @@ function DrawerDescription(_a) {
 }
 
 export { Drawer2 as Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerSwipeHandle, DrawerTitle, DrawerTrigger, Tab, Tabs, button_quantity_default, card_default, data_table_default, dialog_default, filterInputSelect, filter_default2 as filter_default, input_default, input_select_default };
-//# sourceMappingURL=chunk-S4LG6GS3.mjs.map
-//# sourceMappingURL=chunk-S4LG6GS3.mjs.map
+//# sourceMappingURL=chunk-QMC42A6I.mjs.map
+//# sourceMappingURL=chunk-QMC42A6I.mjs.map

@@ -6,6 +6,8 @@ import Autocomplete, {
   type AutocompleteChangeReason,
   type AutocompleteChangeDetails,
 } from "@mui/material/Autocomplete";
+import { useMemo } from "react";
+import { withCssVar } from "@/core";
 import { selectMui } from "./utils/css";
 import { locale } from "./utils/constants";
 import type { InputSelectProps } from "./utils/interface";
@@ -24,6 +26,7 @@ import type { InputSelectProps } from "./utils/interface";
  * @param props.multiple - Se `true`, permite selecionar várias opções. Padrão: `false`.
  * @param props.optionLabel - Função que recebe uma opção e retorna o rótulo exibido.
  * @param props.onChange - Callback ao alterar o valor (evento, valor, motivo e detalhes).
+ * @param props.color - Cor de destaque (borda e label), igual ao {@link Input}.
  * @param props.input - Props repassadas ao {@link Input} interno (label, color, type, etc.).
  * @param props.options - Lista de opções disponíveis no seletor.
  * @param props.rest - Demais props do Autocomplete do MUI (exceto `renderInput` e `onChange`).
@@ -48,12 +51,21 @@ import type { InputSelectProps } from "./utils/interface";
  */
 function InputSelect<T, M extends boolean = false>({
   input,
+  color,
+  style,
+  slotProps,
   multiple,
   onChange,
   optionLabel,
   noOptionsText = locale.noOptionsText,
   ...rest
 }: Readonly<InputSelectProps<T, M>>) {
+  const accentColor = input?.color ?? color;
+  const autocompleteStyle = useMemo(
+    () => withCssVar(style, "--primary-color", accentColor),
+    [accentColor, style],
+  );
+
   const handleChange = (
     event: React.SyntheticEvent,
     value: AutocompleteValue<T, M, false, false>,
@@ -69,8 +81,9 @@ function InputSelect<T, M extends boolean = false>({
       size="small"
       multiple={multiple}
       onChange={handleChange}
+      style={autocompleteStyle}
       noOptionsText={noOptionsText}
-      slotProps={{ paper: { sx: selectMui } }}
+      slotProps={{ ...slotProps, paper: { sx: selectMui } }}
       getOptionLabel={(option) =>
         typeof option === "string" ? "" : optionLabel(option)
       }
@@ -78,7 +91,12 @@ function InputSelect<T, M extends boolean = false>({
         JSON.stringify(option) === JSON.stringify(value)
       }
       renderInput={(params) => (
-        <Input {...params} {...input} size={input?.size ?? "small"} />
+        <Input
+          {...params}
+          {...input}
+          color={accentColor}
+          size={input?.size ?? "small"}
+        />
       )}
     />
   );

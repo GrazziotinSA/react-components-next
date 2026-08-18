@@ -31,8 +31,14 @@ export interface InputSelectGridProps {
  */
 export interface InputSelectProps<T, M extends boolean = false> extends Omit<
   AutocompleteProps<T, M, boolean | undefined, boolean | undefined>,
-  "renderInput" | "onChange"
+  "renderInput" | "onChange" | "color"
 > {
+  /**
+   * Cor de destaque do campo (borda e label), igual ao {@link Input}.
+   * Também pode ser passada em `input.color`; se ambos existirem, `input.color` prevalece.
+   */
+  color?: string;
+
   /**
    * Propriedades repassadas ao {@link Input} interno.
    * Aceita label, color, type, máscaras e demais props do TextField do projeto.

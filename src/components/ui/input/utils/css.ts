@@ -19,6 +19,16 @@ const input = {
   fontFamily: "var(--font-poppins) !important",
 };
 
+const outlinedRoot = {
+  "& fieldset": borderAccent,
+  "&:hover fieldset": borderAccent,
+  "&.Mui-disabled fieldset": disabledBorder,
+  "&.Mui-focused fieldset": borderAccent,
+  "&.Mui-error fieldset": borderError,
+  "&.Mui-error:hover fieldset": borderError,
+  "&.Mui-error.Mui-focused fieldset": borderError,
+};
+
 const InputTextField = styled(TextField)({
   fontFamily: "var(--font-poppins) !important",
   "& input": input,
@@ -27,15 +37,10 @@ const InputTextField = styled(TextField)({
   "& label.Mui-error": errorLabel,
   "& .MuiInput-underline:after": underlineAccent,
   "& .MuiInput-underline.Mui-error:after": underlineError,
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": borderAccent,
-    "&:hover fieldset": borderAccent,
-    "&.Mui-disabled fieldset": disabledBorder,
-    "&.Mui-focused fieldset": borderAccent,
-    "&.Mui-error fieldset": borderError,
-    "&.Mui-error:hover fieldset": borderError,
-    "&.Mui-error.Mui-focused fieldset": borderError,
-  },
+  "& .MuiOutlinedInput-root": outlinedRoot,
+  ".MuiAutocomplete-root & .MuiOutlinedInput-root": outlinedRoot,
+  ".MuiAutocomplete-root & label.Mui-focused": focusLabel,
+  ".MuiAutocomplete-root & label.Mui-error": errorLabel,
   "& .MuiFilledInput-root": {
     backgroundColor: "#F9FAFB",
     "&:after": underlineAccent,
