@@ -4,7 +4,7 @@ import type { DialogProps } from "./utils/interface";
 import DialogTitle from "@mui/material/DialogTitle";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import { DIALOG_BACKDROP_STYLE, DIALOG_PAPER_FONT_SX } from "./utils/constants";
+import { mergeDialogSlotProps } from "./utils/functions";
 
 /**
  * Modal de diálogo baseado no MUI `Dialog`, com título, conteúdo e ações opcionais.
@@ -20,6 +20,11 @@ import { DIALOG_BACKDROP_STYLE, DIALOG_PAPER_FONT_SX } from "./utils/constants";
  * @param props.children - Conteúdo principal do diálogo.
  * @param props.maxWidth - Largura máxima do MUI (`xs`, `sm`, `md`, `lg`, `xl` ou `false`).
  * @param props.blurBackdrop - Aplica blur e escurecimento no backdrop. Padrão: `false`.
+ * @param props.disableScrollLock - Desativa scroll lock do MUI (útil ao encadear com Drawer).
+ * @param props.disableEnforceFocus - Desativa enforce focus do Modal MUI.
+ * @param props.disableAutoFocus - Desativa auto-focus ao abrir.
+ * @param props.keepMounted - Mantém o conteúdo montado quando fechado.
+ * @param props.slotProps - Slot props do MUI; mesclado com estilos padrão da lib.
  *
  * @returns Instância do `Dialog` do Material UI.
  *
@@ -57,19 +62,23 @@ function Dialog({
   children,
   maxWidth,
   blurBackdrop = false,
+  disableScrollLock,
+  disableEnforceFocus,
+  disableAutoFocus,
+  keepMounted,
+  slotProps,
 }: Readonly<DialogProps>): React.ReactElement {
-  const backdropStyle = blurBackdrop ? DIALOG_BACKDROP_STYLE : {};
-
   return (
     <DialogMui
       fullWidth
       open={open}
       onClose={onClose}
       maxWidth={maxWidth}
-      slotProps={{
-        backdrop: { sx: backdropStyle },
-        paper: { sx: DIALOG_PAPER_FONT_SX },
-      }}
+      disableScrollLock={disableScrollLock}
+      disableEnforceFocus={disableEnforceFocus}
+      disableAutoFocus={disableAutoFocus}
+      keepMounted={keepMounted}
+      slotProps={mergeDialogSlotProps(blurBackdrop, slotProps)}
     >
       {title && (
         <DialogTitle>

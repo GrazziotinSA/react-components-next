@@ -57,9 +57,11 @@ html body [data-slot="drawer-overlay"][data-overlay-modal] {
   width: 100% !important;
   height: auto !important;
   min-height: 100dvh !important;
-  opacity: 1 !important;
   --drawer-swipe-progress: 0 !important;
   --drawer-overlay-min-opacity: 1 !important;
+}
+html body [data-slot="drawer-overlay"][data-overlay-modal]:not([data-ending-style]):not([data-starting-style]) {
+  opacity: 1 !important;
 }
 html body [data-slot="drawer-popup"]:not([data-floating]) {
   box-shadow: 0 -10px 40px rgb(0 0 0 / 0.18), 0 -2px 10px rgb(0 0 0 / 0.08) !important;

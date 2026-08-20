@@ -65,7 +65,8 @@ function useDrawerContext() {
  *
  * @param props - Propriedades do root. Detalhes em {@link DrawerProps}.
  * @param props.open - Modo controlado: se o drawer está aberto.
- * @param props.onOpenChange - Callback ao abrir/fechar.
+ * @param props.onOpenChange - Callback ao abrir/fechar (dispara no início da transição).
+ * @param props.onOpenChangeComplete - Callback após a animação de abrir/fechar terminar — use ao encadear outro modal.
  * @param props.swipeDirection - Direção do swipe. Padrão: `"down"` (bottom sheet).
  * @param props.snapPoints - Alturas de snap (frações 0–1, px ou rem).
  * @param props.points - Ativa snap points iOS (`[0.3, 0.9]`). Atalho de `snapPoints`.
@@ -74,7 +75,7 @@ function useDrawerContext() {
  * @param props.rounded - Raio dos cantos quando flutuante (`3xl`, `24`, `"1.5rem"`…). Padrão: `"3xl"`.
  * @param props.overlayBlur - Desfoque do overlay (`md`, `12`, `"8px"`…). Padrão: `"md"` (8px).
  * @param props.overlayModal - Overlay sempre escurecido (estilo modal), mesmo com snap points. Padrão: `false`.
- * @param props.modal - Modalidade (`true` | `false` | `"trap-focus"`). Padrão: `true`.
+ * @param props.modal - Modalidade (`true` | `false` | `"trap-focus"`). Padrão: `true`. Com `"trap-focus"`, trava foco sem scroll lock nem overlay (útil ao abrir outro modal em seguida).
  * @param props.disablePointerDismissal - Impede fechar ao clicar fora.
  *
  * @example
@@ -207,6 +208,7 @@ function DrawerOverlay({
   const backdropRef = React.useRef<HTMLDivElement>(null);
 
   // Snap points: Base UI limita overlay à altura do painel. Com overlayModal, força tela cheia.
+  // Não interferir durante enter/exit — senão briga com a animação e deixa overlay “fantasma”.
   React.useLayoutEffect(() => {
     if (!overlayModal) return;
 
@@ -214,6 +216,9 @@ function DrawerOverlay({
     if (!el) return;
 
     const lockModalOverlay = () => {
+      if (el.dataset.endingStyle != null || el.dataset.startingStyle != null) {
+        return;
+      }
       el.style.setProperty("--drawer-swipe-progress", "0");
       el.style.removeProperty("height");
       el.style.removeProperty("--drawer-height");
@@ -221,7 +226,10 @@ function DrawerOverlay({
 
     lockModalOverlay();
     const observer = new MutationObserver(lockModalOverlay);
-    observer.observe(el, { attributes: true, attributeFilter: ["style"] });
+    observer.observe(el, {
+      attributes: true,
+      attributeFilter: ["style", "data-ending-style", "data-starting-style"],
+    });
 
     return () => observer.disconnect();
   }, [overlayModal]);

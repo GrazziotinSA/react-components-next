@@ -1,4 +1,5 @@
-import { Breakpoint } from "@mui/material";
+import type { Breakpoint } from "@mui/material";
+import type { DialogProps as MuiDialogProps } from "@mui/material/Dialog";
 
 /**
  * Propriedades do componente {@link Dialog}.
@@ -46,4 +47,35 @@ export interface DialogProps {
    * Use `false` para desativar o limite de largura.
    */
   maxWidth?: false | Breakpoint;
+
+  /**
+   * Desativa o scroll lock do MUI no `body`.
+   * Útil ao encadear com outro modal (ex.: Drawer Base UI) para evitar locks concorrentes.
+   * @default false
+   */
+  disableScrollLock?: MuiDialogProps["disableScrollLock"];
+
+  /**
+   * Desativa o enforce focus do Modal MUI.
+   * @default false
+   */
+  disableEnforceFocus?: MuiDialogProps["disableEnforceFocus"];
+
+  /**
+   * Desativa o auto-focus ao abrir.
+   * @default false
+   */
+  disableAutoFocus?: MuiDialogProps["disableAutoFocus"];
+
+  /**
+   * Mantém o conteúdo montado quando fechado.
+   * @default false
+   */
+  keepMounted?: MuiDialogProps["keepMounted"];
+
+  /**
+   * `slotProps` do MUI Dialog (backdrop, paper, root, transition…).
+   * Mesclado com os estilos padrão da lib (`blurBackdrop`, fonte do paper).
+   */
+  slotProps?: MuiDialogProps["slotProps"];
 }

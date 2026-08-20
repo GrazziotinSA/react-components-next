@@ -6,6 +6,7 @@ export { AuthContextValue, AuthProvider, AuthProviderProps, GrazziotinProviders,
 export { QueryAuthOptions, useDebounce, useNow, useQueryAuth } from './hooks/index.mjs';
 import '@mui/material';
 import 'react';
+import '@mui/material/Dialog';
 import 'react/jsx-runtime';
 import '@mui/x-data-grid';
 import '@emotion/styled';
