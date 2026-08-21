@@ -1,9 +1,4 @@
-import type {
-  SayFeedbackType,
-  SayNotifyOptions,
-  SpeechPonyfill,
-} from "./interface";
-import { toast } from "react-toastify";
+import type { SayFeedbackType, SpeechPonyfill } from "./interface";
 
 export const DEFAULT_SAY_RATE = 1.4;
 export const DEFAULT_SAY_VOLUME = 1;
@@ -38,27 +33,25 @@ export function defaultShouldVibrate(type: SayFeedbackType): boolean {
   return type === "warning";
 }
 
-/** Exibe toast integrado do {@link Say}. */
-export function showSayNotify(
-  text: string,
-  { type = "success", autoClose = 4500 }: SayNotifyOptions,
-): void {
-  toast(text, { type, autoClose });
-}
-
 const sayConstants = `
-Sintetiza texto em fala via Web Speech API (\`react-say\`), com toast integrado (\`react-toastify\`) e vibração.
+Sintetiza texto em fala via Web Speech API (\`react-say\`), com vibração opcional.
+Notificações (toast) ficam a cargo do app via \`onNotify\` — o Say **não** monta \`ToastContainer\`.
 
 **Importação:**
 \`\`\`tsx
 import { Say, useSay } from "@grazziotin/react-components-next/accessibility";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 \`\`\`
 
 **Uso básico:**
 \`\`\`tsx
-const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay();
+const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay({
+  onNotify: (text, { type, autoClose }) => toast(text, { type, autoClose }),
+});
 
 <>
+  <ToastContainer position="top-right" autoClose={4500} />
   <Say
     isSpeaking={isSpeaking}
     text={textSpeaking}
@@ -71,7 +64,8 @@ const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay();
 onSuccess: (r) => handleSay(r.status, { type: "success" })
 \`\`\`
 
-Monte \`<Say />\` uma vez no layout. Toast e CSS já vêm embutidos.
+Monte \`<Say />\` uma vez no layout (fora de drawers/modais que desmontam).
+Monte \`ToastContainer\` uma vez no app — nunca dentro do Say.
 Use \`notify: false\` para falar sem toast: \`handleSay(texto, { type: "default", notify: false })\`.
 `;
 export default sayConstants;

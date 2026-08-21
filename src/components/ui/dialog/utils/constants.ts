@@ -6,9 +6,7 @@ export const DIALOG_BACKDROP_STYLE = {
 export const DIALOG_PAPER_FONT_SX = {
   fontFamily: "var(--font-family, inherit) !important",
   "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root":
-    {
-      fontFamily: "inherit !important",
-    },
+    { fontFamily: "inherit !important" },
 };
 
 const dialogConstants = `

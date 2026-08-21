@@ -1,3 +1,5 @@
+import "react-toastify/dist/ReactToastify.css";
+
 import Say from "./index";
 import sayConstants, {
   DEFAULT_SAY_PITCH,
@@ -7,6 +9,7 @@ import sayConstants, {
 } from "./utils/constants";
 import { useSay } from "./use-say";
 import { action } from "storybook/actions";
+import { toast, ToastContainer } from "react-toastify";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import type { SayFeedbackType, SayProps } from "./utils/interface";
 
@@ -25,9 +28,26 @@ function SayAmostra({
     notify: boolean;
   }
 >) {
-  const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay();
+  const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay({
+    onNotify: (text, { type: notifyType, autoClose }) => {
+      toast(text, { type: notifyType, autoClose });
+    },
+  });
+
   return (
     <div className="flex w-80 flex-col items-center gap-4">
+      <ToastContainer
+        limit={3}
+        draggable
+        newestOnTop
+        pauseOnHover
+        closeOnClick
+        autoClose={4500}
+        pauseOnFocusLoss
+        closeButton={false}
+        position="top-right"
+        style={{ fontSize: "14px" }}
+      />
       <Say
         rate={rate}
         pitch={pitch}
@@ -48,7 +68,8 @@ function SayAmostra({
         {isSpeaking ? "Falando…" : "Falar"}
       </button>
       <p className="text-center text-xs text-gray-500">
-        Toast integrado via <code className="font-mono">handleSay</code>.
+        Toast do Storybook via <code className="font-mono">onNotify</code> +{" "}
+        <code className="font-mono">ToastContainer</code> do app.
       </p>
     </div>
   );
