@@ -27,7 +27,9 @@ const options = [
 
 **Seleção múltipla:** passe \`multiple\` e trate o valor como array.
 
-**Campo interno:** props do \`Input\` (label, color, placeholder, error, etc.) vão em \`input\`.
+**Campo interno:** props do \`Input\` (label, placeholder, error, etc.) vão em \`input\`.
+
+**Cor:** use \`color\` no \`InputSelect\` (igual ao \`Input\`) ou em \`input.color\`.
 
 **Busca sem resultados:** quando nenhuma opção corresponde ao texto digitado, exibe \`${locale.noOptionsText}\`.
 

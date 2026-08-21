@@ -2,6 +2,7 @@ import * as _mui_material from '@mui/material';
 import { CSSProperties, Breakpoint, TabProps as TabProps$1, TabsProps as TabsProps$1, TextFieldProps, AutocompleteProps, AutocompleteChangeReason, AutocompleteChangeDetails } from '@mui/material';
 import * as react from 'react';
 import react__default, { ComponentPropsWithoutRef, Dispatch, SetStateAction, SubmitEventHandler, ReactElement, ComponentProps } from 'react';
+import { DialogProps as DialogProps$1 } from '@mui/material/Dialog';
 import * as react_jsx_runtime from 'react/jsx-runtime';
 import { DataGridProps } from '@mui/x-data-grid';
 import * as _emotion_styled from '@emotion/styled';
@@ -193,6 +194,32 @@ interface DialogProps {
      * Use `false` para desativar o limite de largura.
      */
     maxWidth?: false | Breakpoint;
+    /**
+     * Desativa o scroll lock do MUI no `body`.
+     * Útil ao encadear com outro modal (ex.: Drawer Base UI) para evitar locks concorrentes.
+     * @default false
+     */
+    disableScrollLock?: DialogProps$1["disableScrollLock"];
+    /**
+     * Desativa o enforce focus do Modal MUI.
+     * @default false
+     */
+    disableEnforceFocus?: DialogProps$1["disableEnforceFocus"];
+    /**
+     * Desativa o auto-focus ao abrir.
+     * @default false
+     */
+    disableAutoFocus?: DialogProps$1["disableAutoFocus"];
+    /**
+     * Mantém o conteúdo montado quando fechado.
+     * @default false
+     */
+    keepMounted?: DialogProps$1["keepMounted"];
+    /**
+     * `slotProps` do MUI Dialog (backdrop, paper, root, transition…).
+     * Mesclado com os estilos padrão da lib (`blurBackdrop`, fonte do paper).
+     */
+    slotProps?: DialogProps$1["slotProps"];
 }
 
 /**
@@ -209,6 +236,11 @@ interface DialogProps {
  * @param props.children - Conteúdo principal do diálogo.
  * @param props.maxWidth - Largura máxima do MUI (`xs`, `sm`, `md`, `lg`, `xl` ou `false`).
  * @param props.blurBackdrop - Aplica blur e escurecimento no backdrop. Padrão: `false`.
+ * @param props.disableScrollLock - Desativa scroll lock do MUI (útil ao encadear com Drawer).
+ * @param props.disableEnforceFocus - Desativa enforce focus do Modal MUI.
+ * @param props.disableAutoFocus - Desativa auto-focus ao abrir.
+ * @param props.keepMounted - Mantém o conteúdo montado quando fechado.
+ * @param props.slotProps - Slot props do MUI; mesclado com estilos padrão da lib.
  *
  * @returns Instância do `Dialog` do Material UI.
  *
@@ -238,7 +270,7 @@ interface DialogProps {
  * </Dialog>
  * ```
  */
-declare function Dialog({ open, title, onClose, actions, children, maxWidth, blurBackdrop, }: Readonly<DialogProps>): react__default.ReactElement;
+declare function Dialog({ open, title, onClose, actions, children, maxWidth, blurBackdrop, disableScrollLock, disableEnforceFocus, disableAutoFocus, keepMounted, slotProps, }: Readonly<DialogProps>): react__default.ReactElement;
 
 /**
  * Propriedades do componente {@link DataTable}.
@@ -374,7 +406,12 @@ interface InputSelectGridProps {
  * @template T - Tipo dos itens de opções no seletor.
  * @template M - Valor booleano que define se a seleção pode ser múltipla.
  */
-interface InputSelectProps<T, M extends boolean = false> extends Omit<AutocompleteProps<T, M, boolean | undefined, boolean | undefined>, "renderInput" | "onChange"> {
+interface InputSelectProps<T, M extends boolean = false> extends Omit<AutocompleteProps<T, M, boolean | undefined, boolean | undefined>, "renderInput" | "onChange" | "color"> {
+    /**
+     * Cor de destaque do campo (borda e label), igual ao {@link Input}.
+     * Também pode ser passada em `input.color`; se ambos existirem, `input.color` prevalece.
+     */
+    color?: string;
     /**
      * Propriedades repassadas ao {@link Input} interno.
      * Aceita label, color, type, máscaras e demais props do TextField do projeto.
@@ -418,6 +455,7 @@ interface InputSelectProps<T, M extends boolean = false> extends Omit<Autocomple
  * @param props.multiple - Se `true`, permite selecionar várias opções. Padrão: `false`.
  * @param props.optionLabel - Função que recebe uma opção e retorna o rótulo exibido.
  * @param props.onChange - Callback ao alterar o valor (evento, valor, motivo e detalhes).
+ * @param props.color - Cor de destaque (borda e label), igual ao {@link Input}.
  * @param props.input - Props repassadas ao {@link Input} interno (label, color, type, etc.).
  * @param props.options - Lista de opções disponíveis no seletor.
  * @param props.rest - Demais props do Autocomplete do MUI (exceto `renderInput` e `onChange`).
@@ -440,7 +478,7 @@ interface InputSelectProps<T, M extends boolean = false> extends Omit<Autocomple
  * />
  * ```
  */
-declare function InputSelect<T, M extends boolean = false>({ input, multiple, onChange, optionLabel, noOptionsText, ...rest }: Readonly<InputSelectProps<T, M>>): react_jsx_runtime.JSX.Element;
+declare function InputSelect<T, M extends boolean = false>({ input, color, style, slotProps, multiple, onChange, optionLabel, noOptionsText, ...rest }: Readonly<InputSelectProps<T, M>>): react_jsx_runtime.JSX.Element;
 
 /**
  * Propriedades do componente {@link FilterCard}.
@@ -815,7 +853,8 @@ type DrawerDescriptionProps = Drawer$1.Description.Props;
  *
  * @param props - Propriedades do root. Detalhes em {@link DrawerProps}.
  * @param props.open - Modo controlado: se o drawer está aberto.
- * @param props.onOpenChange - Callback ao abrir/fechar.
+ * @param props.onOpenChange - Callback ao abrir/fechar (dispara no início da transição).
+ * @param props.onOpenChangeComplete - Callback após a animação de abrir/fechar terminar — use ao encadear outro modal.
  * @param props.swipeDirection - Direção do swipe. Padrão: `"down"` (bottom sheet).
  * @param props.snapPoints - Alturas de snap (frações 0–1, px ou rem).
  * @param props.points - Ativa snap points iOS (`[0.3, 0.9]`). Atalho de `snapPoints`.
@@ -824,7 +863,7 @@ type DrawerDescriptionProps = Drawer$1.Description.Props;
  * @param props.rounded - Raio dos cantos quando flutuante (`3xl`, `24`, `"1.5rem"`…). Padrão: `"3xl"`.
  * @param props.overlayBlur - Desfoque do overlay (`md`, `12`, `"8px"`…). Padrão: `"md"` (8px).
  * @param props.overlayModal - Overlay sempre escurecido (estilo modal), mesmo com snap points. Padrão: `false`.
- * @param props.modal - Modalidade (`true` | `false` | `"trap-focus"`). Padrão: `true`.
+ * @param props.modal - Modalidade (`true` | `false` | `"trap-focus"`). Padrão: `true`. Com `"trap-focus"`, trava foco sem scroll lock nem overlay (útil ao abrir outro modal em seguida).
  * @param props.disablePointerDismissal - Impede fechar ao clicar fora.
  *
  * @example

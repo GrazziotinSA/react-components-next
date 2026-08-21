@@ -10,13 +10,22 @@ export interface SayNotifyOptions {
   autoClose?: number;
 }
 
+/**
+ * Handler de notificação injetado pelo app.
+ * O Say/useSay não monta `ToastContainer` — o app é dono do toast.
+ */
+export type SayNotifyHandler = (
+  text: string,
+  options: SayNotifyOptions,
+) => void;
+
 export interface SayCallOptions {
-  /** Tipo do toast. */
+  /** Tipo do feedback (toast / notificação). */
   type: SayFeedbackType;
 
   /**
-   * Exibe notificação toast integrada.
-   * Padrão: `true`.
+   * Dispara notificação via `onNotify` do hook.
+   * Padrão: `true`. Sem efeito se `onNotify` não for informado.
    */
   notify?: boolean;
 
@@ -31,6 +40,12 @@ export interface SayCallOptions {
 }
 
 export interface UseSayOptions {
+  /**
+   * Callback de notificação (ex.: `toast` do react-toastify).
+   * O app deve montar o `ToastContainer` no layout — nunca no Say.
+   */
+  onNotify?: SayNotifyHandler;
+
   /**
    * Auto-close padrão da notificação em ms.
    * Padrão: `4500`.
@@ -52,9 +67,9 @@ export interface UseSayOptions {
 
 export interface UseSayReturn {
   /**
-   * Dispara fala, toast (quando `notify !== false`) e vibração.
+   * Dispara fala, notificação (quando `notify !== false` e há `onNotify`) e vibração.
    * @param text - Texto falado.
-   * @param options - Controle de notificação, vibração e tipo do toast.
+   * @param options - Controle de notificação, vibração e tipo do feedback.
    */
   isSpeaking: boolean;
   textSpeaking: string;

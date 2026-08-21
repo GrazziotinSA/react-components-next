@@ -1,11 +1,12 @@
 export { ButtonQuantity, ButtonQuantityModel, ButtonQuantityProps, ButtonQuantitySize, Card, CardClassName, CardProps, DataTable, DataTableProps, Dialog, DialogProps, Drawer, DrawerClose, DrawerCloseProps, DrawerContent, DrawerContentProps, DrawerDescription, DrawerDescriptionProps, DrawerFooter, DrawerFooterProps, DrawerHeader, DrawerHeaderProps, DrawerOverlay, DrawerOverlayBlur, DrawerOverlayProps, DrawerPortal, DrawerPortalProps, DrawerProps, DrawerRounded, DrawerSwipeHandle, DrawerSwipeHandleProps, DrawerTitle, DrawerTitleProps, DrawerTrigger, DrawerTriggerProps, Filter, FilterCardProps, FilterDrawerField, FilterDrawerProps, FilterInputProps, FilterInputSelectField, FilterInputSelectItem, FilterInputSelectProps, FilterProps, Input, InputProps, InputSelect, InputSelectGridProps, InputSelectProps, InputType, Tab, TabColorProps, TabProps, Tabs, TabsProps, filterInputSelect } from './ui/index.js';
 export { SetImmerFieldExampleState, SetImmerFieldParams, cn, formatCpfCnpj, formatElapsedSince, formatItem150, formatItem170, formatPhoneBr, formatPriceBrl, nvl, removeDigits, removeNonDigits, removeTextOnly, setImmerField, shortName } from './functions/index.js';
 export { ClassValue } from 'clsx';
-export { Say, SayCallOptions, SayFeedbackType, SayProps, UseSayOptions, UseSayReturn, useSay } from './accessibility/index.js';
+export { Say, SayCallOptions, SayFeedbackType, SayNotifyHandler, SayNotifyOptions, SayProps, UseSayOptions, UseSayReturn, useSay } from './accessibility/index.js';
 export { AuthContextValue, AuthProvider, AuthProviderProps, GrazziotinProviders, NavigationContextValue, NavigationProvider, NavigationProviderProps, useAuth, useNavigation } from './providers/index.js';
 export { QueryAuthOptions, useDebounce, useNow, useQueryAuth } from './hooks/index.js';
 import '@mui/material';
 import 'react';
+import '@mui/material/Dialog';
 import 'react/jsx-runtime';
 import '@mui/x-data-grid';
 import '@emotion/styled';

@@ -1,5 +1,4 @@
 import {
-  showSayNotify,
   defaultShouldVibrate,
   DEFAULT_SAY_VIBRATE_DURATION,
 } from "./utils/constants";
@@ -12,11 +11,13 @@ import { nvl } from "@/functions";
 import { useCallback, useState } from "react";
 
 /**
- * Hook para disparar fala, toast integrado e vibração.
+ * Hook para disparar fala, notificação (via `onNotify`) e vibração.
  *
  * @example
  * ```tsx
- * const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay();
+ * const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay({
+ *   onNotify: (text, { type, autoClose }) => toast(text, { type, autoClose }),
+ * });
  *
  * <Say
  *   isSpeaking={isSpeaking}
@@ -30,6 +31,7 @@ import { useCallback, useState } from "react";
  * ```
  */
 export function useSay({
+  onNotify,
   notifyAutoClose = 4500,
   vibrateDuration = DEFAULT_SAY_VIBRATE_DURATION,
   shouldVibrate = defaultShouldVibrate,
@@ -46,8 +48,8 @@ export function useSay({
       setIsSpeaking(true);
       setTextSpeaking(text);
 
-      if (notify) {
-        showSayNotify(text, {
+      if (notify && onNotify) {
+        onNotify(text, {
           type,
           autoClose: nvl(options.autoClose, notifyAutoClose),
         });
@@ -57,7 +59,7 @@ export function useSay({
         navigator.vibrate(vibrateDuration);
       }
     },
-    [shouldVibrate, vibrateDuration, notifyAutoClose],
+    [onNotify, shouldVibrate, vibrateDuration, notifyAutoClose],
   );
 
   return { handleSay, isSpeaking, textSpeaking, setIsSpeaking };

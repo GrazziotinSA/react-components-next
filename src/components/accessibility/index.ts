@@ -1,6 +1,8 @@
 export type {
   SayCallOptions,
   SayFeedbackType,
+  SayNotifyHandler,
+  SayNotifyOptions,
   SayProps,
   UseSayOptions,
   UseSayReturn,

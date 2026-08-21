@@ -124,10 +124,25 @@ var DIALOG_BACKDROP_STYLE = {
 };
 var DIALOG_PAPER_FONT_SX = {
   fontFamily: "var(--font-family, inherit) !important",
-  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": {
-    fontFamily: "inherit !important"
-  }
+  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": { fontFamily: "inherit !important" }
 };
+
+// src/components/ui/dialog/utils/functions.ts
+function mergeSlotSx(baseSx, slot) {
+  var _a;
+  const slotSx = typeof slot === "object" && slot !== null && "sx" in slot ? (_a = slot.sx) != null ? _a : {} : {};
+  if (!baseSx && Object.keys(slotSx).length === 0) return void 0;
+  return __spreadValues(__spreadValues({}, baseSx), slotSx);
+}
+function mergeDialogSlotProps(blurBackdrop, slotProps) {
+  const backdropStyle = blurBackdrop ? DIALOG_BACKDROP_STYLE : {};
+  const userBackdrop = typeof (slotProps == null ? void 0 : slotProps.backdrop) === "object" && slotProps.backdrop !== null ? slotProps.backdrop : {};
+  const userPaper = typeof (slotProps == null ? void 0 : slotProps.paper) === "object" && slotProps.paper !== null ? slotProps.paper : {};
+  return __spreadProps(__spreadValues({}, slotProps), {
+    backdrop: __spreadProps(__spreadValues({}, userBackdrop), { sx: mergeSlotSx(backdropStyle, userBackdrop) }),
+    paper: __spreadProps(__spreadValues({}, userPaper), { sx: mergeSlotSx(DIALOG_PAPER_FONT_SX, userPaper) })
+  });
+}
 function Dialog({
   open,
   title,
@@ -135,9 +150,13 @@ function Dialog({
   actions,
   children,
   maxWidth,
-  blurBackdrop = false
+  blurBackdrop = false,
+  disableScrollLock,
+  disableEnforceFocus,
+  disableAutoFocus,
+  keepMounted,
+  slotProps
 }) {
-  const backdropStyle = blurBackdrop ? DIALOG_BACKDROP_STYLE : {};
   return /* @__PURE__ */ jsxs(
     DialogMui,
     {
@@ -145,10 +164,11 @@ function Dialog({
       open,
       onClose,
       maxWidth,
-      slotProps: {
-        backdrop: { sx: backdropStyle },
-        paper: { sx: DIALOG_PAPER_FONT_SX }
-      },
+      disableScrollLock,
+      disableEnforceFocus,
+      disableAutoFocus,
+      keepMounted,
+      slotProps: mergeDialogSlotProps(blurBackdrop, slotProps),
       children: [
         title && /* @__PURE__ */ jsx(DialogTitle, { children: /* @__PURE__ */ jsx("p", { className: "text-sm font-semibold text-black", children: title }) }),
         /* @__PURE__ */ jsx(DialogContent, { className: "text-black", children }),
@@ -553,6 +573,15 @@ var input = {
   fontSize: "13px !important",
   fontFamily: "var(--font-poppins) !important"
 };
+var outlinedRoot = {
+  "& fieldset": borderAccent,
+  "&:hover fieldset": borderAccent,
+  "&.Mui-disabled fieldset": disabledBorder,
+  "&.Mui-focused fieldset": borderAccent,
+  "&.Mui-error fieldset": borderError,
+  "&.Mui-error:hover fieldset": borderError,
+  "&.Mui-error.Mui-focused fieldset": borderError
+};
 var InputTextField = styled(TextField)({
   fontFamily: "var(--font-poppins) !important",
   "& input": input,
@@ -561,15 +590,10 @@ var InputTextField = styled(TextField)({
   "& label.Mui-error": errorLabel,
   "& .MuiInput-underline:after": underlineAccent,
   "& .MuiInput-underline.Mui-error:after": underlineError,
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": borderAccent,
-    "&:hover fieldset": borderAccent,
-    "&.Mui-disabled fieldset": disabledBorder,
-    "&.Mui-focused fieldset": borderAccent,
-    "&.Mui-error fieldset": borderError,
-    "&.Mui-error:hover fieldset": borderError,
-    "&.Mui-error.Mui-focused fieldset": borderError
-  },
+  "& .MuiOutlinedInput-root": outlinedRoot,
+  ".MuiAutocomplete-root & .MuiOutlinedInput-root": outlinedRoot,
+  ".MuiAutocomplete-root & label.Mui-focused": focusLabel,
+  ".MuiAutocomplete-root & label.Mui-error": errorLabel,
   "& .MuiFilledInput-root": {
     backgroundColor: "#F9FAFB",
     "&:after": underlineAccent,
@@ -737,17 +761,29 @@ var locale = {
 function InputSelect(_a) {
   var _b = _a, {
     input: input2,
+    color,
+    style,
+    slotProps,
     multiple,
     onChange,
     optionLabel,
     noOptionsText = locale.noOptionsText
   } = _b, rest = __objRest(_b, [
     "input",
+    "color",
+    "style",
+    "slotProps",
     "multiple",
     "onChange",
     "optionLabel",
     "noOptionsText"
   ]);
+  var _a2;
+  const accentColor = (_a2 = input2 == null ? void 0 : input2.color) != null ? _a2 : color;
+  const autocompleteStyle = useMemo(
+    () => withCssVar(style, "--primary-color", accentColor),
+    [accentColor, style]
+  );
   const handleChange = (event, value, reason, details) => {
     onChange == null ? void 0 : onChange(event, value, reason, details);
   };
@@ -757,13 +793,20 @@ function InputSelect(_a) {
       size: "small",
       multiple,
       onChange: handleChange,
+      style: autocompleteStyle,
       noOptionsText,
-      slotProps: { paper: { sx: selectMui } },
+      slotProps: __spreadProps(__spreadValues({}, slotProps), { paper: { sx: selectMui } }),
       getOptionLabel: (option) => typeof option === "string" ? "" : optionLabel(option),
       isOptionEqualToValue: (option, value) => JSON.stringify(option) === JSON.stringify(value),
       renderInput: (params) => {
-        var _a2;
-        return /* @__PURE__ */ jsx(input_default, __spreadProps(__spreadValues(__spreadValues({}, params), input2), { size: (_a2 = input2 == null ? void 0 : input2.size) != null ? _a2 : "small" }));
+        var _a3;
+        return /* @__PURE__ */ jsx(
+          input_default,
+          __spreadProps(__spreadValues(__spreadValues({}, params), input2), {
+            color: accentColor,
+            size: (_a3 = input2 == null ? void 0 : input2.size) != null ? _a3 : "small"
+          })
+        );
       }
     })
   );
@@ -1253,9 +1296,11 @@ html body [data-slot="drawer-overlay"][data-overlay-modal] {
   width: 100% !important;
   height: auto !important;
   min-height: 100dvh !important;
-  opacity: 1 !important;
   --drawer-swipe-progress: 0 !important;
   --drawer-overlay-min-opacity: 1 !important;
+}
+html body [data-slot="drawer-overlay"][data-overlay-modal]:not([data-ending-style]):not([data-starting-style]) {
+  opacity: 1 !important;
 }
 html body [data-slot="drawer-popup"]:not([data-floating]) {
   box-shadow: 0 -10px 40px rgb(0 0 0 / 0.18), 0 -2px 10px rgb(0 0 0 / 0.08) !important;
@@ -1492,13 +1537,19 @@ function DrawerOverlay(_a) {
     const el = backdropRef.current;
     if (!el) return;
     const lockModalOverlay = () => {
+      if (el.dataset.endingStyle != null || el.dataset.startingStyle != null) {
+        return;
+      }
       el.style.setProperty("--drawer-swipe-progress", "0");
       el.style.removeProperty("height");
       el.style.removeProperty("--drawer-height");
     };
     lockModalOverlay();
     const observer = new MutationObserver(lockModalOverlay);
-    observer.observe(el, { attributes: true, attributeFilter: ["style"] });
+    observer.observe(el, {
+      attributes: true,
+      attributeFilter: ["style", "data-ending-style", "data-starting-style"]
+    });
     return () => observer.disconnect();
   }, [overlayModal]);
   return /* @__PURE__ */ jsx(
@@ -1670,5 +1721,5 @@ function DrawerDescription(_a) {
 }
 
 export { Drawer2 as Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerSwipeHandle, DrawerTitle, DrawerTrigger, Tab, Tabs, button_quantity_default, card_default, data_table_default, dialog_default, filterInputSelect, filter_default2 as filter_default, input_default, input_select_default };
-//# sourceMappingURL=chunk-S4LG6GS3.mjs.map
-//# sourceMappingURL=chunk-S4LG6GS3.mjs.map
+//# sourceMappingURL=chunk-EBSY5JHZ.mjs.map
+//# sourceMappingURL=chunk-EBSY5JHZ.mjs.map

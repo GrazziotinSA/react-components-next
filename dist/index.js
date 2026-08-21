@@ -17,8 +17,6 @@ var Autocomplete = require('@mui/material/Autocomplete');
 var fa = require('react-icons/fa');
 var fa6 = require('react-icons/fa6');
 var drawer = require('@base-ui/react/drawer');
-require('react-toastify/dist/ReactToastify.css');
-var reactToastify = require('react-toastify');
 var SayEngine = require('react-say');
 var reactQuery = require('@tanstack/react-query');
 
@@ -307,10 +305,25 @@ var DIALOG_BACKDROP_STYLE = {
 };
 var DIALOG_PAPER_FONT_SX = {
   fontFamily: "var(--font-family, inherit) !important",
-  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": {
-    fontFamily: "inherit !important"
-  }
+  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": { fontFamily: "inherit !important" }
 };
+
+// src/components/ui/dialog/utils/functions.ts
+function mergeSlotSx(baseSx, slot) {
+  var _a;
+  const slotSx = typeof slot === "object" && slot !== null && "sx" in slot ? (_a = slot.sx) != null ? _a : {} : {};
+  if (!baseSx && Object.keys(slotSx).length === 0) return void 0;
+  return __spreadValues(__spreadValues({}, baseSx), slotSx);
+}
+function mergeDialogSlotProps(blurBackdrop, slotProps) {
+  const backdropStyle = blurBackdrop ? DIALOG_BACKDROP_STYLE : {};
+  const userBackdrop = typeof (slotProps == null ? void 0 : slotProps.backdrop) === "object" && slotProps.backdrop !== null ? slotProps.backdrop : {};
+  const userPaper = typeof (slotProps == null ? void 0 : slotProps.paper) === "object" && slotProps.paper !== null ? slotProps.paper : {};
+  return __spreadProps(__spreadValues({}, slotProps), {
+    backdrop: __spreadProps(__spreadValues({}, userBackdrop), { sx: mergeSlotSx(backdropStyle, userBackdrop) }),
+    paper: __spreadProps(__spreadValues({}, userPaper), { sx: mergeSlotSx(DIALOG_PAPER_FONT_SX, userPaper) })
+  });
+}
 function Dialog({
   open,
   title,
@@ -318,9 +331,13 @@ function Dialog({
   actions,
   children,
   maxWidth,
-  blurBackdrop = false
+  blurBackdrop = false,
+  disableScrollLock,
+  disableEnforceFocus,
+  disableAutoFocus,
+  keepMounted,
+  slotProps
 }) {
-  const backdropStyle = blurBackdrop ? DIALOG_BACKDROP_STYLE : {};
   return /* @__PURE__ */ jsxRuntime.jsxs(
     DialogMui__default.default,
     {
@@ -328,10 +345,11 @@ function Dialog({
       open,
       onClose,
       maxWidth,
-      slotProps: {
-        backdrop: { sx: backdropStyle },
-        paper: { sx: DIALOG_PAPER_FONT_SX }
-      },
+      disableScrollLock,
+      disableEnforceFocus,
+      disableAutoFocus,
+      keepMounted,
+      slotProps: mergeDialogSlotProps(blurBackdrop, slotProps),
       children: [
         title && /* @__PURE__ */ jsxRuntime.jsx(DialogTitle__default.default, { children: /* @__PURE__ */ jsxRuntime.jsx("p", { className: "text-sm font-semibold text-black", children: title }) }),
         /* @__PURE__ */ jsxRuntime.jsx(DialogContent__default.default, { className: "text-black", children }),
@@ -736,6 +754,15 @@ var input = {
   fontSize: "13px !important",
   fontFamily: "var(--font-poppins) !important"
 };
+var outlinedRoot = {
+  "& fieldset": borderAccent,
+  "&:hover fieldset": borderAccent,
+  "&.Mui-disabled fieldset": disabledBorder,
+  "&.Mui-focused fieldset": borderAccent,
+  "&.Mui-error fieldset": borderError,
+  "&.Mui-error:hover fieldset": borderError,
+  "&.Mui-error.Mui-focused fieldset": borderError
+};
 var InputTextField = material.styled(material.TextField)({
   fontFamily: "var(--font-poppins) !important",
   "& input": input,
@@ -744,15 +771,10 @@ var InputTextField = material.styled(material.TextField)({
   "& label.Mui-error": errorLabel,
   "& .MuiInput-underline:after": underlineAccent,
   "& .MuiInput-underline.Mui-error:after": underlineError,
-  "& .MuiOutlinedInput-root": {
-    "& fieldset": borderAccent,
-    "&:hover fieldset": borderAccent,
-    "&.Mui-disabled fieldset": disabledBorder,
-    "&.Mui-focused fieldset": borderAccent,
-    "&.Mui-error fieldset": borderError,
-    "&.Mui-error:hover fieldset": borderError,
-    "&.Mui-error.Mui-focused fieldset": borderError
-  },
+  "& .MuiOutlinedInput-root": outlinedRoot,
+  ".MuiAutocomplete-root & .MuiOutlinedInput-root": outlinedRoot,
+  ".MuiAutocomplete-root & label.Mui-focused": focusLabel,
+  ".MuiAutocomplete-root & label.Mui-error": errorLabel,
   "& .MuiFilledInput-root": {
     backgroundColor: "#F9FAFB",
     "&:after": underlineAccent,
@@ -920,17 +942,29 @@ var locale = {
 function InputSelect(_a) {
   var _b = _a, {
     input: input2,
+    color,
+    style,
+    slotProps,
     multiple,
     onChange,
     optionLabel,
     noOptionsText = locale.noOptionsText
   } = _b, rest = __objRest(_b, [
     "input",
+    "color",
+    "style",
+    "slotProps",
     "multiple",
     "onChange",
     "optionLabel",
     "noOptionsText"
   ]);
+  var _a2;
+  const accentColor = (_a2 = input2 == null ? void 0 : input2.color) != null ? _a2 : color;
+  const autocompleteStyle = React.useMemo(
+    () => withCssVar(style, "--primary-color", accentColor),
+    [accentColor, style]
+  );
   const handleChange = (event, value, reason, details) => {
     onChange == null ? void 0 : onChange(event, value, reason, details);
   };
@@ -940,13 +974,20 @@ function InputSelect(_a) {
       size: "small",
       multiple,
       onChange: handleChange,
+      style: autocompleteStyle,
       noOptionsText,
-      slotProps: { paper: { sx: selectMui } },
+      slotProps: __spreadProps(__spreadValues({}, slotProps), { paper: { sx: selectMui } }),
       getOptionLabel: (option) => typeof option === "string" ? "" : optionLabel(option),
       isOptionEqualToValue: (option, value) => JSON.stringify(option) === JSON.stringify(value),
       renderInput: (params) => {
-        var _a2;
-        return /* @__PURE__ */ jsxRuntime.jsx(input_default, __spreadProps(__spreadValues(__spreadValues({}, params), input2), { size: (_a2 = input2 == null ? void 0 : input2.size) != null ? _a2 : "small" }));
+        var _a3;
+        return /* @__PURE__ */ jsxRuntime.jsx(
+          input_default,
+          __spreadProps(__spreadValues(__spreadValues({}, params), input2), {
+            color: accentColor,
+            size: (_a3 = input2 == null ? void 0 : input2.size) != null ? _a3 : "small"
+          })
+        );
       }
     })
   );
@@ -1436,9 +1477,11 @@ html body [data-slot="drawer-overlay"][data-overlay-modal] {
   width: 100% !important;
   height: auto !important;
   min-height: 100dvh !important;
-  opacity: 1 !important;
   --drawer-swipe-progress: 0 !important;
   --drawer-overlay-min-opacity: 1 !important;
+}
+html body [data-slot="drawer-overlay"][data-overlay-modal]:not([data-ending-style]):not([data-starting-style]) {
+  opacity: 1 !important;
 }
 html body [data-slot="drawer-popup"]:not([data-floating]) {
   box-shadow: 0 -10px 40px rgb(0 0 0 / 0.18), 0 -2px 10px rgb(0 0 0 / 0.08) !important;
@@ -1675,13 +1718,19 @@ function DrawerOverlay(_a) {
     const el = backdropRef.current;
     if (!el) return;
     const lockModalOverlay = () => {
+      if (el.dataset.endingStyle != null || el.dataset.startingStyle != null) {
+        return;
+      }
       el.style.setProperty("--drawer-swipe-progress", "0");
       el.style.removeProperty("height");
       el.style.removeProperty("--drawer-height");
     };
     lockModalOverlay();
     const observer = new MutationObserver(lockModalOverlay);
-    observer.observe(el, { attributes: true, attributeFilter: ["style"] });
+    observer.observe(el, {
+      attributes: true,
+      attributeFilter: ["style", "data-ending-style", "data-starting-style"]
+    });
     return () => observer.disconnect();
   }, [overlayModal]);
   return /* @__PURE__ */ jsxRuntime.jsx(
@@ -1851,6 +1900,8 @@ function DrawerDescription(_a) {
     }, props)
   );
 }
+
+// src/components/accessibility/say/utils/constants.ts
 var DEFAULT_SAY_RATE = 1.4;
 var DEFAULT_SAY_VOLUME = 1;
 var DEFAULT_SAY_PITCH = 0.8;
@@ -1878,9 +1929,6 @@ function getSpeechSupport() {
 }
 function defaultShouldVibrate(type) {
   return type === "warning";
-}
-function showSayNotify(text, { type = "success", autoClose = 4500 }) {
-  reactToastify.toast(text, { type, autoClose });
 }
 function useSpeechPonyfill() {
   const ponyfill = React.useMemo(() => getSpeechSupport(), []);
@@ -1919,39 +1967,24 @@ function Say({
     setIsSpeaking(false);
     onEnd == null ? void 0 : onEnd();
   }, [setIsSpeaking, onEnd]);
-  return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntime.jsx(
-      reactToastify.ToastContainer,
-      {
-        limit: 3,
-        draggable: true,
-        newestOnTop: true,
-        pauseOnHover: true,
-        closeOnClick: true,
-        autoClose: 4500,
-        pauseOnFocusLoss: true,
-        closeButton: false,
-        position: "top-right",
-        style: { fontSize: "14px" }
-      }
-    ),
-    canSpeak && /* @__PURE__ */ jsxRuntime.jsx(
-      SayEngine__default.default,
-      {
-        text,
-        rate,
-        pitch,
-        volume,
-        onEnd: handleEnd,
-        onStart,
-        ponyfill,
-        voice: voices.find((v) => v.name === voice)
-      }
-    )
-  ] });
+  if (!canSpeak) return null;
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    SayEngine__default.default,
+    {
+      text,
+      rate,
+      pitch,
+      volume,
+      onEnd: handleEnd,
+      onStart,
+      ponyfill,
+      voice: voices.find((v) => v.name === voice)
+    }
+  );
 }
 var say_default = Say;
 function useSay({
+  onNotify,
   notifyAutoClose = 4500,
   vibrateDuration = DEFAULT_SAY_VIBRATE_DURATION,
   shouldVibrate = defaultShouldVibrate
@@ -1965,8 +1998,8 @@ function useSay({
       const { type } = options;
       setIsSpeaking(true);
       setTextSpeaking(text);
-      if (notify) {
-        showSayNotify(text, {
+      if (notify && onNotify) {
+        onNotify(text, {
           type,
           autoClose: nvl(options.autoClose, notifyAutoClose)
         });
@@ -1975,7 +2008,7 @@ function useSay({
         navigator.vibrate(vibrateDuration);
       }
     },
-    [shouldVibrate, vibrateDuration, notifyAutoClose]
+    [onNotify, shouldVibrate, vibrateDuration, notifyAutoClose]
   );
   return { handleSay, isSpeaking, textSpeaking, setIsSpeaking };
 }
