@@ -124,9 +124,7 @@ var DIALOG_BACKDROP_STYLE = {
 };
 var DIALOG_PAPER_FONT_SX = {
   fontFamily: "var(--font-family, inherit) !important",
-  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": {
-    fontFamily: "inherit !important"
-  }
+  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": { fontFamily: "inherit !important" }
 };
 
 // src/components/ui/dialog/utils/functions.ts
@@ -1723,5 +1721,5 @@ function DrawerDescription(_a) {
 }
 
 export { Drawer2 as Drawer, DrawerClose, DrawerContent, DrawerDescription, DrawerFooter, DrawerHeader, DrawerOverlay, DrawerPortal, DrawerSwipeHandle, DrawerTitle, DrawerTrigger, Tab, Tabs, button_quantity_default, card_default, data_table_default, dialog_default, filterInputSelect, filter_default2 as filter_default, input_default, input_select_default };
-//# sourceMappingURL=chunk-I4ZTIK46.mjs.map
-//# sourceMappingURL=chunk-I4ZTIK46.mjs.map
+//# sourceMappingURL=chunk-EBSY5JHZ.mjs.map
+//# sourceMappingURL=chunk-EBSY5JHZ.mjs.map

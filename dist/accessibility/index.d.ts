@@ -1,12 +1,21 @@
 import react__default from 'react';
 
 type SayFeedbackType = "info" | "success" | "warning" | "error" | "default";
+interface SayNotifyOptions {
+    type?: SayFeedbackType;
+    autoClose?: number;
+}
+/**
+ * Handler de notificação injetado pelo app.
+ * O Say/useSay não monta `ToastContainer` — o app é dono do toast.
+ */
+type SayNotifyHandler = (text: string, options: SayNotifyOptions) => void;
 interface SayCallOptions {
-    /** Tipo do toast. */
+    /** Tipo do feedback (toast / notificação). */
     type: SayFeedbackType;
     /**
-     * Exibe notificação toast integrada.
-     * Padrão: `true`.
+     * Dispara notificação via `onNotify` do hook.
+     * Padrão: `true`. Sem efeito se `onNotify` não for informado.
      */
     notify?: boolean;
     /**
@@ -18,6 +27,11 @@ interface SayCallOptions {
     autoClose?: number;
 }
 interface UseSayOptions {
+    /**
+     * Callback de notificação (ex.: `toast` do react-toastify).
+     * O app deve montar o `ToastContainer` no layout — nunca no Say.
+     */
+    onNotify?: SayNotifyHandler;
     /**
      * Auto-close padrão da notificação em ms.
      * Padrão: `4500`.
@@ -36,9 +50,9 @@ interface UseSayOptions {
 }
 interface UseSayReturn {
     /**
-     * Dispara fala, toast (quando `notify !== false`) e vibração.
+     * Dispara fala, notificação (quando `notify !== false` e há `onNotify`) e vibração.
      * @param text - Texto falado.
-     * @param options - Controle de notificação, vibração e tipo do toast.
+     * @param options - Controle de notificação, vibração e tipo do feedback.
      */
     isSpeaking: boolean;
     textSpeaking: string;
@@ -75,14 +89,17 @@ interface SayProps {
 
 /**
  * Sintetiza texto em fala via Web Speech API (`react-say`).
- * Inclui toast integrado para notificações do {@link useSay}.
+ * Não monta toast — o app deve exibir notificações via {@link useSay} `onNotify`.
  *
  * @example
  * ```tsx
- * const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay();
+ * const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay({
+ *   onNotify: (text, { type, autoClose }) => toast(text, { type, autoClose }),
+ * });
  *
  * return (
  *   <>
+ *     <ToastContainer />
  *     <Say
  *       isSpeaking={isSpeaking}
  *       text={textSpeaking}
@@ -95,14 +112,16 @@ interface SayProps {
  * );
  * ```
  */
-declare function Say({ text, onEnd, onStart, isSpeaking, setIsSpeaking, rate, voice, pitch, volume, }: Readonly<SayProps>): react__default.ReactElement;
+declare function Say({ text, onEnd, onStart, isSpeaking, setIsSpeaking, rate, voice, pitch, volume, }: Readonly<SayProps>): react__default.ReactElement | null;
 
 /**
- * Hook para disparar fala, toast integrado e vibração.
+ * Hook para disparar fala, notificação (via `onNotify`) e vibração.
  *
  * @example
  * ```tsx
- * const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay();
+ * const { handleSay, isSpeaking, textSpeaking, setIsSpeaking } = useSay({
+ *   onNotify: (text, { type, autoClose }) => toast(text, { type, autoClose }),
+ * });
  *
  * <Say
  *   isSpeaking={isSpeaking}
@@ -115,6 +134,6 @@ declare function Say({ text, onEnd, onStart, isSpeaking, setIsSpeaking, rate, vo
  * handleSay("Apenas fala", { type: "default", notify: false });
  * ```
  */
-declare function useSay({ notifyAutoClose, vibrateDuration, shouldVibrate, }?: UseSayOptions): UseSayReturn;
+declare function useSay({ onNotify, notifyAutoClose, vibrateDuration, shouldVibrate, }?: UseSayOptions): UseSayReturn;
 
-export { Say, type SayCallOptions, type SayFeedbackType, type SayProps, type UseSayOptions, type UseSayReturn, useSay };
+export { Say, type SayCallOptions, type SayFeedbackType, type SayNotifyHandler, type SayNotifyOptions, type SayProps, type UseSayOptions, type UseSayReturn, useSay };

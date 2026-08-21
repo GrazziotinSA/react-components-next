@@ -267,9 +267,7 @@ var DIALOG_BACKDROP_STYLE = {
 };
 var DIALOG_PAPER_FONT_SX = {
   fontFamily: "var(--font-family, inherit) !important",
-  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": {
-    fontFamily: "inherit !important"
-  }
+  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": { fontFamily: "inherit !important" }
 };
 
 // src/components/ui/dialog/utils/functions.ts

@@ -1,10 +1,9 @@
 import { nvl } from './chunk-N2ZRDZYM.mjs';
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer, toast } from 'react-toastify';
 import SayEngine from 'react-say';
 import { useCallback, useState, useMemo, useEffect } from 'react';
-import { jsxs, Fragment, jsx } from 'react/jsx-runtime';
+import { jsx } from 'react/jsx-runtime';
 
+// src/components/accessibility/say/utils/constants.ts
 var DEFAULT_SAY_RATE = 1.4;
 var DEFAULT_SAY_VOLUME = 1;
 var DEFAULT_SAY_PITCH = 0.8;
@@ -32,9 +31,6 @@ function getSpeechSupport() {
 }
 function defaultShouldVibrate(type) {
   return type === "warning";
-}
-function showSayNotify(text, { type = "success", autoClose = 4500 }) {
-  toast(text, { type, autoClose });
 }
 function useSpeechPonyfill() {
   const ponyfill = useMemo(() => getSpeechSupport(), []);
@@ -73,39 +69,24 @@ function Say({
     setIsSpeaking(false);
     onEnd == null ? void 0 : onEnd();
   }, [setIsSpeaking, onEnd]);
-  return /* @__PURE__ */ jsxs(Fragment, { children: [
-    /* @__PURE__ */ jsx(
-      ToastContainer,
-      {
-        limit: 3,
-        draggable: true,
-        newestOnTop: true,
-        pauseOnHover: true,
-        closeOnClick: true,
-        autoClose: 4500,
-        pauseOnFocusLoss: true,
-        closeButton: false,
-        position: "top-right",
-        style: { fontSize: "14px" }
-      }
-    ),
-    canSpeak && /* @__PURE__ */ jsx(
-      SayEngine,
-      {
-        text,
-        rate,
-        pitch,
-        volume,
-        onEnd: handleEnd,
-        onStart,
-        ponyfill,
-        voice: voices.find((v) => v.name === voice)
-      }
-    )
-  ] });
+  if (!canSpeak) return null;
+  return /* @__PURE__ */ jsx(
+    SayEngine,
+    {
+      text,
+      rate,
+      pitch,
+      volume,
+      onEnd: handleEnd,
+      onStart,
+      ponyfill,
+      voice: voices.find((v) => v.name === voice)
+    }
+  );
 }
 var say_default = Say;
 function useSay({
+  onNotify,
   notifyAutoClose = 4500,
   vibrateDuration = DEFAULT_SAY_VIBRATE_DURATION,
   shouldVibrate = defaultShouldVibrate
@@ -119,8 +100,8 @@ function useSay({
       const { type } = options;
       setIsSpeaking(true);
       setTextSpeaking(text);
-      if (notify) {
-        showSayNotify(text, {
+      if (notify && onNotify) {
+        onNotify(text, {
           type,
           autoClose: nvl(options.autoClose, notifyAutoClose)
         });
@@ -129,11 +110,11 @@ function useSay({
         navigator.vibrate(vibrateDuration);
       }
     },
-    [shouldVibrate, vibrateDuration, notifyAutoClose]
+    [onNotify, shouldVibrate, vibrateDuration, notifyAutoClose]
   );
   return { handleSay, isSpeaking, textSpeaking, setIsSpeaking };
 }
 
 export { say_default, useSay };
-//# sourceMappingURL=chunk-V7YF32K5.mjs.map
-//# sourceMappingURL=chunk-V7YF32K5.mjs.map
+//# sourceMappingURL=chunk-OS5OIICG.mjs.map
+//# sourceMappingURL=chunk-OS5OIICG.mjs.map

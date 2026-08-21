@@ -17,8 +17,6 @@ var Autocomplete = require('@mui/material/Autocomplete');
 var fa = require('react-icons/fa');
 var fa6 = require('react-icons/fa6');
 var drawer = require('@base-ui/react/drawer');
-require('react-toastify/dist/ReactToastify.css');
-var reactToastify = require('react-toastify');
 var SayEngine = require('react-say');
 var reactQuery = require('@tanstack/react-query');
 
@@ -307,9 +305,7 @@ var DIALOG_BACKDROP_STYLE = {
 };
 var DIALOG_PAPER_FONT_SX = {
   fontFamily: "var(--font-family, inherit) !important",
-  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": {
-    fontFamily: "inherit !important"
-  }
+  "& .MuiDialogTitle-root, & .MuiDialogContent-root, & .MuiDialogActions-root, & .MuiTypography-root": { fontFamily: "inherit !important" }
 };
 
 // src/components/ui/dialog/utils/functions.ts
@@ -1904,6 +1900,8 @@ function DrawerDescription(_a) {
     }, props)
   );
 }
+
+// src/components/accessibility/say/utils/constants.ts
 var DEFAULT_SAY_RATE = 1.4;
 var DEFAULT_SAY_VOLUME = 1;
 var DEFAULT_SAY_PITCH = 0.8;
@@ -1931,9 +1929,6 @@ function getSpeechSupport() {
 }
 function defaultShouldVibrate(type) {
   return type === "warning";
-}
-function showSayNotify(text, { type = "success", autoClose = 4500 }) {
-  reactToastify.toast(text, { type, autoClose });
 }
 function useSpeechPonyfill() {
   const ponyfill = React.useMemo(() => getSpeechSupport(), []);
@@ -1972,39 +1967,24 @@ function Say({
     setIsSpeaking(false);
     onEnd == null ? void 0 : onEnd();
   }, [setIsSpeaking, onEnd]);
-  return /* @__PURE__ */ jsxRuntime.jsxs(jsxRuntime.Fragment, { children: [
-    /* @__PURE__ */ jsxRuntime.jsx(
-      reactToastify.ToastContainer,
-      {
-        limit: 3,
-        draggable: true,
-        newestOnTop: true,
-        pauseOnHover: true,
-        closeOnClick: true,
-        autoClose: 4500,
-        pauseOnFocusLoss: true,
-        closeButton: false,
-        position: "top-right",
-        style: { fontSize: "14px" }
-      }
-    ),
-    canSpeak && /* @__PURE__ */ jsxRuntime.jsx(
-      SayEngine__default.default,
-      {
-        text,
-        rate,
-        pitch,
-        volume,
-        onEnd: handleEnd,
-        onStart,
-        ponyfill,
-        voice: voices.find((v) => v.name === voice)
-      }
-    )
-  ] });
+  if (!canSpeak) return null;
+  return /* @__PURE__ */ jsxRuntime.jsx(
+    SayEngine__default.default,
+    {
+      text,
+      rate,
+      pitch,
+      volume,
+      onEnd: handleEnd,
+      onStart,
+      ponyfill,
+      voice: voices.find((v) => v.name === voice)
+    }
+  );
 }
 var say_default = Say;
 function useSay({
+  onNotify,
   notifyAutoClose = 4500,
   vibrateDuration = DEFAULT_SAY_VIBRATE_DURATION,
   shouldVibrate = defaultShouldVibrate
@@ -2018,8 +1998,8 @@ function useSay({
       const { type } = options;
       setIsSpeaking(true);
       setTextSpeaking(text);
-      if (notify) {
-        showSayNotify(text, {
+      if (notify && onNotify) {
+        onNotify(text, {
           type,
           autoClose: nvl(options.autoClose, notifyAutoClose)
         });
@@ -2028,7 +2008,7 @@ function useSay({
         navigator.vibrate(vibrateDuration);
       }
     },
-    [shouldVibrate, vibrateDuration, notifyAutoClose]
+    [onNotify, shouldVibrate, vibrateDuration, notifyAutoClose]
   );
   return { handleSay, isSpeaking, textSpeaking, setIsSpeaking };
 }
